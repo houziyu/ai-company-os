@@ -1,0 +1,18 @@
+{
+  "method": "real Chrome window + Windows SendInput Ctrl+'=' x6 (browser page zoom)",
+  "foregroundAchieved": false,
+  "rendererReceivedKeyEvents": [],
+  "baseline": {
+    "dpr": 1,
+    "innerWidth": 1424,
+    "outerWidth": 1440
+  },
+  "zoomed": {
+    "dpr": 1,
+    "innerWidth": 1424,
+    "outerWidth": 1440
+  },
+  "zoomApplied": false,
+  "conclusion": "blocked: OS-injected input does not reach the automated Chrome window renderer on this host",
+  "evidenceForBlock": "The automated window was made foreground, yet its page recorded zero keydown events, so the browser never saw the zoom accelerator."
+}

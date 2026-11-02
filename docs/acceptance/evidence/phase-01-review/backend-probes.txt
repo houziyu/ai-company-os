@@ -1,0 +1,47 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_________________ test_default_logs_exclude_credential_hashes _________________
+..\docs\acceptance\evidence\phase-01-review\backend_probes.py:30: in test_default_logs_exclude_credential_hashes
+    assert not any(leaked.values()), leaked
+E   AssertionError: {'password_hash': True, 'session_hash_parameters': True, 'csrf_hash_parameters': True}
+E   assert not True
+E    +  where True = any(dict_values([True, True, True]))
+E    +    where dict_values([True, True, True]) = <built-in method values of dict object at 0x0000018EABDCED80>()
+E    +      where <built-in method values of dict object at 0x0000018EABDCED80> = {'password_hash': True, 'session_hash_parameters': True, 'csrf_hash_parameters': True}.values
+________________ test_expiration_persists_revocation_and_audit ________________
+..\docs\acceptance\evidence\phase-01-review\backend_probes.py:45: in test_expiration_persists_revocation_and_audit
+    assert (reason, count) == ("EXPIRED", 1), {"reason": reason, "audit_count": count}
+E   AssertionError: {'reason': None, 'audit_count': 0}
+E   assert (None, 0) == ('EXPIRED', 1)
+E     
+E     At index 0 diff: None != 'EXPIRED'
+E     Use -v to get more diff
+______________ test_failed_commit_does_not_report_setup_success _______________
+..\docs\acceptance\evidence\phase-01-review\backend_probes.py:61: in test_failed_commit_does_not_report_setup_success
+    assert response.status_code >= 500, {
+E   AssertionError: {'http_status': 201, 'persisted_users': 0, 'issued_session_cookie': True}
+E   assert 201 >= 500
+E    +  where 201 = <Response [201 Created]>.status_code
+_____________ test_single_api_concurrent_login_respects_threshold _____________
+..\docs\acceptance\evidence\phase-01-review\backend_probes.py:96: in test_single_api_concurrent_login_respects_threshold
+    assert statuses.count(401) == 1 and statuses.count(429) == 3, {
+E   AssertionError: {'statuses': [401, 401, 401, 401], 'persisted_failures': 6, 'threshold': 3}
+E   assert (4 == 1)
+E    +  where 4 = <built-in method count of list object at 0x0000018EAC06A9C0>(401)
+E    +    where <built-in method count of list object at 0x0000018EAC06A9C0> = [401, 401, 401, 401].count
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-01-review/backend_probes.py::test_default_logs_exclude_credential_hashes
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-01-review\backend_probes.py::test_default_logs_exclude_credential_hashes
+FAILED ..\docs\acceptance\evidence\phase-01-review\backend_probes.py::test_expiration_persists_revocation_and_audit
+FAILED ..\docs\acceptance\evidence\phase-01-review\backend_probes.py::test_failed_commit_does_not_report_setup_success
+FAILED ..\docs\acceptance\evidence\phase-01-review\backend_probes.py::test_single_api_concurrent_login_respects_threshold
+4 failed, 2 warnings in 3.66s

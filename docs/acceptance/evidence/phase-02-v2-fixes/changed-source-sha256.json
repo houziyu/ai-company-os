@@ -1,0 +1,55 @@
+{
+  "backend/app/api/v1/model_centre.py": {
+    "before": "15a729d8ae9946b0c4d6ed97f98c053e945dde032a10533769153f2f36388d28",
+    "after": "52a6cc74ffeb28cf27324a39bc0c59266d65d52e7a3ebeeab48bca3ecfd02daf"
+  },
+  "backend/app/api/v1/organization.py": {
+    "before": "356f53fe9d08fed67aa82ac5405bcb023eb868837dc7ef705dfd33794de42850",
+    "after": "b427216ce784a114d1013470f485c45fe915838de21d3e0bdf8ec1f67265676a"
+  },
+  "backend/app/providers/adapter.py": {
+    "before": "b0dbad1649b844cdc54ff5b078e74d5b759142794561bc63c22c41d2d65e507b",
+    "after": "04d49832f5f59dea8e62cea43b57cbfab32ecd8975654fffa5e59f118aa0d241"
+  },
+  "backend/app/repositories/organization_repository.py": {
+    "before": "f916bbaf019ba569282658c74690ccdb4153262250546bc483a173cb0e04dbc3",
+    "after": "e0ea08282303418cac9a14a3b9b45a0b44c520d649773ce82b7abe0ff665dcc5"
+  },
+  "backend/app/services/model_centre_service.py": {
+    "before": "6c8dff8869faf70f6ff04e4d77d5a4a0b0b805cd963c273c18d7546bb7d80860",
+    "after": "4ecac53b941fdcbfa2200ab95000a6c7f407827e3a35ab61cdfeffac8bb8a61c"
+  },
+  "frontend/src/components/AppDrawer.vue": {
+    "before": "3e19865ea79a20813bd466098d8508db76725ae6265fd413d305af68ec058ab3",
+    "after": "c2f9fea9a8f1fe112cd47f1a4a035374ec1783b155ae8cf553f5df8733832231"
+  },
+  "frontend/src/views/OrganizationView.vue": {
+    "before": "e4dd60fcbf22f5be7e0ca3bef8bf26ab323d2e585737023b83ecac743fbabff5",
+    "after": "c0081d99216ad9b4cc6d4f67008bc3b03fc2557c647d3863eb995077361b3525"
+  },
+  "backend/app/domain/model_evidence.py": {
+    "before": null,
+    "after": "3d69193f89f76b0c1c0cf8a6253b3b322efeb5742c543c9bc642e789e7086299",
+    "new_file": true
+  },
+  "backend/alembic/versions/8c24a71d9e03_repair_provider_evidence.py": {
+    "before": null,
+    "after": "d7993a4735b70c27272643e0589d59ad8caf2e76c25a15f08961a0077d3c6674",
+    "new_file": true
+  },
+  "backend/tests/test_v2_fixes.py": {
+    "before": null,
+    "after": "87f51dcd9033d7b8138aeca583f0586b32a2a365b690230be4e7f86e03345df6",
+    "new_file": true
+  },
+  "frontend/src/__tests__/v2-fixes.spec.ts": {
+    "before": null,
+    "after": "4a1cda576ef8d9b8c173875ee1613c71ee0f097acc21f774456d6f36fc7ae348",
+    "new_file": true
+  },
+  "scripts/verify_phase02_v2_ui.cjs": {
+    "before": null,
+    "after": "2a9469f143a823b8798e008fd0a36ddf106f252c113c4b533ee05f164b991143",
+    "new_file": true
+  }
+}

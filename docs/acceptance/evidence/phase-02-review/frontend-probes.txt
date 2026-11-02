@@ -1,0 +1,82 @@
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+stdout | src/__tests__/phase02-review.probes.spec.ts > R10: keyboard users can reach the third model-centre tab
+REVIEW R10 { selected: 1, focused: 0 }
+
+stdout | src/__tests__/phase02-review.probes.spec.ts > R11: selecting unbound must not silently keep the existing model
+REVIEW R11 { requestedBindings: 0, displayedUnboundOption: true }
+
+stdout | src/__tests__/phase02-review.probes.spec.ts > R8: a failed model binding must not make the next profile save stale
+REVIEW R8 UI { expectedVersions: [ 1, 1 ], serverVersion: 2 }
+
+ ❯ src/__tests__/phase02-review.probes.spec.ts (3 tests | 3 failed) 337ms
+   × R10: keyboard users can reach the third model-centre tab 191ms
+   × R11: selecting unbound must not silently keep the existing model 97ms
+   × R8: a failed model binding must not make the next profile save stale 48ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/phase02-review.probes.spec.ts > R10: keyboard users can reach the third model-centre tab
+AssertionError: expected 'false' to be 'true' // Object.is equality
+
+Expected: "true"
+Received: "false"
+
+ ❯ src/__tests__/phase02-review.probes.spec.ts:60:48
+     58|   console.log('REVIEW R10', { selected: tabs.findIndex(tab => tab.attr…
+     59|     focused: tabs.findIndex(tab => tab.element === document.activeElem…
+     60|   expect(tabs[2]!.attributes('aria-selected')).toBe('true')
+       |                                                ^
+     61| })
+     62|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/__tests__/phase02-review.probes.spec.ts > R11: selecting unbound must not silently keep the existing model
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/__tests__/phase02-review.probes.spec.ts:88:27
+     86|   const bindings = calls.filter(call => call.url.endsWith('/model-assi…
+     87|   console.log('REVIEW R11', { requestedBindings: bindings.length, disp…
+     88|   expect(bindings.length).toBe(1)
+       |                           ^
+     89| })
+     90|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/__tests__/phase02-review.probes.spec.ts > R8: a failed model binding must not make the next profile save stale
+AssertionError: expected [ 1, 1 ] to deeply equal [ 1, 2 ]
+
+- Expected
++ Received
+
+  [
+    1,
+-   2,
++   1,
+  ]
+
+ ❯ src/__tests__/phase02-review.probes.spec.ts:122:28
+    120|   save.click(); await flushPromises()
+    121|   console.log('REVIEW R8 UI', { expectedVersions, serverVersion: curre…
+    122|   expect(expectedVersions).toEqual([1, 2])
+       |                            ^
+    123| })
+    124|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  13:33:32
+   Duration  3.22s (import 47%, environment 34%, tests 11%, transform 4%, setup 3%)
+

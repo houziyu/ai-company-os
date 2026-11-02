@@ -1,0 +1,5 @@
+acos-phase01-fixes-web-1 Up 2 minutes (healthy) 127.0.0.1:18081->8080/tcp
+acos-phase01-fixes-worker-1 Up 2 minutes (healthy) 8000/tcp
+acos-phase01-fixes-api-1 Up 2 minutes (healthy) 8000/tcp
+acos-phase01-fixes-migrate-1 Exited (0) 2 minutes ago 
+acos-phase01-fixes-postgres-1 Up 13 minutes (healthy) 5432/tcp

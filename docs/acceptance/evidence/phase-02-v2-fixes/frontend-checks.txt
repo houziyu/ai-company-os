@@ -1,0 +1,22 @@
+
+> ai-company-os-frontend@0.1.0 check C:\Users\admin\Desktop\ai-company-os\frontend
+> pnpm tokens && pnpm lint && pnpm typecheck && pnpm test && vite build
+
+
+> ai-company-os-frontend@0.1.0 tokens C:\Users\admin\Desktop\ai-company-os\frontend
+> node scripts/generate-tokens.mjs
+
+design tokens generated from docs/design/design-tokens.json
+
+> ai-company-os-frontend@0.1.0 lint C:\Users\admin\Desktop\ai-company-os\frontend
+> eslint . --max-warnings=0
+
+
+C:\Users\admin\Desktop\ai-company-os\frontend\src\__tests__\v2-fixes.spec.ts
+  233:5  warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+✖ 1 problem (0 errors, 1 warning)
+
+ESLint found too many warnings (maximum: 0).
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.

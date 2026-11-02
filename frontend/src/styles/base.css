@@ -1,0 +1,110 @@
+/**
+ * Base styles. All values come from generated tokens -- no literal colours,
+ * font sizes or control heights belong in this file.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--acos-color-bg);
+  color: var(--acos-color-text);
+  font-family: var(--acos-font-family);
+  font-size: var(--acos-font-body-size);
+  line-height: var(--acos-font-body-line);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--acos-font-title-size);
+  line-height: var(--acos-font-title-line);
+  font-weight: var(--acos-font-title-weight);
+}
+
+h2 {
+  font-size: var(--acos-font-section-size);
+  line-height: var(--acos-font-section-line);
+  font-weight: var(--acos-font-section-weight);
+}
+
+h3 {
+  font-size: var(--acos-font-subtitle-size);
+  line-height: var(--acos-font-subtitle-line);
+  font-weight: var(--acos-font-subtitle-weight);
+}
+
+a {
+  color: var(--acos-color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--acos-color-primary-hover);
+  text-decoration: underline;
+}
+
+/* Visible focus for every interactive element. Never remove the outline
+   without supplying this replacement. */
+:focus-visible {
+  outline: var(--acos-focus-width) solid var(--acos-color-focus);
+  outline-offset: var(--acos-focus-offset);
+  border-radius: var(--acos-radius-control);
+}
+
+/* Utility: visually hidden but available to assistive tech. */
+.acos-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Numeric alignment for money/token columns. */
+.acos-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.acos-caption {
+  font-size: var(--acos-font-caption-size);
+  line-height: var(--acos-font-caption-line);
+  color: var(--acos-color-text-muted);
+}
+
+.acos-text-secondary {
+  color: var(--acos-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

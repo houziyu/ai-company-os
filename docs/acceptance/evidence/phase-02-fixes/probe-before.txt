@@ -1,0 +1,353 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+{"ts": "2026-10-30T05:49:18.964209+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:19.106813+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:19.111484+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "31b042cb7dad44248dc1c30e0e2aee76", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 145.02, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:19.112455+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:19.150042+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:19.154453+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f1c82aaf5b464b03a8314c79dbb354ce", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 39.43, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:19.154892+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:19.179070+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "70d1d6764d1741fcae49476833573c8a", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.95, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:19.179504+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:19.196352+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:19.209362+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "27512fbf094d43f89aefd5d606329d7b", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 27.54, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:19.209798+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:19.239724+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "6e92385979f342a3849fc9ca864a2413", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 27.25, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:19.240142+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R1", "status": 200, "in_probe_response": true, "in_overview_response": true, "in_database": true}
+F{"ts": "2026-10-30T05:49:19.246233+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:19.880519+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:20.065260+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.069771+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c4449499d6f0446b99c6fb178f916703", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 186.99, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.070307+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.105603+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.109595+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d0c239a9ccc14d699287382e77930f64", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 36.46, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.110072+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.134633+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "848766a926794296912d5828791a97ea", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 22.05, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.135051+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.176017+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.188674+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a739ab0cdfb1455abe2401d6184824ce", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 51.69, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.189076+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R2", "status": 200, "committed_rows_during_provider_call": [0]}
+F{"ts": "2026-10-30T05:49:20.191478+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:20.347551+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:20.495369+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.500402+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a08512e439b7439e857c60027a9d618d", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 150.98, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.500910+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.534885+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.538823+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b0583893b0344d239a873c7a79d3a132", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 35.21, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.539223+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.562604+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c6d5b177162f4b7488aa2ecfadd0faaa", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 20.75, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.563051+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.578187+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.589952+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "84ae0bd99b63491d94ef07af57eb323a", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 24.66, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.590361+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.614726+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e3cf717158cb46e9af8a74405122078b", "method": "PATCH", "path": "/api/v1/providers/1", "status": 200, "duration_ms": 21.58, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.615141+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.639561+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3dabd9e1a87e406c87b9e34924627f94", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 22.12, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.639994+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R3", "base_url": "https://different-provider.example.test", "capability": true, "last_result": "SUCCESS"}
+F{"ts": "2026-10-30T05:49:20.642860+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:20.767040+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:20.908874+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.914107+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a19952c5208d43dfb8c603fd98709f04", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 145.16, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.914652+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.958278+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:20.962735+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bb26f93f09fc4102b11ca30dc528e551", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 45.75, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.963162+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:20.987467+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8876ce17adea4c09a2ab9ef8dfd41498", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.92, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:20.987888+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.005142+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.017013+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "879fdd75ebf64010a9385350cdd253e4", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 25.7, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.017409+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.050052+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f8203a2e71e843a491c39e3ba5c07b3e", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 29.51, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.050477+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R4", "response_completion": null, "summary": {"probeCalls": 1, "measuredCalls": 1, "unmeasuredCalls": 0, "promptTokens": 21, "completionTokens": 0}}
+F{"ts": "2026-10-30T05:49:21.053166+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:21.181216+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:21.324893+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:21.329904+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "84cfef88eeb54112aaf62705c7f1e973", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 146.64, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.330403+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.365819+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:21.370001+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3735004556264c80aeb17476b8ec8fab", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 36.83, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.370452+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.395038+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2ef5724f595746dbbb0f003ef685e0e0", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.93, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.395502+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.412034+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.415267+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "database error handling request", "error": "DataError", "request_id": "3be4b0a7c99741f08b97948101f6878a"}
+{"ts": "2026-10-30T05:49:21.415582+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3be4b0a7c99741f08b97948101f6878a", "method": "POST", "path": "/api/v1/models/1/probe", "status": 503, "duration_ms": 17.37, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.415936+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R5-model_length", "status": 503, "probes": 0, "usage_rows": 0, "prompt_tokens": null}
+F{"ts": "2026-10-30T05:49:21.422744+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:21.544627+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:21.693809+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:21.698633+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7039c3b675f546939ca4df6ac18d0bc4", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 151.93, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.699129+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.735170+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:21.739427+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "601cf694733e42379164a903da107094", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 37.19, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.739834+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.763495+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9e529d1b3e0c443bba5ca7fb894e706e", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 20.64, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.763926+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.780419+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:21.785870+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "database error handling request", "error": "DataError", "request_id": "21aef480d549481d986cd353a86ba39d"}
+{"ts": "2026-10-30T05:49:21.786182+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "21aef480d549481d986cd353a86ba39d", "method": "POST", "path": "/api/v1/models/1/probe", "status": 503, "duration_ms": 20.09, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:21.786550+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R5-usage_overflow", "status": 503, "probes": 0, "usage_rows": 0, "prompt_tokens": null}
+F{"ts": "2026-10-30T05:49:21.793737+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:21.908461+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:22.064304+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:22.068730+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0fc12f3b6834457189fd5b2f30f426df", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 158.47, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:22.069367+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:22.108896+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:22.113160+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "44d1c2b5953048a1b6d97021d1171627", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 40.67, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:22.113596+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:22.137391+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a6db13b6f92c4af1a772306ba77cf8ae", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.38, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:22.137836+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:22.154329+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:22.166737+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "102e3406ca81444fa632db10a22e67ec", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 26.27, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:22.167155+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R5-bad_envelope", "status": 200, "probes": 1, "usage_rows": 1, "prompt_tokens": null}
+F{"ts": "2026-10-30T05:49:22.173626+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:23.802701+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R6", "configured_timeout_seconds": 1, "elapsed_seconds": 3.795, "error_code": null}
+F{"ts": "2026-10-30T05:49:26.418674+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:26.547121+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:26.552741+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cf6b0942db534d8586dc56f7ed8e8cd0", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 131.13, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.553252+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:26.586955+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:26.591102+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f2c861a3f12f4577b5827258c7b3fbf4", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 35.69, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.591500+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:26.616552+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "60c02e74ea82400798ef2563e7941c75", "method": "PATCH", "path": "/api/v1/providers/1", "status": 200, "duration_ms": 22.24, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.616975+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:26.638044+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4f620a2fa4b4488e887fdc7eda57fdb9", "method": "PATCH", "path": "/api/v1/providers/1", "status": 200, "duration_ms": 19.04, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.638451+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R7", "first_status": 200, "stale_status": 200, "first_name": "new-name", "final_name": "DeepSeek 供应商"}
+F{"ts": "2026-10-30T05:49:26.640841+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:26.765967+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:26.897686+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:26.902775+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3696a40b714746169e677085f03bdaa1", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 135.03, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.903311+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:26.971409+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:26.985108+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "db32bb29cd584b11b81ff52421e8cefa", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 78.94, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:26.985519+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.033203+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d1051c517b104acdb48acb1d0efb457c", "method": "GET", "path": "/api/v1/organization", "status": 200, "duration_ms": 45.26, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.033635+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.070984+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c598431e12184b7798438cf5d2c401b8", "method": "PATCH", "path": "/api/v1/agents/1", "status": 200, "duration_ms": 34.5, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.071444+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.089073+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f8c1e78abc3c4bf89551a0fc2f7af1ca", "method": "POST", "path": "/api/v1/agents/1/model-assignment", "status": 404, "duration_ms": 14.36, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.089483+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.106351+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d8c0fb4e5e6f4b48b0738cfa40ea6195", "method": "PATCH", "path": "/api/v1/agents/1", "status": 409, "duration_ms": 14.22, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.106891+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R8", "profile_status": 200, "binding_status": 404, "retry_status": 409, "persisted_name": "changed-before-binding-fails"}
+F{"ts": "2026-10-30T05:49:27.109413+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T05:49:27.266595+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T05:49:27.407533+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T05:49:27.411931+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b4aa8e3f8fdf421fb0580c9c2d52720a", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 143.88, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.412562+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.447015+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T05:49:27.451124+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4ab7b1c803c9411695a8baa739f22af4", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 35.97, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.451561+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.476873+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ed81a7cc14094ed387dad62dc31be1bc", "method": "PATCH", "path": "/api/v1/providers/1", "status": 200, "duration_ms": 22.81, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.477314+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T05:49:27.496913+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "32f70dbbe1bd4b229067fb09fca26c81", "method": "PATCH", "path": "/api/v1/providers/1", "status": 200, "duration_ms": 16.9, "client_ip": "testclient"}
+{"ts": "2026-10-30T05:49:27.497338+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+REVIEW {"case": "R9", "status": 200, "saved_notes": "old-note"}
+F{"ts": "2026-10-30T05:49:27.499760+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+
+================================== FAILURES ===================================
+E   AssertionError: provider-controlled model field leaks the actual Authorization credential
+    assert not True
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/models/centre "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:54: AssertionError: provider-controlled model field leaks the actual Authorization credential
+E   AssertionError: flush is not commit; process death loses all evidence of paid call
+    assert [0] == [1]
+      
+      At index 0 diff: 0 != 1
+      Use -v to get more diff
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:68: AssertionError: flush is not commit; process death loses all evidence of paid call
+E   AssertionError: new endpoint has never been probed
+    assert True is None
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/providers/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/models/centre "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:82: AssertionError: new endpoint has never been probed
+E   AssertionError: unreported completion tokens are unknown, not zero
+    assert 0 is None
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/models/centre "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:92: AssertionError: unreported completion tokens are unknown, not zero
+E   AssertionError: bad provider metadata rolled back all call evidence
+    assert 0 == 1
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR    app.api.errors:errors.py:137 database error handling request
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 503 Service Unavailable"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:118: AssertionError: bad provider metadata rolled back all call evidence
+E   AssertionError: bad provider metadata rolled back all call evidence
+    assert 0 == 1
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR    app.api.errors:errors.py:137 database error handling request
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 503 Service Unavailable"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:118: AssertionError: bad provider metadata rolled back all call evidence
+E   AssertionError: response validation discarded separately valid reported usage
+    assert None == 21
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:116: AssertionError: response validation discarded separately valid reported usage
+E   AssertionError: httpx inactivity timeout is not a total deadline
+    assert (None == 'TIMEOUT')
+------------------------------ Captured log call ------------------------------
+INFO     httpx:_client.py:1025 HTTP Request: POST http://127.0.0.1:57327/v1/chat/completions "HTTP/1.0 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:167: AssertionError: httpx inactivity timeout is not a total deadline
+E   AssertionError: row lock serializes writes but cannot detect a stale form
+    assert 200 == 409
+     +  where 200 = <Response [200 OK]>.status_code
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/providers/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/providers/1 "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:181: AssertionError: row lock serializes writes but cannot detect a stale form
+E   AssertionError: the UI reuses pre-save agent.version after partial success
+    assert 409 != 409
+     +  where 409 = <Response [409 Conflict]>.status_code
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/organization "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/agents/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/agents/1/model-assignment "HTTP/1.1 404 Not Found"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/agents/1 "HTTP/1.1 409 Conflict"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:196: AssertionError: the UI reuses pre-save agent.version after partial success
+E   AssertionError: the UI sends null for cleared text but service treats null as absent
+    assert 'old-note' is None
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:239 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/providers/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: PATCH http://testserver/api/v1/providers/1 "HTTP/1.1 200 OK"
+C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-02-review\test_review_probes.py:207: AssertionError: the UI sends null for cleared text but service treats null as absent
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-02-review/test_review_probes.py::test_r1_provider_model_echo_must_not_persist_or_return_secret
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r1_provider_model_echo_must_not_persist_or_return_secret
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r2_probe_intent_must_be_committed_before_network_call
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r3_provider_endpoint_change_must_invalidate_capability
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r4_partial_usage_must_not_turn_unknown_completion_into_zero
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r5_untrusted_response_must_preserve_probe_and_usage[model_length]
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r5_untrusted_response_must_preserve_probe_and_usage[usage_overflow]
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r5_untrusted_response_must_preserve_probe_and_usage[bad_envelope]
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r6_timeout_must_bound_total_elapsed_time
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r7_two_stale_provider_forms_must_not_silently_overwrite
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r8_profile_save_then_binding_failure_leaves_stale_retry
+FAILED ..\docs\acceptance\evidence\phase-02-review\test_review_probes.py::test_r9_provider_notes_can_be_cleared
+11 failed, 2 warnings in 10.22s

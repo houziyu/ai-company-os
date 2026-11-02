@@ -1,0 +1,6 @@
+BASELINE {"dpr":1,"innerWidth":1424,"outerWidth":1440}
+foregroundMatch=True
+targetTitle=��¼ �� AI Company OS - Google Chrome
+sent=6
+ZOOMED {"dpr":1,"innerWidth":1424,"outerWidth":1440} keys received: []
+REAL BROWSER ZOOM NOT VERIFIED — see docs/acceptance/evidence/phase-02/zoom-200-real.json

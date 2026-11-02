@@ -1,0 +1,36 @@
+[PASS] API 可访问: HTTP 200, app=AI Company OS
+[PASS] 就绪检查含数据库与迁移: checks={'database': 'ok', 'migrations': 'ok', 'worker': 'ok'}
+[PASS] 创建前公司未初始化: companyInitialized=False
+[PASS] 所有者初始化成功: user=owner
+[PASS] 创建前公司状态仍为未初始化: companyInitialized=False
+[PASS] 模板包含五个岗位: codes=['CEO', 'PRODUCT_MANAGER', 'TECH_LEAD', 'QA', 'DEVOPS']
+[PASS] 模型中心提供 DeepSeek 预设且无密钥值: secretRef=DEEPSEEK_API_KEY
+[PASS] 密钥未配置时状态为 false: secretConfigured=False
+[PASS] 模型未探测前 JSON 能力为未知: supportsJsonOutput=None
+[PASS] 缺少密钥的探测被本地拒绝: errorCode=MISSING_SECRET, callCount=0
+[PASS] 探测提示可能消耗 Token: 测试连接会向供应商发送一次请求，可能消耗少量 Token，不会自动重试。
+[PASS] 过期的供应商表单被拒绝: status=409
+[PASS] 备注可显式清空: notes=None
+[PASS] 地址变更后能力仍为未验证: baseUrl=https://another-endpoint.example.test, supportsJsonOutput=None
+[PASS] 公司创建生成五岗位五员工: positions=5, agents=5
+[PASS] 相同幂等键重复提交返回既有公司: second status=200, same id=True
+[PASS] 不同请求重复创建被拒绝: status=409, code=COMPANY_ALREADY_EXISTS
+[PASS] 公司初始化状态已更新: companyName=精一科技
+[PASS] 组织包含五名独立员工: agents=5
+[PASS] 模板汇报关系已建立: CEO 为根，PM 直属 CEO，QA 直属技术负责人
+[PASS] 创建时绑定的模型出现在组织视图: bound model id=1
+[PASS] 循环汇报关系被服务端拒绝: status=409, code=REPORTING_CYCLE
+[PASS] 合法汇报调整生效: QA managerId=1
+[PASS] 岗位职责编辑生成新版本: version 1 -> 2
+[PASS] 归档保留身份与职责覆盖: status=ARCHIVED, code=DEVOPS-001
+[PASS] 员工履历包含职责与模型记录: kinds=['DUTY_OVERRIDE', 'MODEL_ASSIGNMENT']
+[PASS] 模型重新绑定成功: modelId=1
+[PASS] 组织与模型变更写入审计: 10 种动作
+[PASS] 审计记录无删除接口: DELETE status=404
+[PASS] 模型中心响应不含密钥值: 响应只含 secretRef 与 secretConfigured
+[PASS] 数据库端口未发布到宿主: postgres 容器没有发布端口
+[PASS] 未认证访问组织被拒绝: status=401
+[PASS] 写请求缺少 CSRF 头被拒绝: status=403, code=CSRF_VALIDATION_FAILED
+[PASS] CSRF 拒绝不影响有效会话: status=200
+
+执行 34 项检查，失败 0 项

@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(geometry.contentWidth <= width && geometry.left >= 0 && geometry.right <= width + 1)
+
+    at C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase02_v2_ui.cjs:108:7 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

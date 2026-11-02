@@ -1,0 +1,1 @@
+ZOOM_WINDOW_READY {"baseURL":"http://127.0.0.1:18082","baseline":{"width":1424,"height":805,"dpr":1,"outerWidth":1440}}

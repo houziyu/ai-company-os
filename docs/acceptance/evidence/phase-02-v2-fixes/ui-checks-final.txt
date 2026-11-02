@@ -1,0 +1,23 @@
+ExpectError: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+    at captureRawStack (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright-core\lib\coreBundle.js:9681:17)
+    at callMatcherAsStep (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toBe (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright\lib\matchers\expect.js:13300:23)
+    at C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase02_v2_ui.cjs:109:11 {
+  matcherResult: {
+    pass: false,
+    message: 'expect(received).toBe(expected) // Object.is equality\n' +
+      '\n' +
+      'Expected: true\n' +
+      'Received: false\n' +
+      '\n' +
+      'Call Log:\n' +
+      '- Timeout 5000ms exceeded while waiting on the predicate',
+    name: 'toBe'
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "fixture": "in-memory API, no database or server-auth verification",
+  "browser": "156.0.8078.48",
+  "results": [
+    {
+      "check": "login keyboard and overview 1440x900",
+      "layout": {
+        "width": 1440,
+        "contentWidth": 1440,
+        "dpr": 1
+      }
+    },
+    {
+      "check": "settings Escape focus and logout 1440x900",
+      "passed": true
+    },
+    {
+      "check": "login keyboard and overview 1024x768",
+      "layout": {
+        "width": 1024,
+        "contentWidth": 1024,
+        "dpr": 1
+      }
+    },
+    {
+      "check": "settings Escape focus and logout 1024x768",
+      "passed": true
+    },
+    {
+      "check": "login keyboard and overview 390x844",
+      "layout": {
+        "width": 390,
+        "contentWidth": 390,
+        "dpr": 1
+      }
+    },
+    {
+      "check": "settings Escape focus and logout 390x844",
+      "passed": true
+    },
+    {
+      "check": "login keyboard and overview 360x800",
+      "layout": {
+        "width": 360,
+        "contentWidth": 360,
+        "dpr": 1
+      }
+    },
+    {
+      "check": "settings Escape focus and logout 360x800",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

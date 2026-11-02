@@ -1,0 +1,70 @@
+
+> ai-company-os-frontend@0.1.0 check C:\Users\admin\Desktop\ai-company-os\frontend
+> pnpm tokens && pnpm lint && pnpm typecheck && pnpm test && vite build
+
+
+> ai-company-os-frontend@0.1.0 tokens C:\Users\admin\Desktop\ai-company-os\frontend
+> node scripts/generate-tokens.mjs
+
+design tokens generated from docs/design/design-tokens.json
+
+> ai-company-os-frontend@0.1.0 lint C:\Users\admin\Desktop\ai-company-os\frontend
+> eslint . --max-warnings=0
+
+
+> ai-company-os-frontend@0.1.0 typecheck C:\Users\admin\Desktop\ai-company-os\frontend
+> vue-tsc --noEmit
+
+
+> ai-company-os-frontend@0.1.0 test C:\Users\admin\Desktop\ai-company-os\frontend
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+
+ Test Files  8 passed (8)
+      Tests  74 passed (74)
+   Start at  10:52:55
+   Duration  4.04s (environment 55%, import 33%, tests 6%, setup 5%, transform 1%)
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 1672 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.61 kB │ gzip:   0.33 kB
+dist/assets/LoginView-C6ArFX1g.css                 0.35 kB │ gzip:   0.20 kB
+dist/assets/SetupView-nInR85PO.css                 0.35 kB │ gzip:   0.20 kB
+dist/assets/NotFoundView-DTqFdDYo.css              0.50 kB │ gzip:   0.26 kB
+dist/assets/ConfirmDialog-B5c7uARD.css             1.08 kB │ gzip:   0.38 kB
+dist/assets/PageHeader-EO54jEsb.css                1.92 kB │ gzip:   0.54 kB
+dist/assets/AuthLayout-B-22-GVC.css                1.93 kB │ gzip:   0.53 kB
+dist/assets/SettingsView-DR-ZsSGv.css              2.06 kB │ gzip:   0.58 kB
+dist/assets/FormField-DSUe8tq1.css                 2.15 kB │ gzip:   0.60 kB
+dist/assets/OverviewView-BnnJbGjw.css              2.93 kB │ gzip:   0.77 kB
+dist/assets/ComponentsShowcaseView-KstjAylS.css    3.31 kB │ gzip:   0.79 kB
+dist/assets/index-BHZfHa9o.css                    21.45 kB │ gzip:   4.15 kB
+dist/assets/element-plus-NojSDrl8.css            360.17 kB │ gzip:  47.96 kB
+dist/assets/AuditView-CXEIWbRo.js                  0.32 kB │ gzip:   0.25 kB
+dist/assets/ModelsView-B7tugZun.js                 0.32 kB │ gzip:   0.25 kB
+dist/assets/BudgetsView-CvL-WpeG.js                0.32 kB │ gzip:   0.25 kB
+dist/assets/ProjectsView-C7C1jGhv.js               0.33 kB │ gzip:   0.25 kB
+dist/assets/KnowledgeView-ga_Ko57y.js              0.33 kB │ gzip:   0.26 kB
+dist/assets/ProposalsView-DrTFhQ7X.js              0.33 kB │ gzip:   0.25 kB
+dist/assets/OrganizationView-pg7bv4K4.js           0.34 kB │ gzip:   0.26 kB
+dist/assets/NotFoundView-BS9KBMSm.js               0.64 kB │ gzip:   0.51 kB
+dist/assets/AuthLayout-CY06npyH.js                 0.99 kB │ gzip:   0.50 kB
+dist/assets/ConfirmDialog-DHJa57ee.js              1.43 kB │ gzip:   0.74 kB
+dist/assets/PageHeader-DmGG9ilL.js                 1.52 kB │ gzip:   0.71 kB
+dist/assets/PhasePlaceholderView-Xxc5knrf.js       2.17 kB │ gzip:   1.30 kB
+dist/assets/FormField-DrkALkqh.js                  2.31 kB │ gzip:   1.09 kB
+dist/assets/LoginView-vMa-jHAv.js                  2.62 kB │ gzip:   1.36 kB
+dist/assets/SetupView-0rpxKnny.js                  3.86 kB │ gzip:   1.78 kB
+dist/assets/OverviewView-x9QTZa_j.js               4.33 kB │ gzip:   2.20 kB
+dist/assets/SettingsView-4fXBuSVm.js               5.54 kB │ gzip:   2.57 kB
+dist/assets/ComponentsShowcaseView-Bq5pdN1_.js    13.68 kB │ gzip:   5.53 kB
+dist/assets/index-D5v9kmH1.js                     50.14 kB │ gzip:  19.71 kB
+dist/assets/element-plus-C1v1TNOX.js             335.38 kB │ gzip: 117.32 kB
+
+✓ built in 545ms

@@ -1,0 +1,258 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.12, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\admin\Desktop\ai-company-os\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\admin\Desktop\ai-company-os\backend
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.15.1
+collecting ... collected 141 items
+
+tests/test_acceptance_script.py::test_database_port_check_requires_evidence[responses0-True] PASSED [  0%]
+tests/test_acceptance_script.py::test_database_port_check_requires_evidence[responses1-True] PASSED [  1%]
+tests/test_acceptance_script.py::test_database_port_check_requires_evidence[responses2-False] PASSED [  2%]
+tests/test_acceptance_script.py::test_database_port_check_requires_evidence[responses3-False] PASSED [  2%]
+tests/test_acceptance_script.py::test_database_port_check_requires_evidence[responses4-False] PASSED [  3%]
+tests/test_acceptance_script.py::test_database_port_check_docker_unavailable PASSED [  4%]
+tests/test_auth.py::test_setup_status_reports_missing_owner PASSED       [  4%]
+tests/test_auth.py::test_first_setup_creates_owner_and_session PASSED    [  5%]
+tests/test_auth.py::test_setup_is_rejected_after_completion PASSED       [  6%]
+tests/test_auth.py::test_concurrent_setup_only_succeeds_once PASSED      [  7%]
+tests/test_auth.py::test_setup_password_confirmation_mismatch PASSED     [  7%]
+tests/test_auth.py::test_setup_password_policy[short-\u81f3\u5c11\u9700\u8981 12 \u4e2a\u5b57\u7b26] PASSED [  8%]
+tests/test_auth.py::test_setup_password_policy[            -\u7a7a\u767d] PASSED [  9%]
+tests/test_auth.py::test_setup_password_policy[1234567890123-\u4e0d\u80fd\u5168\u662f\u6570\u5b57] PASSED [  9%]
+tests/test_auth.py::test_setup_password_policy[aaaaaaaaaaaa-\u5b57\u7b26\u79cd\u7c7b\u592a\u5c11] PASSED [ 10%]
+tests/test_auth.py::test_weak_setup_does_not_create_user PASSED          [ 11%]
+tests/test_auth.py::test_login_rejects_wrong_password_without_revealing_account PASSED [ 12%]
+tests/test_auth.py::test_login_before_setup_is_rejected PASSED           [ 12%]
+tests/test_auth.py::test_login_success_sets_cookies_and_returns_session PASSED [ 13%]
+tests/test_auth.py::test_logout_invalidates_old_session PASSED           [ 14%]
+tests/test_auth.py::test_expired_session_is_rejected PASSED              [ 14%]
+tests/test_auth.py::test_logout_requires_csrf_header PASSED              [ 15%]
+tests/test_auth.py::test_login_lockout_after_repeated_failures PASSED    [ 16%]
+tests/test_auth.py::test_successful_login_clears_failure_counter PASSED  [ 17%]
+tests/test_auth.py::test_password_is_not_stored_in_plaintext PASSED      [ 17%]
+tests/test_auth.py::test_session_token_is_not_stored_in_plaintext PASSED [ 18%]
+tests/test_auth.py::test_audit_events_record_auth_lifecycle PASSED       [ 19%]
+tests/test_auth.py::test_audit_detail_never_contains_password PASSED     [ 19%]
+tests/test_auth_regressions.py::test_commit_failure_never_reports_success[setup] PASSED [ 20%]
+tests/test_auth_regressions.py::test_commit_failure_never_reports_success[login] PASSED [ 21%]
+tests/test_auth_regressions.py::test_commit_failure_never_reports_success[logout] PASSED [ 21%]
+tests/test_auth_regressions.py::test_concurrent_login_respects_threshold[owner-False] PASSED [ 22%]
+tests/test_auth_regressions.py::test_concurrent_login_respects_threshold[owner-True] PASSED [ 23%]
+tests/test_auth_regressions.py::test_concurrent_login_respects_threshold[unknown-owner-False] PASSED [ 24%]
+tests/test_auth_regressions.py::test_concurrent_login_respects_threshold[unknown-owner-True] PASSED [ 24%]
+tests/test_auth_regressions.py::test_expiration_persists_once_under_concurrent_requests PASSED [ 25%]
+tests/test_auth_regressions.py::test_expiration_commit_failure_returns_database_error PASSED [ 26%]
+tests/test_health.py::test_liveness_does_not_require_database PASSED     [ 26%]
+tests/test_health.py::test_readiness_ok_when_migrated PASSED             [ 27%]
+Timeout (0:00:45)!
+Thread 0x0000e110 (most recent call first):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\selectors.py", line 305 in _select
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\selectors.py", line 314 in select
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\waiting.py", line 141 in wait_conn
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\connection.py", line 109 in connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 869 in connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\create.py", line 645 in connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 912 in __connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 671 in __init__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 386 in _create_connection
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\impl.py", line 174 in _do_get
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 709 in checkout
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 1324 in _checkout
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\pool\base.py", line 445 in connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3299 in raw_connection
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 149 in __init__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 3275 in connect
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1203 in _connection_for_bind
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137 in _go
+  File "<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction._connection_for_bind>", line 2 in _connection_for_bind
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2173 in _connection_for_bind
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2350 in _execute_internal
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2473 in execute
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\health_service.py", line 84 in _check_database
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\health_service.py", line 164 in readiness
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\v1\health.py", line 35 in readiness
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 244 in _run_sync_endpoint
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100 in run
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1044 in _bootstrap_inner
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1015 in _bootstrap
+
+Thread 0x00009730 (most recent call first):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 775 in _poll
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 446 in select
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 2012 in _run_once
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 683 in run_forever
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 712 in run_until_complete
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2548 in run
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\from_thread.py", line 538 in run_blocking_portal
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 995 in run
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1044 in _bootstrap_inner
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 1015 in _bootstrap
+
+Thread 0x0000ea98 (most recent call first):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\threading.py", line 359 in wait
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\from_thread.py", line 340 in call
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 416 in handle_request
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 518 in request
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 1053 in get
+  File "C:\Users\admin\Desktop\ai-company-os\backend\tests\test_health.py", line 46 in test_readiness_fails_when_database_unreachable
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\python.py", line 187 in pytest_pyfunc_call
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\python.py", line 1798 in runtest
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 184 in pytest_runtest_call
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 250 in <lambda>
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 361 in from_call
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 249 in call_and_report
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 139 in runtestprotocol
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\runner.py", line 118 in pytest_runtest_protocol
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\main.py", line 411 in pytest_runtestloop
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\main.py", line 387 in _main
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\main.py", line 333 in wrap_session
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\main.py", line 380 in pytest_cmdline_main
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_execution.py", line 147 in _multicall
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_manager.py", line 183 in _hookexec
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pluggy\_caller.py", line 197 in __call__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\config\__init__.py", line 262 in _main
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\_pytest\config\__init__.py", line 286 in _console_main
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\pytest\__main__.py", line 9 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main
+tests/test_health.py::test_readiness_fails_when_database_unreachable PASSED [ 28%]
+tests/test_health.py::test_readiness_fails_when_migrations_not_applied PASSED [ 29%]
+tests/test_health.py::test_readiness_fails_on_revision_mismatch PASSED   [ 29%]
+tests/test_health.py::test_worker_check_skipped_for_api_but_gating_for_worker PASSED [ 30%]
+tests/test_health.py::test_stale_worker_heartbeat_reported PASSED        [ 31%]
+tests/test_health.py::test_expected_head_revision_is_single PASSED       [ 31%]
+tests/test_health.py::test_health_endpoints_are_not_cached[/api/v1/health/live] PASSED [ 32%]
+tests/test_health.py::test_health_endpoints_are_not_cached[/api/v1/health/ready] PASSED [ 33%]
+tests/test_health.py::test_unmigrated_database_returns_503_not_500 PASSED [ 34%]
+tests/test_health.py::test_error_payload_never_returns_placeholder_request_id PASSED [ 34%]
+tests/test_logging.py::test_logs_exclude_actual_credentials[INFO] PASSED [ 35%]
+tests/test_logging.py::test_logs_exclude_actual_credentials[DEBUG] PASSED [ 36%]
+tests/test_logging.py::test_formatter_rejects_arbitrary_extras_messages_and_exception_values PASSED [ 36%]
+tests/test_organization.py::test_company_template_exposes_five_positions PASSED [ 37%]
+tests/test_organization.py::test_company_creation_makes_exactly_five_positions_and_five_agents PASSED [ 38%]
+tests/test_organization.py::test_company_creation_is_idempotent_for_same_key PASSED [ 39%]
+tests/test_organization.py::test_company_creation_rejects_different_payload_after_exists PASSED [ 39%]
+tests/test_organization.py::test_concurrent_company_creation_creates_exactly_one PASSED [ 40%]
+tests/test_organization.py::test_company_requires_authentication PASSED  [ 41%]
+tests/test_organization.py::test_company_write_requires_csrf PASSED      [ 41%]
+tests/test_organization.py::test_company_missing_before_wizard PASSED    [ 42%]
+tests/test_organization.py::test_position_duty_edit_persists_and_versions PASSED [ 43%]
+tests/test_organization.py::test_position_stale_version_is_rejected PASSED [ 43%]
+tests/test_organization.py::test_reporting_cycle_is_rejected_by_server PASSED [ 44%]
+tests/test_organization.py::test_legitimate_reporting_change_persists PASSED [ 45%]
+tests/test_organization.py::test_management_relation_does_not_grant_resource_permissions PASSED [ 46%]
+tests/test_organization.py::test_agent_identity_and_history_survive_status_and_model_changes PASSED [ 46%]
+tests/test_organization.py::test_duty_override_clearing_keeps_history PASSED [ 47%]
+tests/test_organization.py::test_provider_and_model_crud_with_secret_status PASSED [ 48%]
+tests/test_organization.py::test_provider_validation_rejects_bad_config PASSED [ 48%]
+tests/test_organization.py::test_model_assignment_records_history_and_closes_previous PASSED [ 49%]
+tests/test_organization.py::test_assignment_refused_for_disabled_model PASSED [ 50%]
+tests/test_organization.py::test_probe_success_verifies_json_and_records_usage PASSED [ 51%]
+tests/test_organization.py::test_probe_wrong_key_reports_auth_failure_without_leaking_body PASSED [ 51%]
+tests/test_organization.py::test_probe_timeout_is_a_distinct_error PASSED [ 52%]
+tests/test_organization.py::test_probe_invalid_json_output_is_reported_and_usage_kept PASSED [ 53%]
+tests/test_organization.py::test_probe_without_secret_makes_no_call PASSED [ 53%]
+tests/test_organization.py::test_probe_does_not_save_configuration PASSED [ 54%]
+tests/test_organization.py::test_probe_on_disabled_provider_is_refused_locally PASSED [ 55%]
+tests/test_organization.py::test_no_secret_value_in_responses_database_or_logs PASSED [ 56%]
+tests/test_organization.py::test_audit_records_organization_and_model_changes PASSED [ 56%]
+tests/test_organization.py::test_audit_log_has_no_write_endpoint PASSED  [ 57%]
+tests/test_organization.py::test_setup_status_reports_company_initialization PASSED [ 58%]
+tests/test_organization.py::test_company_update_bumps_version_and_audits PASSED [ 58%]
+tests/test_organization.py::test_company_initialization_with_model_binds_all_five PASSED [ 59%]
+tests/test_provider_adapter.py::test_base_url_normalization[https://api.deepseek.com-https://api.deepseek.com/v1/chat/completions] PASSED [ 60%]
+tests/test_provider_adapter.py::test_base_url_normalization[https://api.deepseek.com/-https://api.deepseek.com/v1/chat/completions] PASSED [ 60%]
+tests/test_provider_adapter.py::test_base_url_normalization[https://api.deepseek.com/v1-https://api.deepseek.com/v1/chat/completions] PASSED [ 61%]
+tests/test_provider_adapter.py::test_base_url_normalization[https://api.deepseek.com/v1/chat/completions-https://api.deepseek.com/v1/chat/completions] PASSED [ 62%]
+tests/test_provider_adapter.py::test_base_url_normalization[http://127.0.0.1:11434/v1/-http://127.0.0.1:11434/v1/chat/completions] PASSED [ 63%]
+tests/test_provider_adapter.py::test_blank_base_url_is_invalid_config PASSED [ 63%]
+tests/test_provider_adapter.py::test_timeout_is_clamped_into_a_safe_range[0.1-1.0] PASSED [ 64%]
+tests/test_provider_adapter.py::test_timeout_is_clamped_into_a_safe_range[1-1.0] PASSED [ 65%]
+tests/test_provider_adapter.py::test_timeout_is_clamped_into_a_safe_range[30-30.0] PASSED [ 65%]
+tests/test_provider_adapter.py::test_timeout_is_clamped_into_a_safe_range[5000-120.0] PASSED [ 66%]
+tests/test_provider_adapter.py::test_secret_is_read_from_the_environment_only PASSED [ 67%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[{"ok": true}-True] PASSED [ 68%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[  {"ok": true}  -True] PASSED [ 68%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[```json\n{"ok": true}\n```-True] PASSED [ 69%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[```\n{"ok": true}\n```-True] PASSED [ 70%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[not json-False] PASSED [ 70%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[-False] PASSED [ 71%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[[1, 2, 3]-False] PASSED [ 72%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[{"ok": true} trailing prose-False] PASSED [ 73%]
+tests/test_provider_adapter.py::test_parse_json_object_is_strict[{broken-False] PASSED [ 73%]
+tests/test_provider_adapter.py::test_probe_sends_one_request_with_bearer_and_json_output_request PASSED [ 74%]
+tests/test_provider_adapter.py::test_probe_missing_secret_raises_before_any_call PASSED [ 75%]
+tests/test_provider_adapter.py::test_probe_without_secret_ref_is_refused PASSED [ 75%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[401-AUTH_FAILED] PASSED [ 76%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[403-AUTH_FAILED] PASSED [ 77%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[429-RATE_LIMITED] PASSED [ 78%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[400-HTTP_ERROR] PASSED [ 78%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[500-HTTP_ERROR] PASSED [ 79%]
+tests/test_provider_adapter.py::test_http_status_maps_to_structured_code[503-HTTP_ERROR] PASSED [ 80%]
+tests/test_provider_adapter.py::test_probe_timeout_maps_to_timeout_code PASSED [ 80%]
+tests/test_provider_adapter.py::test_probe_connection_error_maps_to_network_error PASSED [ 81%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body0] PASSED [ 82%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body1] PASSED [ 82%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body2] PASSED [ 83%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body3] PASSED [ 84%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body4] PASSED [ 85%]
+tests/test_provider_adapter.py::test_malformed_envelope_is_invalid_response[body5] PASSED [ 85%]
+tests/test_provider_adapter.py::test_non_json_http_body_is_invalid_response PASSED [ 86%]
+tests/test_provider_adapter.py::test_invalid_model_json_carries_usage_for_accounting PASSED [ 87%]
+tests/test_provider_adapter.py::test_missing_usage_is_unknown_not_zero PASSED [ 87%]
+tests/test_provider_adapter.py::test_zero_usage_is_reported_as_measured_zero PASSED [ 88%]
+tests/test_provider_adapter.py::test_negative_usage_values_are_rejected_not_stored PASSED [ 89%]
+tests/test_provider_adapter.py::test_template_module_matches_migrated_seed_rows PASSED [ 90%]
+tests/test_provider_adapter.py::test_company_repository_reads_five_template_rows PASSED [ 90%]
+tests/test_security.py::test_business_api_requires_session PASSED        [ 91%]
+tests/test_security.py::test_system_status_requires_session PASSED       [ 92%]
+tests/test_security.py::test_system_status_never_leaks_secrets PASSED    [ 92%]
+tests/test_security.py::test_cross_site_setup_write_is_rejected PASSED   [ 93%]
+tests/test_security.py::test_cross_site_login_write_is_rejected PASSED   [ 94%]
+tests/test_security.py::test_cross_site_referer_is_rejected PASSED       [ 95%]
+tests/test_security.py::test_forged_csrf_token_is_rejected PASSED        [ 95%]
+tests/test_security.py::test_csrf_token_from_another_session_is_rejected PASSED [ 96%]
+tests/test_security.py::test_unauthenticated_write_returns_401_before_csrf PASSED [ 97%]
+tests/test_security.py::test_request_id_is_echoed_and_generated PASSED   [ 97%]
+tests/test_security.py::test_unknown_error_envelope_shape PASSED         [ 98%]
+tests/test_security.py::test_openapi_available_in_test_env PASSED        [ 99%]
+tests/test_security.py::test_password_value_never_echoed_in_validation_error PASSED [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_auth.py::test_setup_status_reports_missing_owner
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+tests/test_auth.py::test_logout_invalidates_old_session
+tests/test_security.py::test_csrf_token_from_another_session_is_rejected
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py:518: DeprecationWarning: Setting per-request cookies=<...> is being deprecated, because the expected behaviour on cookie persistence is ambiguous. Set cookies directly on the client instance instead.
+    return super().request(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 141 passed, 4 warnings in 162.56s (0:02:42) =================

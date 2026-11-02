@@ -1,0 +1,224 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+{"ts": "2026-11-02T02:42:13.946493+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:14.109457+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:14.115348+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bc3c408038104ee681f5855643797a5c", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 166.43, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.116078+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.202727+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:14.209141+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1304f68374ed4d088383f3f2a2b2e1a5", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 90.2, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.209575+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.261753+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2c523b6d08e04f84b2e128e3ca5016a6", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 49.23, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.262201+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.331108+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:14.345809+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "dd902a1b03d6433684ad29aad5ac676b", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 80.79, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.346203+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.422993+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "58aa3d3c9c4f4b8f8b6cbfd8737a4299", "method": "GET", "path": "/api/v1/organization", "status": 200, "duration_ms": 74.39, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.423617+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.479609+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0ede2d2752ab4a9da62952e6fa41a152", "method": "POST", "path": "/api/v1/agents/1/model-assignment", "status": 200, "duration_ms": 51.97, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.480180+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.635762+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.657328+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.680966+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3582b0190fd24c95b218c1a49e73b05c", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 195.98, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.681393+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:14.769883+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a9ee48c222804592b747c6163113993d", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 85.43, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.770320+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "late-old-probe", "stored_capability": false, "stored_outcome": "FAILURE", "displayed_model_capability": false, "assigned_capability": false, "stale": false}
+{"ts": "2026-11-02T02:42:14.853194+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "84b4ba3df9c449b79e030b16466cce9c", "method": "GET", "path": "/api/v1/organization", "status": 200, "duration_ms": 75.08, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:14.853634+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+.{"ts": "2026-11-02T02:42:14.863363+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T02:42:15.470482+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:15.616857+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:15.621865+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fb832bc7481c4ac187badfb7f57475b4", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 148.88, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:15.622464+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:15.663274+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:15.668217+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bf726b30c12849ae8b837225fcd02001", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 42.42, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:15.668794+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:15.697929+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e83aa37d492444929e9c66d6a7fc5691", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 25.47, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:15.698597+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:15.759944+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:15.775954+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5c3f2d81af56445eb14637ebde1688f7", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 73.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:15.776443+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 8c24a71d9e03 -> 3f8d2c6a91b4, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running downgrade 3f8d2c6a91b4 -> 7b41c9d2f0aa, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+RECHECK {"case": "migration-evidence", "old_capability": null, "old_stale": true, "new_probe_outcome": "SUCCESS", "new_capability": true, "new_stale": false}
+.{"ts": "2026-11-02T02:42:16.223981+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:16.374494+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:16.379556+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "00100c3e991545d7899d9cd756ac0e01", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 153.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:16.380036+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:16.421574+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:16.427700+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "037f7ba9f3274f38a20d1a6a5488873a", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 44.98, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:16.428262+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:16.457874+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bd8545fd9d0546acb215c771d04b0350", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 26.2, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:16.458335+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:16.609730+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:16.629194+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4fc20960b44541c0a53d2b554ed7125a", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 166.83, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:16.629638+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 8c24a71d9e03 -> 3f8d2c6a91b4, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+RECHECK {"case": "migration-evidence", "old_capability": null, "old_stale": true, "new_probe_outcome": "SUCCESS", "new_capability": true, "new_stale": false}
+.{"ts": "2026-11-02T02:42:17.013807+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:17.154829+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:17.159483+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ad5b4992301f46dcb45d085c06af73c7", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 144.01, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.159971+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.199057+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:17.203141+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "24333426cc7e465b9362f313e5ccacf4", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 40.36, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.203508+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.229882+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fe52c33941874fedbbc5eac9b95fc90f", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 23.89, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.230265+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.299375+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.322488+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "68457afaae2a4ab5a6766258d18278e7", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 90.04, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.322936+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "surrogate-model", "status": 200, "exception": null, "outcome": "SUCCESS", "usage_rows": 1, "audit_rows": 1}
+.{"ts": "2026-11-02T02:42:17.331818+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T02:42:17.475118+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:17.687949+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:17.697868+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "01d2a5a550874ce9a3609804266fccdf", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 220.72, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.698376+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.737625+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:17.742302+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "292293fce34a47fca1e60ee8d5645a87", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 40.81, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.742659+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.770791+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "32451ddc7c20460a99a06e5466f324ca", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 25.64, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.771162+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.832257+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:17.852086+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "17c535d45c6f4037a7e855562b0a49c7", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 78.22, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:17.852498+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "surrogate-model", "status": 200, "exception": null, "outcome": "SUCCESS", "usage_rows": 1, "audit_rows": 1}
+.{"ts": "2026-11-02T02:42:17.861072+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T02:42:17.995878+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:18.132772+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:18.137121+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9015187b792f4998b3e3d81f855a8930", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 139.27, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.137620+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.174840+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:18.178970+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4a7ebf1ec3c84e1493f176b7ad09bbd9", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 38.81, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.179450+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.203409+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7a693afde07444889b1be42aa8704277", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.48, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.203905+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.259919+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.277591+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f48e670a4c024dd193a90d97cd2e9c98", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 71.07, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.277968+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "surrogate-model", "status": 200, "exception": null, "outcome": "FAILURE", "usage_rows": 1, "audit_rows": 1}
+.{"ts": "2026-11-02T02:42:18.285563+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T02:42:18.421667+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:18.573874+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:18.578554+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bd83d2e879f7469780e4df97bf77959f", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 154.8, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.579068+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.636858+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:18.642911+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "28c0105e7a2d49d68b99b1849d853a89", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 60.94, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.643286+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.668472+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fcfce975c8be4f938214e8f8f18527c3", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 22.73, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.668853+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.720962+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:18.737457+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7fb9a9c5ab8544c9aa27403bb9cc7a25", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 66.25, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:18.737828+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "surrogate-model", "status": 200, "exception": null, "outcome": "FAILURE", "usage_rows": 1, "audit_rows": 1}
+.{"ts": "2026-11-02T02:42:18.745313+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 58936)
+Traceback (most recent call last):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\http\server.py", line 447, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\http\server.py", line 435, in handle_one_request
+    method()
+    ~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\tests\test_v2_fixes.py", line 205, in do_POST
+    self.wfile.write(f"X-Drip-{i}: value\r\n".encode())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\socketserver.py", line 845, in write
+    self._sock.sendall(b)
+    ~~~~~~~~~~~~~~~~~~^^^
+ConnectionAbortedError: [WinError 10053] 你的主机中的软件中止了一个已建立的连接。
+----------------------------------------
+RECHECK {"case": "slow-headers", "configured": 1, "elapsed": 1.011, "error_code": "TIMEOUT", "peer_saw_disconnect": false}
+F{"ts": "2026-11-02T02:42:22.872718+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "body-stall", "elapsed": 1.011, "calls": 1, "peer_saw_disconnect": true}
+.{"ts": "2026-11-02T02:42:23.994732+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:24.177136+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:24.182795+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "939deeb02ae14f839f230309df640e64", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 186.19, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:24.183297+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:24.235276+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:24.240150+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "242d8d4665b4459c99f94df75c95c625", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 54.36, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:24.240613+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:24.265064+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1e2ba33220174b9987634620af70914e", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.57, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:24.265474+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:24.326688+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:24.344650+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "63df79d0353345b5a0166ebdabcf285d", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 76.81, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:24.345215+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:24.372769+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "unhandled exception", "error": "RuntimeError", "exception_type": "RuntimeError", "traceback": [{"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\errors.py", "line": 164, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_asgi.py", "line": 151, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 37, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 102, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 91, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 149, "function": "simple_response"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py", "line": 63, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\middleware\\asyncexitstack.py", "line": 18, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\routing.py", "line": 683, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2811, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1839, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2894, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1865, "function": "_handle_selected"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1328, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 166, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 152, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 745, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 374, "function": "run_endpoint_function"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\concurrency.py", "line": 34, "function": "run_in_threadpool"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\to_thread.py", "line": 65, "function": "run_sync"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 2706, "function": "run_sync_in_worker_thread"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 1100, "function": "run"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_api.py", "line": 244, "function": "_run_sync_endpoint"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\v1\\model_centre.py", "line": 366, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\services\\model_centre_service.py", "line": 696, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\providers\\adapter.py", "line": 347, "function": "probe"}, {"file": "C:\\Users\\admin\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\asyncio\\runners.py", "line": 195, "function": "run"}, {"file": "C:\\Users\\admin\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\asyncio\\runners.py", "line": 118, "function": "run"}, {"file": "C:\\Users\\admin\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\asyncio\\base_events.py", "line": 725, "function": "run_until_complete"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\providers\\adapter.py", "line": 354, "function": "probe_async"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\providers\\adapter.py", "line": 420, "function": "_probe"}, {"file": "C:\\Users\\admin\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\contextlib.py", "line": 214, "function": "__aenter__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_client.py", "line": 1583, "function": "stream"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_client.py", "line": 1629, "function": "send"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_client.py", "line": 1657, "function": "_send_handling_auth"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_client.py", "line": 1694, "function": "_send_handling_redirects"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_client.py", "line": 1730, "function": "_send_single_request"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\httpx\\_transports\\mock.py", "line": 34, "function": "handle_async_request"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\tests\\test_v2_fixes.py", "line": 314, "function": "interrupted"}]}
+{"ts": "2026-11-02T02:42:24.617577+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 8c24a71d9e03 -> 3f8d2c6a91b4, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+RECHECK {"case": "migration-preservation", "history_unchanged": true, "capability": true, "pending": 1}
+.{"ts": "2026-11-02T02:42:25.090439+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T02:42:25.265641+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T02:42:25.271937+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e0c80d0c32804b4bb508c1dd89a904dc", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 179.55, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.272396+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.312622+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:25.317398+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3e27fc0667764eb1b0245cca4e4ff9db", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 42.18, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.317761+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.346032+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b6dde3741f30473682637b1866b0faef", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 25.84, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.346423+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.534779+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T02:42:25.548260+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cd356f6a0c464ef8b1e28c826edc96f0", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 199.35, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.548843+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.621896+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.638786+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "083d68cfa5294e678fee293501361d09", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 87.04, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.639312+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.677569+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "64b27f594e1e40099fdd723e5b3fee69", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 29.72, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.677942+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T02:42:25.727150+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "09c5397a1a2a4322b59f0a2df182a98d", "method": "GET", "path": "/api/v1/organization", "status": 200, "duration_ms": 46.13, "client_ip": "testclient"}
+{"ts": "2026-11-02T02:42:25.727575+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+.{"ts": "2026-11-02T02:42:25.729321+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+
+================================== FAILURES ===================================
+______________ test_total_deadline_covers_slow_response_headers _______________
+tests\test_v2_fixes.py:250: in test_total_deadline_covers_slow_response_headers
+    assert saw_disconnect, "timed-out network work survived the call"
+E   AssertionError: timed-out network work survived the call
+E   assert False
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_v2_fixes.py::test_late_old_probe_cannot_overwrite_new_probe
+tests/test_v2_fixes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe[7b41c9d2f0aa]
+tests/test_v2_fixes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe[7b41c9d2f0aa]
+tests/test_v2_fixes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe[3f8d2c6a91b4]
+tests/test_v2_fixes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe[3f8d2c6a91b4]
+tests/test_v2_fixes.py::test_data_migration_preserves_matching_evidence_pending_usage_and_audit
+tests/test_v2_fixes.py::test_data_migration_preserves_matching_evidence_pending_usage_and_audit
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_v2_fixes.py::test_total_deadline_covers_slow_response_headers
+1 failed, 10 passed, 8 warnings in 12.98s

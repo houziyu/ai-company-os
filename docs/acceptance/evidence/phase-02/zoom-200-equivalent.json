@@ -1,0 +1,65 @@
+{
+  "method": "CDP Emulation.setDeviceMetricsOverride: CSS viewport halved + DPR doubled (equivalent layout conditions of 200% page zoom)",
+  "explicitly_not": "the browser zoom feature; see zoom-200-real.json",
+  "browser": "156.0.8078.48",
+  "baseline": {
+    "dpr": 1,
+    "innerWidth": 1440,
+    "innerHeight": 900
+  },
+  "zoomed": {
+    "dpr": 2,
+    "innerWidth": 720,
+    "innerHeight": 450,
+    "outerWidth": 1440
+  },
+  "layouts": [
+    {
+      "route": "overview",
+      "dpr": 2,
+      "innerWidth": 720,
+      "innerHeight": 450,
+      "scrollWidth": 720,
+      "minFontPx": 12
+    },
+    {
+      "route": "organization",
+      "dpr": 2,
+      "innerWidth": 720,
+      "innerHeight": 450,
+      "scrollWidth": 720,
+      "minFontPx": 12
+    },
+    {
+      "route": "models",
+      "dpr": 2,
+      "innerWidth": 720,
+      "innerHeight": 450,
+      "scrollWidth": 720,
+      "minFontPx": 12
+    },
+    {
+      "route": "audit",
+      "dpr": 2,
+      "innerWidth": 720,
+      "innerHeight": 450,
+      "scrollWidth": 720,
+      "minFontPx": 12
+    },
+    {
+      "route": "setup/company",
+      "dpr": 2,
+      "innerWidth": 720,
+      "innerHeight": 450,
+      "scrollWidth": 720,
+      "minFontPx": 12
+    }
+  ],
+  "drawer": {
+    "x": 160,
+    "y": 0,
+    "width": 560,
+    "height": 450
+  },
+  "pageErrors": []
+}

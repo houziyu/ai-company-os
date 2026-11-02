@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-30",
+  "backend_static": {
+    "ruff_check": "passed",
+    "ruff_format_check": "57 files already formatted",
+    "mypy": "42 source files passed"
+  },
+  "frontend": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "tests": "91 passed / 10 files",
+    "build": "passed"
+  },
+  "notes": "Static/frontend summary transcribed from actual command outputs in this review; full backend/probe logs stored separately. No UI/browser validation performed.",
+  "backend_tests": {
+    "passed": 159,
+    "warnings": 4,
+    "elapsed_seconds": 183.53
+  },
+  "independent_probes": {
+    "backend_failed": 4,
+    "frontend_failed": 1
+  }
+}

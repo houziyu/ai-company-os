@@ -1,0 +1,382 @@
+[
+  {
+    "path": "frontend/src/__tests__/setup.ts",
+    "sha256": "eceffc3cb8177cd0433d3e020ed08845cde538bfbf8306e9771229d3b74dcc9d"
+  },
+  {
+    "path": "frontend/src/__tests__/session-store.spec.ts",
+    "sha256": "0d62cc42c03f01ddbbf88dc5bf8388de7c23e8e62c3a5ca5735ac8622f64e48c"
+  },
+  {
+    "path": "frontend/src/__tests__/session-race.spec.ts",
+    "sha256": "b6d10ae9c954aa5178ba463ff492a949db94c17861a3379f19b216acc69c3722"
+  },
+  {
+    "path": "frontend/src/__tests__/phase02-views.spec.ts",
+    "sha256": "fc719c1a9281d86a2e53f29113065ddf941178e4d6bfaedcfae23ee073dc51eb"
+  },
+  {
+    "path": "frontend/src/__tests__/logout-regressions.spec.ts",
+    "sha256": "953ebc2ffdb9b8a32fbdb3c188f0c8226f4f5c76599f26c2f0ec59f4160396c1"
+  },
+  {
+    "path": "frontend/src/__tests__/helpers.ts",
+    "sha256": "4b004800124c87b444a3305a82f056980d2ee6f972935d516918fad28e789914"
+  },
+  {
+    "path": "frontend/src/__tests__/design-tokens.spec.ts",
+    "sha256": "1e83b7839ad7ee40b89d5257fa4a4d93c7fb8bd9367c1a020a81f461cda464c5"
+  },
+  {
+    "path": "frontend/src/__tests__/components.spec.ts",
+    "sha256": "36c2b3080ca289ceef0013dd4568c21cd18f4a0971d2bad890f9e159bae45599"
+  },
+  {
+    "path": "frontend/src/__tests__/auth-regressions.spec.ts",
+    "sha256": "4bfb346aeef78aaf2472ed37f04dc8a3b4a41164104d6cb7cd8289f6cd118cad"
+  },
+  {
+    "path": "frontend/src/__tests__/AppButton.spec.ts",
+    "sha256": "1d99f6a39e1dde7e7fe4a3d3c43fe19b60ebee4f56ec66d954e835e724045243"
+  },
+  {
+    "path": "frontend/src/__tests__/api-client.spec.ts",
+    "sha256": "7092ce56e31fe2243c2ccce782e9c355653061fd4ad5492a52c894485b633d00"
+  },
+  {
+    "path": "frontend/src/views/SetupView.vue",
+    "sha256": "154b22ad92bf8677d86e572fe5ef9dc8a8b8ddf679bcd66507679ac37b086e57"
+  },
+  {
+    "path": "frontend/src/views/SettingsView.vue",
+    "sha256": "fcb4350f27dcdf123416c1a118725ecef74ecc0a887ba3f318f5044c05bc6aaf"
+  },
+  {
+    "path": "frontend/src/views/ProposalsView.vue",
+    "sha256": "7191fc960bad36ac3b2e6cdb7916bc8d1faf7927566b1940df9d9ed66a495eb3"
+  },
+  {
+    "path": "frontend/src/views/ProjectsView.vue",
+    "sha256": "0ea2b936b700bdefec414d441bf04771a40ffbe31428c8a095835be6f7edea34"
+  },
+  {
+    "path": "frontend/src/views/PhasePlaceholderView.vue",
+    "sha256": "71f778b0e16c19bdf0c73687ac77a041c1ff1a9236a46a907622ab1a10310e57"
+  },
+  {
+    "path": "frontend/src/views/OverviewView.vue",
+    "sha256": "9f403b2b5e6ae63ab2a905daad609b9b50269aaaa8da00215fa6c1cd86ffde6e"
+  },
+  {
+    "path": "frontend/src/views/OrganizationView.vue",
+    "sha256": "e8e838791b0151081789f00a5cb707ac8163e63b562ec5921e8d8a99f74cfa6a"
+  },
+  {
+    "path": "frontend/src/views/NotFoundView.vue",
+    "sha256": "068f85b663a0a28e8738a81fe7aff54ae2b3c7d11df6afaa6456da1ca19ebc5e"
+  },
+  {
+    "path": "frontend/src/views/ModelsView.vue",
+    "sha256": "92f2f830017dcdf4147cc48cc347b2bcba4669e0d37c12cd6e805395ee45aa54"
+  },
+  {
+    "path": "frontend/src/views/LoginView.vue",
+    "sha256": "3f4e6b08f6b3cbebc49047e9e685b410d90d56b43fef881ba79190a35382085a"
+  },
+  {
+    "path": "frontend/src/views/KnowledgeView.vue",
+    "sha256": "0821f9539f1685d31a6c3500a65c4dfe2a302bcd7928bdfcf2b3f12dfbfdaf57"
+  },
+  {
+    "path": "frontend/src/views/ComponentsShowcaseView.vue",
+    "sha256": "92ccc84b7a7cbf0c4c9a208eef88c5c9eb40055f743656b7ad6731c27b9b8bd8"
+  },
+  {
+    "path": "frontend/src/views/CompanySetupView.vue",
+    "sha256": "fc7885ba29a492c6c258a55ce0132b0634ffb6a17f829db2c6610a301c4de5ea"
+  },
+  {
+    "path": "frontend/src/views/BudgetsView.vue",
+    "sha256": "0b2255b00d408a409aa45f16a0c63c6db393897297f49d28728f0b5a19c907d7"
+  },
+  {
+    "path": "frontend/src/views/AuditView.vue",
+    "sha256": "65b9742ee66cf98c766e8194dd5f9689e937b5001ddc3d3395c48dc43aecac20"
+  },
+  {
+    "path": "frontend/src/layouts/AuthLayout.vue",
+    "sha256": "b9391c8d88fe81252217698493eba6366944b71405a36949d239226a43176374"
+  },
+  {
+    "path": "frontend/src/layouts/AppShell.vue",
+    "sha256": "fe060f8c46c3caa0c267006826ac3f81069e7262ffcf2c2d3d2fa5b4b4f1b14d"
+  },
+  {
+    "path": "backend/app/main.py",
+    "sha256": "f0e1ac642a937e870f120e676c5ab3b4b379a530f6a0257c92fa4e7c66201789"
+  },
+  {
+    "path": "backend/app/logging.py",
+    "sha256": "00d2618a131bfc0b56dfb4f73b2de8172536c5d52973def50dff83fb396cab1b"
+  },
+  {
+    "path": "frontend/src/composables/useServiceHealth.ts",
+    "sha256": "c01f6f49a7ecf1db2ea02b024a8750afd81ce07d0e0b3422512acbb8f7995720"
+  },
+  {
+    "path": "frontend/src/composables/useLogout.ts",
+    "sha256": "647474cb9ce5cc1b417471f2d84ef38cca33cbd18f68de342e6cf7182fa36a2b"
+  },
+  {
+    "path": "frontend/src/styles/tokens.ts",
+    "sha256": "5a9d442c348c2499390f7c89e6124982ad2aa8f5159a23c1c13d637f89411693"
+  },
+  {
+    "path": "backend/app/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "frontend/src/main.ts",
+    "sha256": "1c9d269441946170a0bde15c0154e4f8416eec55ed5cd2186d4734aafdf751ff"
+  },
+  {
+    "path": "backend/alembic/env.py",
+    "sha256": "425758af56a122c4d58c6d4668031538a3eac979e361e817482e2aed02e9c4eb"
+  },
+  {
+    "path": "frontend/src/App.vue",
+    "sha256": "fd973328ddaa142472f84b1f7943641a5169bd064c4e701916d4d71c7b32604f"
+  },
+  {
+    "path": "backend/app/asgi.py",
+    "sha256": "c763e4c0b39b4ba3121f26d5dc5a3e60f15383731e6c0dc78f8b5cd3760fa1df"
+  },
+  {
+    "path": "backend/alembic/versions/7b41c9d2f0aa_phase_02_company_organization_models.py",
+    "sha256": "987a9c97f62ea8c331240b6f1b1e561e7fb66761e643d52da91e0bf41be0206c"
+  },
+  {
+    "path": "backend/alembic/versions/6a790d8c2b88_phase_01_initial_schema.py",
+    "sha256": "ff240c7270371a7b4b811f8fc1a76a157a639d6896748f49764c0bf125afd79c"
+  },
+  {
+    "path": "backend/app/config.py",
+    "sha256": "37c7c64268512940cabf23b1abc4e558ac961e2ee351745897a813d4d23f9430"
+  },
+  {
+    "path": "frontend/src/router/navigation.ts",
+    "sha256": "4158c3076137ff76ac7187b81f11a1dc6d7751fdf427d36a8daed3d4eaff144f"
+  },
+  {
+    "path": "frontend/src/router/index.ts",
+    "sha256": "4c6a1d055f961cdecd9d59bc1d5702e893e649787736c42707abcee6a6fc7da8"
+  },
+  {
+    "path": "frontend/src/stores/session.ts",
+    "sha256": "e9e9729a0b4615d419137b3be971597de4936c61edd77054d29bcb8778647e5b"
+  },
+  {
+    "path": "frontend/src/components/StatusBadge.vue",
+    "sha256": "727b9579c2245afb7633f9999f73fd8f3c4cbda16cfe45c842576c8ef511341c"
+  },
+  {
+    "path": "frontend/src/components/PageHeader.vue",
+    "sha256": "1d095b8b6eacfead2e3dd94b270ff2728eb6fbd037136d9769b3fd63baa67fc9"
+  },
+  {
+    "path": "frontend/src/components/FormField.vue",
+    "sha256": "7cea8455c76b68ff9d135a5480fc5466b09d320133dac6e7b27250c0d1ced7a6"
+  },
+  {
+    "path": "frontend/src/components/ErrorState.vue",
+    "sha256": "a9ea003c74ffb2390458c92036b6b4480b258a45215f7ad791d049d885fea69f"
+  },
+  {
+    "path": "frontend/src/components/EmptyState.vue",
+    "sha256": "330e3b70cd76b53e3571cd39114ae8e31c323c48cd97a7a5597a61609afaea3b"
+  },
+  {
+    "path": "frontend/src/components/ConfirmDialog.vue",
+    "sha256": "2ca13430b43c8d0506e8aef24644cb84a7a2298c9e7bdbc0dfbfb23dfe189d3a"
+  },
+  {
+    "path": "frontend/src/components/AppInput.vue",
+    "sha256": "83feca636828b4e008bdaec18e094cd84c16e1e6221e06f5373e1d1fe82bf87c"
+  },
+  {
+    "path": "frontend/src/components/AppDrawer.vue",
+    "sha256": "3e19865ea79a20813bd466098d8508db76725ae6265fd413d305af68ec058ab3"
+  },
+  {
+    "path": "frontend/src/components/AppButton.vue",
+    "sha256": "b7bd7c532a50c614a2c76c40272a2b34c58323777babf56a937f7d70bda4dc2a"
+  },
+  {
+    "path": "frontend/src/api/types.ts",
+    "sha256": "bb0977f338a6095e85be7544095a29b2eb2dfe68b9eb0af947568bf351cdb9ac"
+  },
+  {
+    "path": "frontend/src/api/organization-types.ts",
+    "sha256": "573994765546a9558ad2af1d3407ea9c295582263150f13f942f49d3d4aaed77"
+  },
+  {
+    "path": "frontend/src/api/endpoints.ts",
+    "sha256": "70c8efbe9d4cce712e9df1a0e0f0ed3ad30866337f9b16f7642f294fcbabb87b"
+  },
+  {
+    "path": "frontend/src/api/client.ts",
+    "sha256": "5d91338a9220548ffd11e0200e9cb8fa1197e9e2f6f84d790242f85730d86bfd"
+  },
+  {
+    "path": "frontend/src/api/auth-failure.ts",
+    "sha256": "7513097aa7aac689b0ae282ed2f037076bd20baedbdc1bee5e738e9ba088a284"
+  },
+  {
+    "path": "backend/app/workers/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/workers/health_worker.py",
+    "sha256": "5079b67f623b7dd2f347fcb4edb2674e4d14b3ed440ab5197ebcf5fb1b57daa8"
+  },
+  {
+    "path": "backend/app/domain/errors.py",
+    "sha256": "69f364e579fb556e32243e1bd2621925f17dfd2d6144a177a7311e89cbe9901a"
+  },
+  {
+    "path": "backend/app/domain/enums.py",
+    "sha256": "fce3b27e5f302a824d47099bf60ac9252666c1dd9bd48ef3827b5ec580430e67"
+  },
+  {
+    "path": "backend/app/domain/company_template.py",
+    "sha256": "2afbba74e61d3dc0708b3e374245f53916a4be565dfdf685a9c2ba36a00479cb"
+  },
+  {
+    "path": "backend/app/domain/security.py",
+    "sha256": "17d65e4bb1aab30dbef56ba07defff005ccb6190b0a089d94892ab36e7110b04"
+  },
+  {
+    "path": "backend/app/domain/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/providers/adapter.py",
+    "sha256": "ebb18af08b6f75697986684fc4e339446d4afc9139925f6a4245ad5a312bbfe9"
+  },
+  {
+    "path": "backend/app/providers/__init__.py",
+    "sha256": "f2e0c5e768a797f1886c732b98817b688e1129c63ea84e27aa00b627f95cf967"
+  },
+  {
+    "path": "backend/app/models/organization.py",
+    "sha256": "b184c3a69e355f0656002514f335409f74bff044e621f573a8d742082338cc07"
+  },
+  {
+    "path": "backend/app/models/entities.py",
+    "sha256": "671865b0ba05ef43ee0dcb56f076939f65678e078cc754b9705df420f65126a1"
+  },
+  {
+    "path": "backend/app/models/__init__.py",
+    "sha256": "621b47fd010ce5f24e9943dc9c00690d1eeaabfb26cd97dbbe17af12ea951adb"
+  },
+  {
+    "path": "backend/app/repositories/organization_repository.py",
+    "sha256": "9d8f3465c2710eae70f44d57fe78d52a3d7014c2aed6c3d1772dee36c0c4e53d"
+  },
+  {
+    "path": "backend/app/repositories/auth_repository.py",
+    "sha256": "59a4f97b02576125d2bab98a28c2b36b35b4f4e61a0d47a4ea4a47d1114b9433"
+  },
+  {
+    "path": "backend/app/repositories/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/services/model_centre_service.py",
+    "sha256": "0c340f790cb9a0dc373c68fd0b653ec1c197f2253175f0e2f430e5eecdcfef25"
+  },
+  {
+    "path": "backend/app/services/health_service.py",
+    "sha256": "17638d6bb9c7f1f5c162cdb051ca1354a4c5ac2d70412237bdc1c8927604c336"
+  },
+  {
+    "path": "backend/app/services/auth_service.py",
+    "sha256": "7c037c6c46773591a9eab1aa376864e442829e5495c45ee9a6ef275ccc90d061"
+  },
+  {
+    "path": "backend/app/services/organization_service.py",
+    "sha256": "1f0bf45c68da15644d83c11b2e82953d3aefc9a3cd4fba5ec7aad5661f1f0d62"
+  },
+  {
+    "path": "backend/app/services/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/api/context.py",
+    "sha256": "62df08efa06d183a1fd862cfa84025090b54051fc08c95efd90bd786f3ffae5c"
+  },
+  {
+    "path": "backend/app/api/deps.py",
+    "sha256": "b0a2fc07ba1144a43444f792bb92c3989720e16946fe8c0615040dd37fd518a8"
+  },
+  {
+    "path": "backend/app/api/cookies.py",
+    "sha256": "992f4fc59de1359e0e4a2f96e51cd67db146af8ee2c881ad463c65f79027b12a"
+  },
+  {
+    "path": "backend/app/api/errors.py",
+    "sha256": "58a07a39de62a1dcf6d71f9f476d593d65c4b6b370a7c8a97d8bcc8f2f9375ec"
+  },
+  {
+    "path": "backend/app/api/schemas_organization.py",
+    "sha256": "f6399328babec4c69e3e172d1ddaf4569bbe8eb10f0e6113d3330c923878e693"
+  },
+  {
+    "path": "backend/app/api/middleware.py",
+    "sha256": "d2d2aa827e753ee8cb8fe9d91dd116d90cb25bbb3cbe015eb2ca80774c6b1555"
+  },
+  {
+    "path": "backend/app/api/schemas.py",
+    "sha256": "5306021af0efb7b898cc43b3e185d3c3b96c7f040551aeae94e95ba3d1be1018"
+  },
+  {
+    "path": "backend/app/api/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/db/session.py",
+    "sha256": "c3df271f38b61447322df26d56d90034a9675cfdd8cf6e5736fe84d339a73450"
+  },
+  {
+    "path": "backend/app/db/base.py",
+    "sha256": "fcfe55aac86a3fd2c3286a219bb3522d6c14044ba6272621053d3056e0bbbb00"
+  },
+  {
+    "path": "backend/app/db/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "backend/app/api/v1/health.py",
+    "sha256": "d5b9b0ff461592ee58120233cf55e9bb621bda0f9024f9c7c70dd06fcd12d14b"
+  },
+  {
+    "path": "backend/app/api/v1/auth.py",
+    "sha256": "6ba9a9291d8288e531cda7b04040f712ea8ce01de6598071a04db7efb6985ac6"
+  },
+  {
+    "path": "backend/app/api/v1/audit.py",
+    "sha256": "ff9d843f3c4e06d069220eeb209cdd9094cab55f35c8f0ef0ec119aa1b2a3841"
+  },
+  {
+    "path": "backend/app/api/v1/organization.py",
+    "sha256": "5b78812867e1593b658ffe79e10b0b813950f57578fd7bd2c31c7ebf6a2ea0df"
+  },
+  {
+    "path": "backend/app/api/v1/model_centre.py",
+    "sha256": "78ad22fccd49851d9c776dbbc61e53dfd14d13f2721dbbe7ba08ad6269b50ab7"
+  },
+  {
+    "path": "backend/app/api/v1/__init__.py",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

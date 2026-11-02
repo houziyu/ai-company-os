@@ -1,0 +1,5 @@
+{
+  "argon2_hash_leaked": false,
+  "session_hash_parameters_leaked": false,
+  "csrf_hash_parameters_leaked": false
+}

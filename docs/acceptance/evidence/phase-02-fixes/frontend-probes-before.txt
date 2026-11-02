@@ -1,0 +1,82 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90mC:/Users/admin/Desktop/ai-company-os/frontend[39m
+
+[90mstdout[2m | src/__tests__/zz-reviewed-probes.spec.ts[2m > [22m[2mR10: keyboard users can reach the third model-centre tab
+[22m[39mREVIEW R10 { selected: [33m1[39m, focused: [33m0[39m }
+
+[90mstdout[2m | src/__tests__/zz-reviewed-probes.spec.ts[2m > [22m[2mR11: selecting unbound must not silently keep the existing model
+[22m[39mREVIEW R11 { requestedBindings: [33m0[39m, displayedUnboundOption: [33mtrue[39m }
+
+[90mstdout[2m | src/__tests__/zz-reviewed-probes.spec.ts[2m > [22m[2mR8: a failed model binding must not make the next profile save stale
+[22m[39mREVIEW R8 UI { expectedVersions: [ [33m1[39m, [33m1[39m ], serverVersion: [33m2[39m }
+
+ [31m❯[39m src/__tests__/zz-reviewed-probes.spec.ts [2m([22m[2m3 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 355[2mms[22m[39m
+[31m   [31m×[31m R10: keyboard users can reach the third model-centre tab[39m[32m 193[2mms[22m[39m
+[31m   [31m×[31m R11: selecting unbound must not silently keep the existing model[39m[32m 109[2mms[22m[39m
+[31m   [31m×[31m R8: a failed model binding must not make the next profile save stale[39m[32m 52[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/zz-reviewed-probes.spec.ts[2m > [22mR10: keyboard users can reach the third model-centre tab
+[31m[1mAssertionError[22m: expected 'false' to be 'true' // Object.is equality[39m
+
+Expected: [32m"[7mtru[27me"[39m
+Received: [31m"[7mfals[27me"[39m
+
+[36m [2m❯[22m src/__tests__/zz-reviewed-probes.spec.ts:[2m60:48[22m[39m
+    [90m 58|[39m   console.log('REVIEW R10', { selected: tabs.findIndex(tab => tab.attr…
+    [90m 59|[39m     focused: tabs.findIndex(tab => tab.element === document.activeElem…
+    [90m 60|[39m   expect(tabs[2]!.attributes('aria-selected')).toBe('true')
+    [90m   |[39m                                                [31m^[39m
+    [90m 61|[39m })
+    [90m 62|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/zz-reviewed-probes.spec.ts[2m > [22mR11: selecting unbound must not silently keep the existing model
+[31m[1mAssertionError[22m: expected +0 to be 1 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/__tests__/zz-reviewed-probes.spec.ts:[2m88:27[22m[39m
+    [90m 86|[39m   const bindings = calls.filter(call => call.url.endsWith('/model-assi…
+    [90m 87|[39m   console.log('REVIEW R11', { requestedBindings: bindings.length, disp…
+    [90m 88|[39m   expect(bindings.length).toBe(1)
+    [90m   |[39m                           [31m^[39m
+    [90m 89|[39m })
+    [90m 90|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/zz-reviewed-probes.spec.ts[2m > [22mR8: a failed model binding must not make the next profile save stale
+[31m[1mAssertionError[22m: expected [ 1, 1 ] to deeply equal [ 1, 2 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    1,[22m
+[32m-   2,[39m
+[31m+   1,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/__tests__/zz-reviewed-probes.spec.ts:[2m122:28[22m[39m
+    [90m120|[39m   save.click(); await flushPromises()
+    [90m121|[39m   console.log('REVIEW R8 UI', { expectedVersions, serverVersion: curre…
+    [90m122|[39m   expect(expectedVersions).toEqual([1, 2])
+    [90m   |[39m                            [31m^[39m
+    [90m123|[39m })
+    [90m124|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[90m (3)[39m
+[2m   Start at [22m 13:50:00
+[2m   Duration [22m 3.24s[2m (import 47%, environment 34%, tests 12%, transform 4%, setup 3%)[22m
+

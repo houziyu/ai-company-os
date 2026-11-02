@@ -1,0 +1,14 @@
+# Runtime dependencies, pinned after verification on 2026-10-29 (Python 3.13).
+fastapi==0.162.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.1
+pydantic-settings==2.16.2
+SQLAlchemy==2.1.6
+alembic==1.20.1
+psycopg[binary]==3.3.6
+argon2-cffi==25.1.0
+# Provider HTTP client. Used by the unified model adapter for probes (and later
+# task execution). Pinned to the version validated by the Phase 02 tests; the
+# test-only httpx entry was removed from requirements-dev.txt to avoid a second
+# pin of the same package.
+httpx==0.28.1

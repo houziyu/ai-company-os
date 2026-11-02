@@ -1,0 +1,197 @@
+DIALOG_GEOMETRY [
+  {
+    html: '<div aria-modal="true" aria-label="已保存的模拟姓名 · CEO" aria-describedby="el-id-2641-12" class="app-drawer el-drawer rtl open" role="dialog" style="width: var(--acos',
+    rect: {
+      x: 880,
+      y: 0,
+      width: 560,
+      height: 900,
+      top: 0,
+      right: 1440,
+      bottom: 900,
+      left: 880
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="编辑岗位" aria-describedby="el-id-2641-14" class="app-drawer el-drawer rtl" role="dialog" style="width: var(--acos-layout-drawer)',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div role="dialog" aria-modal="true" aria-label="归档员工" aria-describedby="el-id-2641-16" class="el-overlay-dialog" style="display: flex;"></div>',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="导航" aria-describedby="el-id-2641-10" class="app-shell__drawer el-drawer ltr" role="dialog" style="width: 264px;"><span class=',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  }
+]
+DIALOG_GEOMETRY [
+  {
+    html: '<div aria-modal="true" aria-label="已保存的模拟姓名 · CEO" aria-describedby="el-id-489-12" class="app-drawer el-drawer rtl open" role="dialog" style="width: var(--acos-',
+    rect: {
+      x: 464,
+      y: 0,
+      width: 560,
+      height: 768,
+      top: 0,
+      right: 1024,
+      bottom: 768,
+      left: 464
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="编辑岗位" aria-describedby="el-id-489-14" class="app-drawer el-drawer rtl" role="dialog" style="width: var(--acos-layout-drawer);',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div role="dialog" aria-modal="true" aria-label="归档员工" aria-describedby="el-id-489-16" class="el-overlay-dialog" style="display: flex;"></div>',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="导航" aria-describedby="el-id-489-10" class="app-shell__drawer el-drawer ltr" role="dialog" style="width: 264px;"><span class="',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  }
+]
+DIALOG_GEOMETRY [
+  {
+    html: '<div aria-modal="true" aria-label="已保存的模拟姓名 · CEO" aria-describedby="el-id-1370-12" class="app-drawer el-drawer rtl open" role="dialog" style="width: var(--acos',
+    rect: {
+      x: -170,
+      y: 0,
+      width: 560,
+      height: 844,
+      top: 0,
+      right: 390,
+      bottom: 844,
+      left: -170
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="编辑岗位" aria-describedby="el-id-1370-14" class="app-drawer el-drawer rtl" role="dialog" style="width: var(--acos-layout-drawer)',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div role="dialog" aria-modal="true" aria-label="归档员工" aria-describedby="el-id-1370-16" class="el-overlay-dialog" style="display: flex;"></div>',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  },
+  {
+    html: '<div aria-modal="true" aria-label="导航" aria-describedby="el-id-1370-10" class="app-shell__drawer el-drawer ltr" role="dialog" style="width: 264px;"><span class=',
+    rect: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    },
+    display: 'flex'
+  }
+]
+ExpectError: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate
+    at captureRawStack (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright-core\lib\coreBundle.js:9681:17)
+    at callMatcherAsStep (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright\lib\matchers\expect.js:13310:57)
+    at Object.toBe (C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\node_modules\playwright\lib\matchers\expect.js:13300:23)
+    at C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase02_v2_ui.cjs:111:11 {
+  matcherResult: {
+    pass: false,
+    message: 'expect(received).toBe(expected) // Object.is equality\n' +
+      '\n' +
+      'Expected: true\n' +
+      'Received: false\n' +
+      '\n' +
+      'Call Log:\n' +
+      '- Timeout 5000ms exceeded while waiting on the predicate',
+    name: 'toBe'
+  }
+}

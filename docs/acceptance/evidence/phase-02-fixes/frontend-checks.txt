@@ -1,0 +1,89 @@
+
+> ai-company-os-frontend@0.1.0 check C:\Users\admin\Desktop\ai-company-os\frontend
+> pnpm tokens && pnpm lint && pnpm typecheck && pnpm test && vite build
+
+
+> ai-company-os-frontend@0.1.0 tokens C:\Users\admin\Desktop\ai-company-os\frontend
+> node scripts/generate-tokens.mjs
+
+design tokens generated from docs/design/design-tokens.json
+
+> ai-company-os-frontend@0.1.0 lint C:\Users\admin\Desktop\ai-company-os\frontend
+> eslint . --max-warnings=0
+
+
+> ai-company-os-frontend@0.1.0 typecheck C:\Users\admin\Desktop\ai-company-os\frontend
+> vue-tsc --noEmit
+
+
+> ai-company-os-frontend@0.1.0 test C:\Users\admin\Desktop\ai-company-os\frontend
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.5 [39m[90mC:/Users/admin/Desktop/ai-company-os/frontend[39m
+
+ [32m✓[39m src/__tests__/api-client.spec.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/__tests__/design-tokens.spec.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/__tests__/session-store.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/__tests__/session-race.spec.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/__tests__/components.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m src/__tests__/AppButton.spec.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+ [32m✓[39m src/__tests__/auth-regressions.spec.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 264[2mms[22m[39m
+ [32m✓[39m src/__tests__/phase02-views.spec.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 701[2mms[22m[39m
+ [32m✓[39m src/__tests__/review-fixes.spec.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 839[2mms[22m[39m
+   [32m✓[39m R10 tab keyboard [2m(4)[22m
+     [33m[2m✓[22m[39m ArrowRight moves selection and focus through all three tabs[33m 530[2mms[22m[39m
+ [32m✓[39m src/__tests__/logout-regressions.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 662[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m91 passed[39m[22m[90m (91)[39m
+[2m   Start at [22m 15:21:48
+[2m   Duration [22m 5.27s[2m (environment 46%, import 39%, tests 9%, setup 4%, transform 1%)[22m
+
+[36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 1678 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                    0.61 kB │ gzip:   0.33 kB
+dist/assets/LoginView-C6ArFX1g.css                 0.35 kB │ gzip:   0.20 kB
+dist/assets/SetupView-nInR85PO.css                 0.35 kB │ gzip:   0.20 kB
+dist/assets/NotFoundView-DTqFdDYo.css              0.50 kB │ gzip:   0.26 kB
+dist/assets/AppDrawer-NcKkg3WC.css                 0.90 kB │ gzip:   0.33 kB
+dist/assets/ConfirmDialog-B5c7uARD.css             1.08 kB │ gzip:   0.38 kB
+dist/assets/PageHeader-EO54jEsb.css                1.92 kB │ gzip:   0.54 kB
+dist/assets/AuthLayout-B-22-GVC.css                1.93 kB │ gzip:   0.53 kB
+dist/assets/AuditView-Bl413eqI.css                 1.97 kB │ gzip:   0.56 kB
+dist/assets/SettingsView-DR-ZsSGv.css              2.06 kB │ gzip:   0.58 kB
+dist/assets/FormField-DSUe8tq1.css                 2.15 kB │ gzip:   0.60 kB
+dist/assets/ComponentsShowcaseView-BdOa4mKh.css    2.41 kB │ gzip:   0.61 kB
+dist/assets/OverviewView-D1-HOs_D.css              4.27 kB │ gzip:   0.83 kB
+dist/assets/CompanySetupView-DEJPP4W2.css          5.46 kB │ gzip:   1.01 kB
+dist/assets/OrganizationView-DLPhBxF-.css          5.61 kB │ gzip:   1.08 kB
+dist/assets/ModelsView-CZrwqD43.css                6.17 kB │ gzip:   1.13 kB
+dist/assets/index-BBwzweF8.css                    21.45 kB │ gzip:   4.15 kB
+dist/assets/element-plus-NojSDrl8.css            360.17 kB │ gzip:  47.96 kB
+dist/assets/BudgetsView-qgwnpKW0.js                0.32 kB │ gzip:   0.25 kB
+dist/assets/ProjectsView-BCUEaepQ.js               0.33 kB │ gzip:   0.25 kB
+dist/assets/KnowledgeView--e-_4ZgI.js              0.33 kB │ gzip:   0.25 kB
+dist/assets/ProposalsView-_jcfC95I.js              0.33 kB │ gzip:   0.25 kB
+dist/assets/NotFoundView-C-93TH30.js               0.64 kB │ gzip:   0.51 kB
+dist/assets/AppDrawer-CGeByayz.js                  0.94 kB │ gzip:   0.55 kB
+dist/assets/AuthLayout-BZ4HWaYp.js                 0.99 kB │ gzip:   0.50 kB
+dist/assets/ConfirmDialog-Bz9wdrlY.js              1.43 kB │ gzip:   0.74 kB
+dist/assets/PageHeader-Bp5wWtcO.js                 1.52 kB │ gzip:   0.71 kB
+dist/assets/PhasePlaceholderView-BVghEajo.js       2.18 kB │ gzip:   1.30 kB
+dist/assets/FormField-BWtaxKpI.js                  2.31 kB │ gzip:   1.09 kB
+dist/assets/LoginView-BunzY_ho.js                  2.62 kB │ gzip:   1.36 kB
+dist/assets/SetupView-DKvdKbl1.js                  3.85 kB │ gzip:   1.78 kB
+dist/assets/AuditView-x9vbTbah.js                  5.33 kB │ gzip:   2.63 kB
+dist/assets/SettingsView-BsYgyZL_.js               5.54 kB │ gzip:   2.57 kB
+dist/assets/OverviewView-BG6yrJXB.js               5.66 kB │ gzip:   2.73 kB
+dist/assets/CompanySetupView-D5Ai6Y34.js           9.41 kB │ gzip:   4.00 kB
+dist/assets/ComponentsShowcaseView-B2_od4gl.js    12.94 kB │ gzip:   5.21 kB
+dist/assets/OrganizationView-BevG0ZSd.js          17.27 kB │ gzip:   5.98 kB
+dist/assets/ModelsView-BPkt5MM7.js                22.10 kB │ gzip:   7.01 kB
+dist/assets/index-XiGRd7EO.js                     52.06 kB │ gzip:  20.30 kB
+dist/assets/element-plus-D_40tbEA.js             337.91 kB │ gzip: 118.19 kB
+
+[32m✓ built in 658ms[39m

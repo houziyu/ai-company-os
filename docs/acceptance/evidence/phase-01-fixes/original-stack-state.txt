@@ -1,0 +1,5 @@
+ai-company-os-web-1 Exited (0) 16 hours ago
+ai-company-os-worker-1 Exited (0) 16 hours ago
+ai-company-os-api-1 Exited (0) 16 hours ago
+ai-company-os-migrate-1 Exited (0) 17 hours ago
+ai-company-os-postgres-1 Exited (0) 16 hours ago

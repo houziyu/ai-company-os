@@ -1,0 +1,160 @@
+# AI Company OS -- standard deployment.
+#
+# Topology (docs/architecture.md):
+#   web (published) -> api -> postgres          internal network only
+#                     worker -> postgres        internal network only
+#                     migrate -> postgres       one-shot, ordered before api
+#
+# The database port is not published. There is no executor service in Phase 01.
+
+name: ai-company-os
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in .env}
+      # Deterministic collation so indexes behave the same everywhere.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      # pg_isready alone can pass before the server accepts authenticated
+      # connections for this database, so query the real database as the real user.
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\" && psql -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\" -c 'SELECT 1' >/dev/null",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    stop_grace_period: 30s
+
+  migrate:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ai-company-os-backend:local
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    restart: "no"
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ai-company-os-backend:local
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:8080}
+      EXTRA_ALLOWED_ORIGINS: ${EXTRA_ALLOWED_ORIGINS:-[]}
+      SESSION_TTL_HOURS: ${SESSION_TTL_HOURS:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      ENABLE_API_DOCS: ${ENABLE_API_DOCS:-false}
+      PASSWORD_MIN_LENGTH: ${PASSWORD_MIN_LENGTH:-12}
+      LOCKOUT_THRESHOLD: ${LOCKOUT_THRESHOLD:-10}
+      LOCKOUT_MINUTES: ${LOCKOUT_MINUTES:-5}
+      # Model provider credentials, injected by *name*. A provider row stores
+      # only the variable name; when the variable is absent the UI reports
+      # "未配置" and probes are refused locally rather than sent with an empty key.
+      # Add one line per provider secret reference you configure in the UI.
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+    depends_on:
+      # The API must not start before migrations finish: a reachable-but-empty
+      # database is a readiness failure, not a normal state.
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      # Readiness, not liveness: proves the API can reach a migrated database.
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/api/v1/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    stop_grace_period: 20s
+
+  worker:
+    image: ai-company-os-backend:local
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # Phase 01 worker: heartbeat + health endpoint only. No task consumption,
+    # no model calls, no code execution.
+    command: ["python", "-m", "app.workers.health_worker"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      WORKER_NAME: ${WORKER_NAME:-worker-1}
+      WORKER_HEALTH_PORT: "9100"
+      WORKER_HEARTBEAT_INTERVAL_SECONDS: ${WORKER_HEARTBEAT_INTERVAL_SECONDS:-5}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9100/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    stop_grace_period: 20s
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: ai-company-os-web:local
+    restart: unless-stopped
+    ports:
+      # Bind to loopback by default: the container is the only published entry
+      # point, and TLS termination is expected in front of it for public use.
+      - "${WEB_BIND_ADDRESS:-127.0.0.1}:${WEB_PORT:-8080}:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: ai-company-os_postgres_data

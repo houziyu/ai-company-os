@@ -1,0 +1,14 @@
+# Isolated Phase 01 QA stack. Always use with -p acos-phase01-fixes and
+# --env-file .env.example; never shares production images or database volume.
+services:
+  migrate:
+    image: ai-company-os-backend:phase01-fixes
+  api:
+    image: ai-company-os-backend:phase01-fixes
+  worker:
+    image: ai-company-os-backend:phase01-fixes
+  web:
+    image: ai-company-os-web:phase01-fixes
+volumes:
+  postgres_data:
+    name: acos-phase01-fixes_postgres_data

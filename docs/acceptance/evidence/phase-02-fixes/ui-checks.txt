@@ -1,0 +1,22 @@
+PASS first run redirects to setup: {"path":"/setup"}
+PASS wizard created company and five employees: {"landedOn":"/overview"}
+PASS organization controls 1440x900: {"measured":8}
+PASS organization keyboard open 1440x900: {"focusRing":true}
+PASS cyclic manager options filtered 1440x900: {"options":["不向任何人汇报"]}
+PASS drawer Escape close 1440x900: {"closed":true}
+PASS employee rename persists after reload 1440x900: {"name":"质量工程师（改名）"}
+PASS legal manager change persists 1440x900: {"qaDepth":"1"}
+PASS model centre shows 未配置 1440x900: {"passwordInputs":0}
+PASS model centre tab keyboard 1440x900: {"reached":"assignments via ArrowRight","focusFollows":true,"home":true}
+PASS model assignment tab 1440x900: {"rows":5,"binding":"未绑定 (honest: none configured)"}
+PASS model binding visible in assignment table 1440x900: {"secretState":"密钥未配置"}
+PASS unbind persists after reload 1440x900: {"binding":"已解除（历史保留）"}
+PASS audit read-only + filter 1440x900: {"hasDeleteControl":false,"filtered":"COMPANY_INITIALIZED"}
+PASS settings dialog focus return 1440x900: {"returned":true}
+PASS overview layout 1024x768: {"innerWidth":1024,"scrollWidth":1024,"dpr":1}
+PASS overview layout 390x844: {"innerWidth":390,"scrollWidth":390,"dpr":1}
+PASS mobile navigation drawer 390x844: {"reachable":true}
+PASS overview layout 360x800: {"innerWidth":360,"scrollWidth":360,"dpr":1}
+PASS mobile navigation drawer 360x800: {"reachable":true}
+
+20 UI checks passed

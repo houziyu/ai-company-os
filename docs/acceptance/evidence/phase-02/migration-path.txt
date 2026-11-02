@@ -1,0 +1,8 @@
+phase01 tables: 7
+phase02 tables: 19
+head revision: 7b41c9d2f0aa
+template rows: 5
+companies rows: 0
+after downgrade tables: 7
+remaining: ['alembic_version', 'audit_events', 'auth_sessions', 'login_attempts', 'platform_state', 'users', 'worker_heartbeats']
+re-upgrade tables: 19

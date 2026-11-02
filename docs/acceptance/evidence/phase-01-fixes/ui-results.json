@@ -1,0 +1,242 @@
+{
+  "browser": "156.0.8078.48",
+  "baseURL": "http://127.0.0.1:18081",
+  "results": [
+    {
+      "check": "login narrow/layout 1440",
+      "detail": {
+        "viewport": 1440,
+        "content": 1440
+      }
+    },
+    {
+      "check": "login narrow/layout 1024",
+      "detail": {
+        "viewport": 1024,
+        "content": 1024
+      }
+    },
+    {
+      "check": "login narrow/layout 390",
+      "detail": {
+        "viewport": 390,
+        "content": 390
+      }
+    },
+    {
+      "check": "login narrow/layout 360",
+      "detail": {
+        "viewport": 360,
+        "content": 360
+      }
+    },
+    {
+      "check": "keyboard login, error and pending submit",
+      "detail": "Tab username → Tab password → Enter; successful retry"
+    },
+    {
+      "check": "overview layout 1440",
+      "detail": {
+        "viewport": 1440,
+        "content": 1440
+      }
+    },
+    {
+      "check": "overview layout 1024",
+      "detail": {
+        "viewport": 1024,
+        "content": 1024
+      }
+    },
+    {
+      "check": "tablet accessible names, tooltip and keyboard navigation",
+      "detail": [
+        "公司概览",
+        "组织",
+        "模型中心",
+        "项目与任务",
+        "提案中心",
+        "知识",
+        "预算",
+        "审计",
+        "设置"
+      ]
+    },
+    {
+      "check": "overview layout 390",
+      "detail": {
+        "viewport": 390,
+        "content": 390
+      }
+    },
+    {
+      "check": "overview layout 360",
+      "detail": {
+        "viewport": 360,
+        "content": 360
+      }
+    },
+    {
+      "check": "mobile drawer Escape focus and touch targets",
+      "detail": [
+        {
+          "name": "打开导航菜单",
+          "width": 44,
+          "height": 44
+        },
+        {
+          "name": "  注销 ",
+          "width": 64,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "check": "topbar network logout failure",
+      "detail": "visible uncertainty, real server retry succeeds"
+    },
+    {
+      "check": "mobile logout dialog bounds, Tab trap and Escape focus return",
+      "detail": {
+        "x": 16,
+        "y": 196.5,
+        "width": 358,
+        "height": 451
+      }
+    },
+    {
+      "check": "settings database logout failure",
+      "detail": "dialog keeps error and supports real retry"
+    },
+    {
+      "check": "real revoked session → protected 401 → login without reload",
+      "detail": "passed"
+    },
+    {
+      "check": "stale setup cache + actual server 409",
+      "detail": "login redirect and explanatory message"
+    },
+    {
+      "check": "button dimensions",
+      "detail": [
+        {
+          "name": "btn-small",
+          "height": 32
+        },
+        {
+          "name": "btn-medium",
+          "height": 40
+        },
+        {
+          "name": "btn-large",
+          "height": 48
+        }
+      ]
+    },
+    {
+      "check": "actual rendered contrast combinations",
+      "detail": [
+        {
+          "element": "primary default",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(29, 78, 216)",
+          "border": "rgb(29, 78, 216)",
+          "contrast": 6.701618401398807
+        },
+        {
+          "element": "primary hover",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(30, 64, 175)",
+          "border": "rgb(30, 64, 175)",
+          "contrast": 8.722410784954462
+        },
+        {
+          "element": "primary active",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(30, 58, 138)",
+          "border": "rgb(30, 58, 138)",
+          "contrast": 10.357982247884618
+        },
+        {
+          "element": "全部符合 token",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.7914469872179986
+        },
+        {
+          "element": "排队中",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.916973995632248
+        },
+        {
+          "element": "执行中",
+          "color": "rgb(29, 78, 216)",
+          "background": "rgb(239, 246, 255)",
+          "contrast": 6.157973971775643
+        },
+        {
+          "element": "验证中",
+          "color": "rgb(29, 78, 216)",
+          "background": "rgb(239, 246, 255)",
+          "contrast": 6.157973971775643
+        },
+        {
+          "element": "等待审批",
+          "color": "rgb(146, 64, 14)",
+          "background": "rgb(255, 251, 235)",
+          "contrast": 6.837002380367332
+        },
+        {
+          "element": "已阻塞",
+          "color": "rgb(146, 64, 14)",
+          "background": "rgb(255, 251, 235)",
+          "contrast": 6.837002380367332
+        },
+        {
+          "element": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.7914469872179986
+        },
+        {
+          "element": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.914600426850339
+        },
+        {
+          "element": "已取消",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.916973995632248
+        },
+        {
+          "element": "input border/focus",
+          "border": "rgb(100, 116, 139)",
+          "outline": "rgb(37, 99, 235)",
+          "outlineWidth": "2px",
+          "background": "rgb(255, 255, 255)",
+          "borderContrast": 4.758842787868666,
+          "outlineContrast": 5.168555560022562
+        }
+      ]
+    },
+    {
+      "check": "loading, error and recovery",
+      "detail": "passed"
+    },
+    {
+      "check": "200% equivalent reflow (1440/2 × 900/2)",
+      "detail": {
+        "viewport": 720,
+        "content": 720
+      }
+    },
+    {
+      "check": "uncaught browser errors",
+      "detail": []
+    }
+  ],
+  "pageErrors": []
+}

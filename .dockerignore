@@ -1,0 +1,15 @@
+# Keep build contexts small and free of secrets or local state.
+.git
+.env
+.env.*
+!.env.example
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/*.pyc
+docs/acceptance/evidence
+*.log

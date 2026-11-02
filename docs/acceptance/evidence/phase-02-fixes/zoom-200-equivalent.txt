@@ -1,0 +1,9 @@
+BASELINE {"dpr":1,"innerWidth":1440,"innerHeight":900}
+session probe: {"status":200,"body":"{\"user\":{\"id\":1,\"username\":\"owner\",\"displayName\":\"验收所有者\",\"role\":\"OWNER\"},\"expiresAt\":\"2026-10-30T19:25:30.585098Z\",\"sessionCreatedAt\":\"2026-10-30T07:25:30.48983","cookie":"acos_csrf=TdM7RFqUmOR-__ivbI8rPNo6AdxDEGPZbCE1qbLpYtQrO6o0x7-cXnzyXtYR0uFd"} url: http://127.0.0.1:18083/overview
+PASS overview @200% equivalent {"dpr":2,"innerWidth":720,"innerHeight":450,"scrollWidth":720,"minFontPx":12}
+PASS organization @200% equivalent {"dpr":2,"innerWidth":720,"innerHeight":450,"scrollWidth":720,"minFontPx":12}
+PASS models @200% equivalent {"dpr":2,"innerWidth":720,"innerHeight":450,"scrollWidth":720,"minFontPx":12}
+PASS audit @200% equivalent {"dpr":2,"innerWidth":720,"innerHeight":450,"scrollWidth":720,"minFontPx":12}
+PASS setup/company @200% equivalent {"dpr":2,"innerWidth":720,"innerHeight":450,"scrollWidth":720,"minFontPx":12}
+PASS drawer fits viewport @200% equivalent {"x":160,"y":0,"width":560,"height":450}
+EQUIVALENT ZOOM GATE PASSED

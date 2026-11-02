@@ -1,0 +1,17 @@
+after phase 02 (pre-fix): tables=19 revision=7b41c9d2f0aa
+  outcome constraint: CHECK (((outcome)::text = ANY ((ARRAY['SUCCESS'::character varying, 'FAILURE'::character varying])::text[])))
+  per-dimension usage columns: []
+after review fixes: tables=19 revision=3f8d2c6a91b4
+  outcome constraint: CHECK (((outcome)::text = ANY ((ARRAY['PENDING'::character varying, 'SUCCESS'::character varying, 'FAILURE'::character varying])::text[])))
+  per-dimension usage columns: ['completion_tokens_known', 'prompt_tokens_known']
+legacy usage row after backfill: (21, None, False, True, False)
+  (usage_known demoted because completion was never reported)
+provider version default: 1
+provider fingerprint seeded: ''
+PENDING rows (should be 0: the migration invents no intent): 0
+after downgrade: tables=19 revision=7b41c9d2f0aa
+  outcome constraint: CHECK (((outcome)::text = ANY ((ARRAY['SUCCESS'::character varying, 'FAILURE'::character varying])::text[])))
+  per-dimension usage columns: []
+after re-upgrade: tables=19 revision=3f8d2c6a91b4
+  outcome constraint: CHECK (((outcome)::text = ANY ((ARRAY['PENDING'::character varying, 'SUCCESS'::character varying, 'FAILURE'::character varying])::text[])))
+  per-dimension usage columns: ['completion_tokens_known', 'prompt_tokens_known']

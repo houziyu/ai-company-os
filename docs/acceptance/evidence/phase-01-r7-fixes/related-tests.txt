@@ -1,0 +1,9 @@
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+
+ Test Files  5 passed (5)
+      Tests  46 passed (46)
+   Start at  10:51:36
+   Duration  4.14s (environment 53%, import 29%, tests 8%, setup 6%, transform 3%, worker 1%)
+

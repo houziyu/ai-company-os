@@ -1,0 +1,51 @@
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+Not implemented: Window's scrollTo() method
+ ❯ src/__tests__/review-probes.spec.ts (2 tests | 2 failed) 106ms
+   × routes a losing setup request to login without a page reload 58ms
+   × allows signing in after a protected endpoint reports an expired session 47ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/review-probes.spec.ts > routes a losing setup request to login without a page reload
+AssertionError: expected '/setup' to be '/login' // Object.is equality
+
+Expected: "/login"
+Received: "/setup"
+
+ ❯ src/__tests__/review-probes.spec.ts:37:21
+     35|   const finalPath = router.currentRoute.value.path
+     36|   wrapper.unmount()
+     37|   expect(finalPath).toBe('/login')
+       |                     ^
+     38| })
+     39|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/__tests__/review-probes.spec.ts > allows signing in after a protected endpoint reports an expired session
+AssertionError: expected '/overview' to be '/login' // Object.is equality
+
+Expected: "/login"
+Received: "/overview"
+
+ ❯ src/__tests__/review-probes.spec.ts:53:21
+     51|   const finalPath = router.currentRoute.value.path
+     52|   wrapper.unmount()
+     53|   expect(finalPath).toBe('/login')
+       |                     ^
+     54| })
+     55|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  17:51:14
+   Duration  3.19s (import 53%, environment 36%, transform 4%, tests 4%, setup 3%)
+

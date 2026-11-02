@@ -1,0 +1,59 @@
+
+> ai-company-os-frontend@0.1.0 check C:\Users\admin\Desktop\ai-company-os\frontend
+> pnpm tokens && pnpm lint && pnpm typecheck && pnpm test && vite build
+
+
+> ai-company-os-frontend@0.1.0 tokens C:\Users\admin\Desktop\ai-company-os\frontend
+> node scripts/generate-tokens.mjs
+
+design tokens generated from docs/design/design-tokens.json
+
+> ai-company-os-frontend@0.1.0 lint C:\Users\admin\Desktop\ai-company-os\frontend
+> eslint . --max-warnings=0
+
+
+> ai-company-os-frontend@0.1.0 typecheck C:\Users\admin\Desktop\ai-company-os\frontend
+> vue-tsc --noEmit
+
+
+> ai-company-os-frontend@0.1.0 test C:\Users\admin\Desktop\ai-company-os\frontend
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+ ❯ src/__tests__/design-tokens.spec.ts (5 tests | 1 failed) 53ms
+   ❯ design tokens (5)
+     × every --acos-* custom property used in components is defined 22ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/design-tokens.spec.ts > design tokens > every --acos-* custom property used in components is defined
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "--acos-drawer-width (C:\\Users\\admin\\Desktop\\ai-company-os\\frontend\\src\\components\\AppDrawer.vue)",
++ ]
+
+ ❯ src/__tests__/design-tokens.spec.ts:100:26
+     98|       }
+     99|     }
+    100|     expect([...missing]).toEqual([])
+       |                          ^
+    101|   })
+    102| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 10 passed (11)
+      Tests  1 failed | 92 passed (93)
+   Start at  10:45:54
+   Duration  5.76s (environment 46%, import 40%, tests 8%, setup 4%, transform 1%)
+
+ ELIFECYCLE  Test failed. See above for more details.
+ ELIFECYCLE  Command failed with exit code 1.

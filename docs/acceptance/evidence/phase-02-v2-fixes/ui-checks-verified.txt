@@ -1,0 +1,63 @@
+{
+  "fixture": "simulated API; frontend browser test only",
+  "browser": "156.0.8078.48",
+  "results": [
+    {
+      "viewport": "1440x900",
+      "versions": [
+        1,
+        2
+      ],
+      "persistedName": "已保存的模拟姓名",
+      "geometry": {
+        "width": 1440,
+        "contentWidth": 1440,
+        "left": 880,
+        "right": 1440
+      }
+    },
+    {
+      "viewport": "1024x768",
+      "versions": [
+        1,
+        2
+      ],
+      "persistedName": "已保存的模拟姓名",
+      "geometry": {
+        "width": 1024,
+        "contentWidth": 1024,
+        "left": 464,
+        "right": 1024
+      }
+    },
+    {
+      "viewport": "390x844",
+      "versions": [
+        1,
+        2
+      ],
+      "persistedName": "已保存的模拟姓名",
+      "geometry": {
+        "width": 390,
+        "contentWidth": 390,
+        "left": 0,
+        "right": 390
+      }
+    },
+    {
+      "viewport": "360x800",
+      "versions": [
+        1,
+        2
+      ],
+      "persistedName": "已保存的模拟姓名",
+      "geometry": {
+        "width": 360,
+        "contentWidth": 360,
+        "left": 0,
+        "right": 360
+      }
+    }
+  ],
+  "errors": []
+}

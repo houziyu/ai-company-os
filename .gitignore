@@ -1,0 +1,34 @@
+# secrets and local configuration
+.env
+.env.local
+*.pem
+*.key
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+
+# node
+node_modules/
+dist/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# generated design token artifacts (regenerate with `pnpm tokens`)
+frontend/src/styles/tokens.css
+frontend/src/styles/element-theme.css
+frontend/src/styles/tokens.ts
+
+# evidence and local artifacts
+docs/acceptance/evidence/**/*.png
+!docs/acceptance/evidence/phase-01/README.md
+*.log
+.DS_Store
+Thumbs.db

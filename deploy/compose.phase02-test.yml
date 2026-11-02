@@ -1,0 +1,17 @@
+# Isolated Phase 02 QA stack. Always use with -p acos-phase02-test and
+# --env-file .env.example; never shares production images or database volume.
+#
+# The provider key is intentionally left empty: this stack exercises the
+# "未配置" path and the protocol simulator, never a real provider call.
+services:
+  migrate:
+    image: ai-company-os-backend:phase02-test
+  api:
+    image: ai-company-os-backend:phase02-test
+  worker:
+    image: ai-company-os-backend:phase02-test
+  web:
+    image: ai-company-os-web:phase02-test
+volumes:
+  postgres_data:
+    name: acos-phase02-test_postgres_data

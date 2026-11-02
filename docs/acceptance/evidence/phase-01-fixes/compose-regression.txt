@@ -1,0 +1,24 @@
+== Phase 01 verification against http://127.0.0.1:18081 ==
+
+[PASS] liveness returns 200 -- status=200
+[PASS] readiness returns 200 with database+migrations ok -- status=200 checks={'database': 'ok', 'migrations': 'ok', 'worker': 'ok'}
+[PASS] worker heartbeat reported in readiness -- worker=ok
+[PASS] setup-status reports current owner state -- setupComplete=True
+[PASS] owner already provisioned (setup skipped)
+[PASS] login with existing owner -- status=200
+[PASS] CSRF token available to the client
+[PASS] authenticated session readable -- status=200
+[PASS] system status works and leaks no secrets -- status=200 db=ok worker=ok
+[PASS] logout without CSRF header is rejected (403) -- status=403
+[PASS] cross-site write is rejected (403) -- status=403
+[PASS] wrong password rejected without revealing account existence -- wrong=401 unknown_user=401
+[PASS] logout with CSRF header succeeds (204) -- status=204
+[PASS] session is unusable after logout (401) -- status=401
+[PASS] revoked cookie replay rejected (401) -- status=401
+[PASS] login with correct password succeeds -- status=200
+[PASS] business API rejects unauthenticated requests (401) -- status=401
+[PASS] web serves the SPA shell with security headers -- status=200
+[PASS] client-side route falls back to index.html -- status=200
+[PASS] database port is not published -- inspected 1 running postgres container(s), no host ports
+
+== 20/20 checks passed ==

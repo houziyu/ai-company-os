@@ -1,0 +1,11 @@
+ Container acos-phase01-fixes-web-1 Stopping 
+ Container acos-phase01-fixes-worker-1 Stopping 
+ Container acos-phase01-fixes-web-1 Stopped 
+ Container acos-phase01-fixes-api-1 Stopping 
+ Container acos-phase01-fixes-worker-1 Stopped 
+ Container acos-phase01-fixes-api-1 Stopped 
+ Container acos-phase01-fixes-migrate-1 Stopping 
+ Container acos-phase01-fixes-migrate-1 Stopped 
+ Container acos-phase01-fixes-postgres-1 Stopping 
+ Container acos-phase01-fixes-postgres-1 Stopped 
+acos-review-pg-20261029

@@ -1,0 +1,30 @@
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+ ❯ src/__tests__/session-race.spec.ts (1 test | 1 failed) 24ms
+   × keeps the new session when an older protected request returns 401 late 22ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/session-race.spec.ts > keeps the new session when an older protected request returns 401 late
+AssertionError: expected 'anonymous' to be 'authenticated' // Object.is equality
+
+Expected: "authenticated"
+Received: "anonymous"
+
+ ❯ src/__tests__/session-race.spec.ts:34:27
+     32|     releaseOldResponse(unauthorized())
+     33|     await oldRequest
+     34|     expect(session.state).toBe('authenticated')
+       |                           ^
+     35|     expect(session.user?.username).toBe('owner')
+     36|   } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  10:48:31
+   Duration  1.42s (environment 84%, setup 8%, transform 4%, tests 2%, import 2%, worker 1%)
+

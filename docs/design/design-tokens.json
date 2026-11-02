@@ -1,0 +1,220 @@
+{
+  "version": "1.0",
+  "theme": "light",
+  "unit": "CSS px",
+  "color": {
+    "bg": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "surfaceSubtle": "#F1F5F9",
+    "text": "#0F172A",
+    "textSecondary": "#475569",
+    "textMuted": "#64748B",
+    "border": "#E2E8F0",
+    "controlBorder": "#64748B",
+    "primary": "#1D4ED8",
+    "primaryHover": "#1E40AF",
+    "primaryActive": "#1E3A8A",
+    "onPrimary": "#FFFFFF",
+    "primarySubtle": "#EFF6FF",
+    "success": "#15803D",
+    "successSubtle": "#F0FDF4",
+    "warning": "#92400E",
+    "warningSubtle": "#FFFBEB",
+    "danger": "#B91C1C",
+    "dangerHover": "#991B1B",
+    "dangerActive": "#7F1D1D",
+    "dangerSubtle": "#FEF2F2",
+    "info": "#1D4ED8",
+    "infoSubtle": "#EFF6FF",
+    "neutral": "#475569",
+    "neutralSubtle": "#F1F5F9",
+    "focus": "#2563EB",
+    "disabledBg": "#E2E8F0",
+    "disabledText": "#475569",
+    "overlay": "rgba(15,23,42,0.40)",
+    "logBg": "#0F172A",
+    "logText": "#E2E8F0"
+  },
+  "spacing": [
+    0,
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    32,
+    40,
+    48,
+    64
+  ],
+  "font": {
+    "family": "Inter, \"PingFang SC\", \"Microsoft YaHei\", system-ui, sans-serif",
+    "mono": "\"SFMono-Regular\", Consolas, monospace",
+    "caption": {
+      "size": 12,
+      "line": 18,
+      "weight": 400
+    },
+    "body": {
+      "size": 14,
+      "line": 22,
+      "weight": 400
+    },
+    "label": {
+      "size": 14,
+      "line": 20,
+      "weight": 500
+    },
+    "subtitle": {
+      "size": 16,
+      "line": 24,
+      "weight": 600
+    },
+    "section": {
+      "size": 20,
+      "line": 28,
+      "weight": 600
+    },
+    "title": {
+      "size": 24,
+      "line": 32,
+      "weight": 600
+    },
+    "metric": {
+      "size": 32,
+      "line": 40,
+      "weight": 600
+    },
+    "code": {
+      "size": 14,
+      "line": 20,
+      "weight": 400
+    },
+    "mobileInput": {
+      "size": 16,
+      "line": 24,
+      "weight": 400
+    }
+  },
+  "radius": {
+    "control": 8,
+    "card": 12,
+    "dialog": 16,
+    "pill": 999
+  },
+  "control": {
+    "small": {
+      "height": 32,
+      "paddingX": 12,
+      "fontSize": 14,
+      "icon": 16,
+      "minWidth": 64
+    },
+    "medium": {
+      "height": 40,
+      "paddingX": 16,
+      "fontSize": 14,
+      "icon": 16,
+      "minWidth": 80
+    },
+    "large": {
+      "height": 48,
+      "paddingX": 20,
+      "fontSize": 16,
+      "icon": 20,
+      "minWidth": 96
+    },
+    "mobileTarget": 44,
+    "iconButton": 40,
+    "iconButtonSmall": 32,
+    "gap": 8,
+    "borderWidth": 1,
+    "inputPaddingX": 12,
+    "textareaMinHeight": 120,
+    "badgeHeight": 24,
+    "badgePaddingX": 8,
+    "badgeFont": 12,
+    "badgeIcon": 12,
+    "badgeGap": 4,
+    "dangerActionGap": 12
+  },
+  "layout": {
+    "topbarMobile": 56,
+    "loginCard": 440,
+    "loginPadding": 32,
+    "loginMobilePadding": 24,
+    "kanbanCardPadding": 16,
+    "dialogMaxHeightVh": 85,
+    "cellPaddingX": 16,
+    "cellPaddingY": 12,
+    "navActiveBorder": 3,
+    "sidebar": 240,
+    "sidebarCollapsed": 72,
+    "topbar": 64,
+    "desktopPadding": 32,
+    "tabletPadding": 24,
+    "mobilePadding": 16,
+    "contentMax": 1600,
+    "formMax": 640,
+    "cardPadding": 24,
+    "cardGap": 24,
+    "tableHead": 44,
+    "tableRowMin": 56,
+    "navItem": 44,
+    "kanbanColumn": 300,
+    "kanbanGap": 16,
+    "drawer": 560,
+    "drawerWide": 800,
+    "dialogSmall": 480,
+    "dialogMedium": 640,
+    "dialogLarge": 880,
+    "dialogViewportMargin": 16,
+    "breakpointMobile": 768,
+    "breakpointDesktop": 1280
+  },
+  "motion": {
+    "fast": 120,
+    "normal": 180,
+    "slow": 240
+  },
+  "focus": {
+    "width": 2,
+    "offset": 2
+  },
+  "zIndex": {
+    "base": 0,
+    "sticky": 10,
+    "sidebar": 20,
+    "dropdown": 100,
+    "overlay": 1000,
+    "dialog": 1010,
+    "toast": 1100,
+    "tooltip": 1200
+  },
+  "shadow": {
+    "card": "0 1px 2px rgba(15,23,42,0.04)",
+    "floating": "0 12px 32px rgba(15,23,42,0.12)"
+  },
+  "status": {
+    "QUEUED": "neutral",
+    "RUNNING": "info",
+    "VERIFYING": "info",
+    "WAITING_INPUT": "warning",
+    "WAITING_APPROVAL": "warning",
+    "BLOCKED": "warning",
+    "SUCCEEDED": "success",
+    "FAILED": "danger",
+    "CANCELLED": "neutral",
+    "INTERRUPTED": "warning"
+  },
+  "feedback": {
+    "toastSuccessMs": 3000,
+    "paginationDefault": 20,
+    "paginationOptions": [
+      20,
+      50,
+      100
+    ]
+  }
+}

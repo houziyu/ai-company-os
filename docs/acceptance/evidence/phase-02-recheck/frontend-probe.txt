@@ -1,0 +1,35 @@
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+stdout | src/__tests__/second-review-probe.spec.ts > R8 partial save > retains the committed profile version when the centre refresh fails
+RECHECK refresh-failure {"expectedVersions":[1,1],"serverVersion":2,"draftName":"review-agent"}
+
+ ❯ src/__tests__/second-review-probe.spec.ts (1 test | 1 failed) 290ms
+   ❯ R8 partial save (1)
+     × retains the committed profile version when the centre refresh fails 289ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/second-review-probe.spec.ts > R8 partial save > retains the committed profile version when the centre refresh fails
+AssertionError: expected [ 1, 1 ] to deeply equal [ 1, 2 ]
+
+- Expected
++ Received
+
+  [
+    1,
+-   2,
++   1,
+  ]
+
+ ❯ src/__tests__/second-review-probe.spec.ts:232:30
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  17:43:26
+   Duration  2.98s (import 49%, environment 35%, tests 10%, setup 3%, transform 2%)
+

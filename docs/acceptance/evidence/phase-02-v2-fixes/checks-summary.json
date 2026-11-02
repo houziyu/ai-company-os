@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-02",
+  "scope": "phase-02 second review fixes V2-1 through V2-5; narrow drawer correction",
+  "before": {
+    "backend_failed": 4,
+    "frontend_failed": 1
+  },
+  "backend": {
+    "passed": 170,
+    "warnings": 10,
+    "seconds": 192.3,
+    "new_regressions_passed": 11,
+    "ruff": "passed",
+    "format": "60 files already formatted",
+    "mypy": "43 source files passed"
+  },
+  "frontend": {
+    "passed": 93,
+    "test_files": 11,
+    "tokens": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "browser": {
+    "version": "156.0.8078.48",
+    "fixture": "simulated API; frontend browser test only",
+    "viewports": [
+      "1440x900",
+      "1024x768",
+      "390x844",
+      "360x800"
+    ],
+    "errors": [],
+    "manual_review": "four partial-save screenshots inspected"
+  },
+  "migration_head": "8c24a71d9e03",
+  "database": {
+    "test_endpoint": "127.0.0.1:55434",
+    "container": "acos-phase02-review-20261030",
+    "final_status": "exited",
+    "volumes_preserved": true
+  },
+  "not_run": [
+    "full Compose E2E in this fix round",
+    "real 200% browser zoom",
+    "real provider API",
+    "OS process kill recovery",
+    "real TLS",
+    "production backup restore"
+  ],
+  "phase_02_status": "partially complete"
+}

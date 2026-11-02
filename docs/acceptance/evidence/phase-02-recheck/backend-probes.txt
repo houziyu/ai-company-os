@@ -1,0 +1,657 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+{"ts": "2026-10-30T09:44:40.388379+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T09:44:40.553873+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T09:44:40.561508+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2dbe91c409d54d54b7e29850805b28de", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 170.63, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.562545+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:40.606605+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T09:44:40.611712+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2ccc5fa268414ed28793c87bcbfb5a92", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 45.89, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.612147+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:40.645384+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2666a40e27c5424caa7261f037310ae0", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 30.25, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.645809+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:40.749426+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T09:44:40.765683+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "eb65dc4d944541469406a7cb99a5e891", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 117.49, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.766102+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:40.817066+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "85cdf608e2304ebba2858b4c7abf990e", "method": "GET", "path": "/api/v1/organization", "status": 200, "duration_ms": 48.65, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.817493+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:40.888826+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "49871062ee324ffca05f3d60231a0430", "method": "POST", "path": "/api/v1/agents/1/model-assignment", "status": 200, "duration_ms": 68.18, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:40.889252+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:41.086504+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:41.098940+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:41.116240+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b67923f00232414bb07c7f1d0a6f0225", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 224.47, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:41.116740+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:41.166416+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7bdc976c152543e48aee96d4b3c188f7", "method": "GET", "path": "/api/v1/models/centre", "status": 200, "duration_ms": 46.91, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:41.166933+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "late-old-probe", "stored_capability": true, "stored_outcome": "SUCCESS", "displayed_model_capability": null, "assigned_capability": true, "stale": true}
+F{"ts": "2026-10-30T09:44:41.497061+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-10-30T09:44:42.163387+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T09:44:42.339406+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T09:44:42.344549+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "954e48a608884539b2ed1127c20e000e", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 179.25, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:42.345045+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:42.402158+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T09:44:42.409031+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ebd0965e554941088100406d9ecce3e7", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 60.75, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:42.409528+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:42.438651+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9631dd2f76824e6caf546d7b34e5b937", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 26.21, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:42.439145+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:42.499118+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:42.512067+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e5783483a12b4b509055eb3f1a3171d0", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 70.3, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:42.512473+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade 3f8d2c6a91b4 -> 7b41c9d2f0aa, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+RECHECK {"case": "migration-evidence", "old_capability": true, "old_stale": false, "new_probe_outcome": "SUCCESS", "new_capability": null, "new_stale": true}
+F{"ts": "2026-10-30T09:44:43.048625+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-10-30T09:44:43.193754+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-10-30T09:44:43.198182+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ba712f94e27a495aa60826daf05919ec", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 147.58, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:43.198683+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:43.236771+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-10-30T09:44:43.241186+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "047ec932e72442e1ad2b4e81ce38ac35", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 39.64, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:43.241665+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:43.269660+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a7cdd657706b4a84be0d7874f44b36f4", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 25.0, "client_ip": "testclient"}
+{"ts": "2026-10-30T09:44:43.270109+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:43.316104+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-10-30T09:44:43.319234+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "unhandled exception", "error": "UnicodeEncodeError", "exception_type": "UnicodeEncodeError", "traceback": [{"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\errors.py", "line": 164, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_asgi.py", "line": 151, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 37, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 102, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 91, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 149, "function": "simple_response"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py", "line": 63, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\middleware\\asyncexitstack.py", "line": 18, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\routing.py", "line": 683, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2811, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1839, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2894, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1865, "function": "_handle_selected"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1328, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 166, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 152, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 745, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 374, "function": "run_endpoint_function"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\concurrency.py", "line": 34, "function": "run_in_threadpool"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\to_thread.py", "line": 65, "function": "run_sync"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 2706, "function": "run_sync_in_worker_thread"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 1100, "function": "run"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_api.py", "line": 244, "function": "_run_sync_endpoint"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\v1\\model_centre.py", "line": 369, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\services\\model_centre_service.py", "line": 733, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\services\\model_centre_service.py", "line": 842, "function": "_record_success"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\services\\model_centre_service.py", "line": 975, "function": "_finish_row"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\repositories\\organization_repository.py", "line": 575, "function": "add"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\session.py", "line": 4543, "function": "flush"}, {"file": "<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>", "line": 2, "function": "_flush"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\deprecations.py", "line": 281, "function": "warned"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\session.py", "line": 4686, "function": "_flush"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\util\\langhelpers.py", "line": 166, "function": "__exit__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\session.py", "line": 4647, "function": "_flush"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\unitofwork.py", "line": 467, "function": "execute"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\unitofwork.py", "line": 643, "function": "execute"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\persistence.py", "line": 84, "function": "_save_obj"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\orm\\persistence.py", "line": 916, "function": "_emit_update_statements"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 1463, "function": "execute"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\sql\\elements.py", "line": 533, "function": "_execute_on_connection"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 1683, "function": "_execute_clauseelement"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 1837, "function": "_execute_context"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 1977, "function": "_exec_single_context"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 2350, "function": "_handle_dbapi_exception"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py", "line": 1958, "function": "_exec_single_context"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\sqlalchemy\\engine\\default.py", "line": 1192, "function": "do_execute"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\cursor.py", "line": 113, "function": "execute"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\connection.py", "line": 495, "function": "wait"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\waiting.py", "line": 341, "function": "wait_select"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\_cursor_base.py", "line": 205, "function": "_execute_gen"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\_cursor_base.py", "line": 465, "function": "_convert_query"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\_queries.py", "line": 92, "function": "convert"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\psycopg\\_queries.py", "line": 103, "function": "dump"}, {"file": "psycopg_binary/_psycopg/transform.pyx", "line": 355, "function": "psycopg_binary._psycopg.Transformer.dump_sequence"}, {"file": "psycopg_binary/_psycopg/transform.pyx", "line": 403, "function": "psycopg_binary._psycopg.Transformer.dump_sequence"}, {"file": "psycopg_binary/types/string.pyx", "line": 96, "function": "psycopg_binary._psycopg._StrDumper.cdump"}, {"file": "psycopg_binary/types/string.pyx", "line": 55, "function": "psycopg_binary._psycopg._BaseStrDumper.cdump"}]}
+{"ts": "2026-10-30T09:44:43.691841+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+RECHECK {"case": "surrogate-model", "status": null, "exception": "UnicodeEncodeError", "outcome": "PENDING", "usage_rows": 0, "audit_rows": 0}
+F{"ts": "2026-10-30T09:44:43.704756+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+
+================================== FAILURES ===================================
+_______________ test_late_old_probe_cannot_overwrite_new_probe ________________
+..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py:56: in test_late_old_probe_cannot_overwrite_new_probe
+    assert tuple(stored) == (False, 'FAILURE'), 'old result overwrote newer configuration evidence'
+E   AssertionError: old result overwrote newer configuration evidence
+E   assert (True, 'SUCCESS') == (False, 'FAILURE')
+E     
+E     At index 0 diff: True != False
+E     Use -v to get more diff
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:282 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/organization "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/agents/1/model-assignment "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://new.example.test/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/models/centre "HTTP/1.1 200 OK"
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:69 api stopped
+_______ test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe _______
+..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py:73: in test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe
+    assert before['supportsJsonOutput'] is None, 'pre-fingerprint evidence must not be trusted after upgrade'
+E   AssertionError: pre-fingerprint evidence must not be trusted after upgrade
+E   assert True is None
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:282 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+___________ test_surrogate_model_metadata_does_not_lose_known_usage ___________
+..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py:93: in test_surrogate_model_metadata_does_not_lose_known_usage
+    assert status == 200 and error is None, 'untrusted model metadata escaped validation'
+E   AssertionError: untrusted model metadata escaped validation
+E   assert (None == 200)
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:282 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     httpx:_client.py:1025 HTTP Request: POST https://api.deepseek.com/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR    app.api.errors:errors.py:153 unhandled exception
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_utils.py", line 104, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 37, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 102, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    |     await self.simple_response(scope, receive, send, request_headers=headers)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 149, in simple_response
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\routing.py", line 683, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2811, in app
+    |     await route.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1839, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2894, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1865, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1328, in handle
+    |     await effective_context.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 166, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 152, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 745, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 374, in run_endpoint_function
+    |     return await run_in_threadpool(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |         _run_sync_endpoint, function=dependant.call, arguments=values
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    |     result = context.run(func, *args)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 244, in _run_sync_endpoint
+    |     return function(**arguments)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\v1\model_centre.py", line 369, in probe_model
+    |     outcome = service.probe_model(
+    |         session,
+    |     ...<3 lines>...
+    |         ip_address=client_ip(request),
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 733, in probe_model
+    |     return self._record_success(
+    |            ~~~~~~~~~~~~~~~~~~~~^
+    |         session,
+    |         ^^^^^^^^
+    |     ...<7 lines>...
+    |         config_fp=fingerprint,
+    |         ^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 842, in _record_success
+    |     return self._finish_row(
+    |            ~~~~~~~~~~~~~~~~^
+    |         session,
+    |         ^^^^^^^^
+    |     ...<17 lines>...
+    |         metadata_dropped=result.metadata_dropped,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 975, in _finish_row
+    |     self._usage.add(
+    |     ~~~~~~~~~~~~~~~^
+    |         session,
+    |         ^^^^^^^^
+    |     ...<5 lines>...
+    |         completion_tokens=completion_tokens,
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\repositories\organization_repository.py", line 575, in add
+    |     session.flush()
+    |     ~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4543, in flush
+    |     self._flush(objects)
+    |     ~~~~~~~~~~~^^^^^^^^^
+    |   File "<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>", line 2, in _flush
+    |     return target(fn, self, objects=objects)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    |     return fn(*args, **kwargs)  # type: ignore[no-any-return]
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4686, in _flush
+    |     with util.safe_reraise():
+    |          ~~~~~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 166, in __exit__
+    |     raise exc_value.with_traceback(exc_tb)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4647, in _flush
+    |     flush_context.execute()
+    |     ~~~~~~~~~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 467, in execute
+    |     rec.execute(self)
+    |     ~~~~~~~~~~~^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 643, in execute
+    |     util.preloaded.orm_persistence._save_obj(
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    |         self.mapper,
+    |         ^^^^^^^^^^^^
+    |         uow.states_for_mapper_hierarchy(self.mapper, False, False),
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         uow,
+    |         ^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 84, in _save_obj
+    |     _emit_update_statements(
+    |     ~~~~~~~~~~~~~~~~~~~~~~~^
+    |         base_mapper,
+    |         ^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |         update,
+    |         ^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 916, in _emit_update_statements
+    |     c = connection.execute(
+    |         statement, multiparams, execution_options=execution_options
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1463, in execute
+    |     return meth(
+    |         self,
+    |         distilled_parameters,
+    |         execution_options or NO_OPTIONS,
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 533, in _execute_on_connection
+    |     return connection._execute_clauseelement(
+    |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    |         self, distilled_params, execution_options
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1683, in _execute_clauseelement
+    |     ret = self._execute_context(
+    |         dialect,
+    |     ...<9 lines>...
+    |         param_dict=param_dict,
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1837, in _execute_context
+    |     return self._exec_single_context(
+    |            ~~~~~~~~~~~~~~~~~~~~~~~~~^
+    |         dialect, context, statement, parameters
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1977, in _exec_single_context
+    |     self._handle_dbapi_exception(
+    |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+    |         e, str_statement, effective_parameters, cursor, context
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2350, in _handle_dbapi_exception
+    |     raise exc_info[1].with_traceback(exc_info[2])
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1958, in _exec_single_context
+    |     self.dialect.do_execute(
+    |     ~~~~~~~~~~~~~~~~~~~~~~~^
+    |         cursor, str_statement, effective_parameters, context
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1192, in do_execute
+    |     cursor.execute(statement, parameters)
+    |     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\cursor.py", line 113, in execute
+    |     self._conn.wait(
+    |     ~~~~~~~~~~~~~~~^
+    |         self._execute_gen(query, params, prepare=prepare, binary=binary)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\connection.py", line 495, in wait
+    |     return waiting.wait(
+    |            ~~~~~~~~~~~~^
+    |         gen, self.pgconn.socket, interval=interval, timeout=timeout
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\waiting.py", line 341, in wait_select
+    |     s = next(gen)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_cursor_base.py", line 205, in _execute_gen
+    |     pgq = self._convert_query(query, params)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_cursor_base.py", line 465, in _convert_query
+    |     pgq.convert(query, params)
+    |     ~~~~~~~~~~~^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_queries.py", line 92, in convert
+    |     self.dump(vars)
+    |     ~~~~~~~~~^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_queries.py", line 103, in dump
+    |     self.params = self._tx.dump_sequence(params, self._want_formats)
+    |                   ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "psycopg_binary/_psycopg/transform.pyx", line 355, in psycopg_binary._psycopg.Transformer.dump_sequence
+    |   File "psycopg_binary/_psycopg/transform.pyx", line 403, in psycopg_binary._psycopg.Transformer.dump_sequence
+    |   File "psycopg_binary/types/string.pyx", line 96, in psycopg_binary._psycopg._StrDumper.cdump
+    |   File "psycopg_binary/types/string.pyx", line 55, in psycopg_binary._psycopg._BaseStrDumper.cdump
+    | UnicodeEncodeError: 'utf-8' codec can't encode character '\ud800' in position 0: surrogates not allowed
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 37, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 102, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2811, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1839, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2894, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1865, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1328, in handle
+    await effective_context.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 166, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 152, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 745, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 374, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\v1\model_centre.py", line 369, in probe_model
+    outcome = service.probe_model(
+        session,
+    ...<3 lines>...
+        ip_address=client_ip(request),
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 733, in probe_model
+    return self._record_success(
+           ~~~~~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<7 lines>...
+        config_fp=fingerprint,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 842, in _record_success
+    return self._finish_row(
+           ~~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<17 lines>...
+        metadata_dropped=result.metadata_dropped,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 975, in _finish_row
+    self._usage.add(
+    ~~~~~~~~~~~~~~~^
+        session,
+        ^^^^^^^^
+    ...<5 lines>...
+        completion_tokens=completion_tokens,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\repositories\organization_repository.py", line 575, in add
+    session.flush()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4543, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>", line 2, in _flush
+    return target(fn, self, objects=objects)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4686, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 166, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4647, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 467, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 643, in execute
+    util.preloaded.orm_persistence._save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 84, in _save_obj
+    _emit_update_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        update,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 916, in _emit_update_statements
+    c = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1463, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 533, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1683, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<9 lines>...
+        param_dict=param_dict,
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1837, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1977, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2350, in _handle_dbapi_exception
+    raise exc_info[1].with_traceback(exc_info[2])
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1958, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1192, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\cursor.py", line 113, in execute
+    self._conn.wait(
+    ~~~~~~~~~~~~~~~^
+        self._execute_gen(query, params, prepare=prepare, binary=binary)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\connection.py", line 495, in wait
+    return waiting.wait(
+           ~~~~~~~~~~~~^
+        gen, self.pgconn.socket, interval=interval, timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\waiting.py", line 341, in wait_select
+    s = next(gen)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_cursor_base.py", line 205, in _execute_gen
+    pgq = self._convert_query(query, params)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_cursor_base.py", line 465, in _convert_query
+    pgq.convert(query, params)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_queries.py", line 92, in convert
+    self.dump(vars)
+    ~~~~~~~~~^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\psycopg\_queries.py", line 103, in dump
+    self.params = self._tx.dump_sequence(params, self._want_formats)
+                  ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "psycopg_binary/_psycopg/transform.pyx", line 355, in psycopg_binary._psycopg.Transformer.dump_sequence
+  File "psycopg_binary/_psycopg/transform.pyx", line 403, in psycopg_binary._psycopg.Transformer.dump_sequence
+  File "psycopg_binary/types/string.pyx", line 96, in psycopg_binary._psycopg._StrDumper.cdump
+  File "psycopg_binary/types/string.pyx", line 55, in psycopg_binary._psycopg._BaseStrDumper.cdump
+UnicodeEncodeError: 'utf-8' codec can't encode character '\ud800' in position 0: surrogates not allowed
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 500 Internal Server Error"
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:69 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-02-recheck/test_recheck_probes.py::test_late_old_probe_cannot_overwrite_new_probe
+docs/acceptance/evidence/phase-02-recheck/test_recheck_probes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe
+docs/acceptance/evidence/phase-02-recheck/test_recheck_probes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py::test_late_old_probe_cannot_overwrite_new_probe
+FAILED ..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py::test_upgrade_marks_unknown_evidence_stale_and_accepts_new_probe
+FAILED ..\docs\acceptance\evidence\phase-02-recheck\test_recheck_probes.py::test_surrogate_model_metadata_does_not_lose_known_usage
+3 failed, 1 deselected, 4 warnings in 5.51s

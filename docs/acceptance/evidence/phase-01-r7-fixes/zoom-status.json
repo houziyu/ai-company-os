@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-30",
+  "status": "unverified",
+  "target": "http://127.0.0.1:18082/login",
+  "fixture": "local built frontend with in-memory API; no database",
+  "baseline": { "outerWidth": 1440, "innerWidth": 1424, "devicePixelRatio": 1 },
+  "attemptedAction": "Select the dedicated Chrome QA window before using actual browser zoom controls",
+  "blockReason": "Computer Use could not determine the current browser URL on Windows with enough confidence to enforce policy and stopped for the turn",
+  "zoomInputsSent": false,
+  "viewportOrCssZoomSubstitutionUsed": false,
+  "waitingProcessStopped": true
+}
