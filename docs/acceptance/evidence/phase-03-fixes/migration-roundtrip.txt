@@ -1,0 +1,50 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade e5b7c9d1a2f4 -> c41f7b93e2a5, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+{
+  "database": "acos_mig_verify_a16dbb92",
+  "previous": "c41f7b93e2a5",
+  "head": "e5b7c9d1a2f4",
+  "rows_before": [
+    1,
+    2
+  ],
+  "id_to_cursor": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      2
+    ]
+  ],
+  "after_roundtrip": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      3,
+      3
+    ]
+  ],
+  "status": "PASS"
+}

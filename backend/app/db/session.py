@@ -29,8 +29,18 @@ def build_engine(settings: Settings) -> Engine:
 
     @event.listens_for(engine, "connect")
     def _set_timezone(dbapi_connection, _record):  # type: ignore[no-untyped-def]
-        with dbapi_connection.cursor() as cursor:
-            cursor.execute("SET TIME ZONE 'UTC'")
+        # Run in autocommit so the pooled connection is left idle. psycopg opens
+        # a transaction on the first statement; a connection that is checked in
+        # as "INTRANS" cannot later be switched to AUTOCOMMIT by a caller
+        # ("can't change 'autocommit' now"), which is exactly what the
+        # concurrency tests do to observe lock waits from a separate connection.
+        previous = dbapi_connection.autocommit
+        dbapi_connection.autocommit = True
+        try:
+            with dbapi_connection.cursor() as cursor:
+                cursor.execute("SET TIME ZONE 'UTC'")
+        finally:
+            dbapi_connection.autocommit = previous
 
     return engine
 

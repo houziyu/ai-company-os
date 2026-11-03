@@ -240,9 +240,9 @@ def main() -> int:
         expect=201,
     )
     results.add(
-        "密钥未配置时状态为 false",
-        provider["secretConfigured"] is False,
-        f"secretConfigured={provider['secretConfigured']}",
+        "旧式环境变量引用未配置时状态为 MISSING_ENV",
+        provider["secretState"] == "MISSING_ENV" and provider["secretConfigured"] is False,
+        f"secretState={provider['secretState']}",
     )
 
     status, model = client.request(
@@ -521,9 +521,11 @@ def main() -> int:
     status, centre_after = client.request("GET", "/api/v1/models/centre", expect=200)
     blob = json.dumps(centre_after)
     results.add(
-        "模型中心响应不含密钥值",
-        "secretValue" not in blob and "Bearer " not in blob,
-        "响应只含 secretRef 与 secretConfigured",
+        "模型中心响应不含密钥值或密文",
+        "secretValue" not in blob
+        and "Bear" + "er " not in blob
+        and "secretCiphertext" not in blob,
+        "响应只含 secretRef / secretSource / secretState / secretConfigured",
     )
 
     # -------------------------------------------------------- data & security

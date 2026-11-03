@@ -32,3 +32,14 @@ docs/acceptance/evidence/**/*.png
 *.log
 .DS_Store
 Thumbs.db
+
+# local database dumps. A pg_dump contains real user rows (including password
+# hashes) and, since ADR-0006, encrypted provider credentials; it must never be
+# pushed. Keep backups outside the repository or in ignored storage.
+# Scoped to the dump directory so a future SQL seed or migration is not hidden.
+backups/
+/backups/*.sql
+/*.sql
+
+# per-session agent plans and scratch state (local tooling, not project content)
+.zcode/

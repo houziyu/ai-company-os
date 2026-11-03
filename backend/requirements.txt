@@ -12,3 +12,6 @@ argon2-cffi==25.1.0
 # test-only httpx entry was removed from requirements-dev.txt to avoid a second
 # pin of the same package.
 httpx==0.28.1
+# AES-256-GCM encryption for provider credentials stored in the database
+# (ADR-0006). The data key lives in SECRET_ENCRYPTION_KEY, never in the database.
+cryptography==46.0.6

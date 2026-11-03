@@ -1,0 +1,218 @@
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+{"ts": "2026-11-02T05:58:34.631848+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:34.806951+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:34.812296+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d338ad0ccac24fdfad48b5abfa8eb51f", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 177.6, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:34.813213+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:34.889019+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:34.902545+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4184861c3b6043a08158abf867c7914b", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 86.0, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:34.902988+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:34.976439+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b6f862b533854de5b42715b0edf27935", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 70.56, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:34.976959+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:35.064306+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "6f12ca85a91b463891341ac8f45254db", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 83.75, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:35.064868+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:35.120010+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "684066c03c184a8397e033de0ff1afe9", "method": "POST", "path": "/api/v1/company/pause", "status": 200, "duration_ms": 26.75, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:35.120437+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+pause: already-claimed task starts BOTH steps and SUCCEEDS after stop command
+.{"ts": "2026-11-02T05:58:35.336370+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:36.223039+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:36.373408+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:36.378031+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e5c542bf3e3d4f60b851e527417a2d60", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 152.58, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:36.378558+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:36.446826+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:36.462753+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c6b803de570848489e2e82e203572e58", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 81.53, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:36.463186+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:36.539313+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bd47bc6ce6a840399813ab9b93b6eea1", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 72.97, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:36.539815+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:36.628476+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4d52e1e9d91143fcb6b79163db09c400", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 85.35, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:36.628990+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:36.686789+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "46a98feda67f43eca4178af5bb11d5c6", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 31.04, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:36.687234+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+cancel: already-claimed task starts BOTH steps and SUCCEEDS after stop command
+.{"ts": "2026-11-02T05:58:36.813716+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:36.947157+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:37.107764+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:37.112452+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5bb69775ead6480eb1a64f688802efda", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 162.91, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.112975+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.179999+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:37.192785+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "86108afc607c4bc7b0d221187815ad60", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 76.57, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.193227+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.261753+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "06d65883616845de8ba5d3abdb69f1ed", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 65.67, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.262141+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.341102+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "435b0fab8ef34956a4bce5f7ea5b5887", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 76.19, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.341553+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+expired lease: new step accepted and heartbeat resurrects expired lease
+.{"ts": "2026-11-02T05:58:37.402539+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:37.535834+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:37.673449+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:37.678308+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "791dae529911495ab0194bd6a0df1d9e", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 139.68, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.678855+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.744463+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:37.758163+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e8db5a9b7196458cba8ef74088cef88f", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 76.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.758768+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.836817+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "78f2128cdef34bbbb1ea0bec7e9bade3", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 74.82, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.837303+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:37.926521+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "063130871cbe475f99eb8ee59bab4cf7", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 86.34, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:37.926966+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+fence race: INTERRUPTED execution acquires new RUNNING step and budget hold
+.{"ts": "2026-11-02T05:58:38.056349+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:38.194371+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:38.347129+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:38.351705+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "20a43259062f47c4b08e699e16e062de", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 154.75, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:38.352219+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:38.413738+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:38.426289+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bce571c1aa0a4f2c8b2267ab47557b74", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 71.13, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:38.426725+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:38.499399+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7464b62691c94926a2ddcf95aac1fcfd", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 69.79, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:38.499872+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:38.579945+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "be3f6dbb8dc64bee854de4f9bc966d78", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 77.14, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:38.580377+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+recovery: BudgetInsufficientError escapes runtime; interruption transaction rolls back
+.{"ts": "2026-11-02T05:58:38.662115+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:38.786242+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:38.921518+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:38.926462+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b707aaa6aa414eee830d9a1f814cc507", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 138.55, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:38.927020+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:38.991336+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:39.003949+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8021fd4777534751a22ae64ead957371", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 73.86, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.004369+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.076079+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "daa5e904cf0a4325bad82cb423d4db38", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.8, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.076544+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.156205+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "41d38bd6d6a440439d36a92d93c21edd", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 76.83, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.156663+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.234087+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7e475251f2f64282ae121c8efa226557", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 29.02, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.234525+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.291642+00:00", "level": "INFO", "logger": "app.workers.task_worker", "message": "recovered interrupted tasks", "count": 1}
+cancel+crash: unknown call charged 200 TASK, but COMPANY/PROJECT both release all cost to zero
+.{"ts": "2026-11-02T05:58:39.297031+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:39.445215+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:39.596120+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:39.600600+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bd6493390e274221958454e415dea9b7", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 153.35, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.601160+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.666483+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:39.678613+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2e00af7905dd4b5397b3927649151c75", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 74.26, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.679050+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.744849+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4f920faf950e4c399be87781dd7e23a8", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 63.13, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.745363+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:39.822539+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "659301dd3d7f4fba9f72990d95d6e66e", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 74.37, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:39.822968+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+failed step: unknown 64-token call disappears from company/project settlement; execution says known 200
+.{"ts": "2026-11-02T05:58:39.990777+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:40.126724+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:40.272846+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:40.277649+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bf9d2086d7cd48f2a2ecc6a1b992dedd", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 148.63, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.278381+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:40.343386+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:40.357471+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "6e253b7b5fa449be856071115cda6bc8", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 75.92, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.357947+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:40.425070+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d26c74317f344b8797990c409e87be4a", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 63.31, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.425520+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:40.502373+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e29b0a1b85ff423993f61dd533bb5522", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 74.01, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.502802+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:40.700067+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8d4c4e0eeebf4105a3122061f2ed7599", "method": "GET", "path": "/api/v1/budgets", "status": 200, "duration_ms": 33.59, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.700692+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:40.725270+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bd8bfa8b86354349be27fff4f7b9d565", "method": "GET", "path": "/api/v1/budgets/pending-reconciliation", "status": 200, "duration_ms": 20.95, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:40.725719+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+reconciliation: 4 flagged reservations exist, API counts 0 and returns empty list
+.{"ts": "2026-11-02T05:58:40.727311+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:40.853080+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:41.007432+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:41.012023+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "23b7108371e542898f650ac31421bdab", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 156.5, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.012570+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.078457+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:41.091613+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3cc610ca8b044f9285b7c20e0cdfdf23", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 75.91, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.092081+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.167725+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "69c93b382f634f2497cc03b43c316e70", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 72.27, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.168177+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.262885+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e1aa7b94cc6545b89b1e1f1114400ef7", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 91.34, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.263339+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+auto retry: project rejects second hold but company retains orphan 1000-token reservation
+.{"ts": "2026-11-02T05:58:41.438092+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:41.582375+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:41.740412+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:41.745737+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0ab602bbef59460389f6db4ade1920b7", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 160.92, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.746340+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.824980+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:41.839183+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c83a2174aee24d76886e4ceedc4dc34f", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 89.09, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.839620+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.917473+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d36d06b284b84c0dba3d69915a0305cb", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 73.32, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.918151+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:41.995341+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7f1ed6d66a474b1caedeccda158caaba", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 74.47, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:41.995776+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.063083+00:00", "level": "INFO", "logger": "app.workers.task_worker", "message": "recovered interrupted tasks", "count": 1}
+{"ts": "2026-11-02T05:58:42.094684+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1f85280d64ec49f589a5b78f6d4d307e", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 29.61, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.095153+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.117687+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d71b7aa11d674e2d9f6a36db6f758391", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 409, "duration_ms": 12.79, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.118185+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+interrupted cancel: accepted 200 but never CANCELLED; retry permanently rejected
+.{"ts": "2026-11-02T05:58:42.120013+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:42.249776+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:42.385082+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:42.389661+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ba44c20a0e654e7fa19db21dc66c605e", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 137.9, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.390209+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.453611+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:42.465120+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c7932b1a4eeb4e5bb9fe802f0686847d", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 71.93, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.465559+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.531413+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "90d780af0e7e4a388631bfb8341cebdb", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 62.6, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.531858+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.615350+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c8804102678c4c2e86386ef1bfd55391", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 80.19, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.615813+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:42.680298+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "995e6a2f308540998b0d682465f419d7", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 61.34, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:42.680741+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+SSE: event 5 delivered first, committed-late event 4 permanently skipped by cursor
+.{"ts": "2026-11-02T05:58:42.761694+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:42.899837+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:43.045075+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:43.051372+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "37ad586131cb4119b970c9a852f438cc", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 149.29, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.052197+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.128035+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:43.141309+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9456a49db46347f68161a8e5f0353ebd", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 85.18, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.141755+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.210012+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4fda8695553f43ae8c67295019332f47", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 65.2, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.210481+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.289661+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d4e8f3ba84984d98aab7acbfab4d2053", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 76.25, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.290123+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+configured company limit 0: first task creates company account with 1000000 and is accepted
+.{"ts": "2026-11-02T05:58:43.297287+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+{"ts": "2026-11-02T05:58:43.441300+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-02T05:58:43.577290+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T05:58:43.582060+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a4470c70b1d34db5af507643c9720d07", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 138.22, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.582613+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.645869+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T05:58:43.658780+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a6e2ec4515ab474b860951c1fbf6f29e", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 73.24, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.659210+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.731342+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ac4b26291e07452f807c065389b02a02", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 69.39, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.731842+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.762332+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "770461cefa6a4b4b949219ea3e5a8e10", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 27.9, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.762786+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.839031+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cc8d948ba06447d3a6f58d3bbdc6b0e0", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 73.34, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.839486+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.900668+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "15cf8b23b6f743bf96be8bbe8502e744", "method": "POST", "path": "/api/v1/projects/2/tasks", "status": 201, "duration_ms": 58.7, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.901192+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.934864+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "74d9ca505ca54492a7c436b3de36af31", "method": "GET", "path": "/api/v1/tasks", "status": 200, "duration_ms": 31.58, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.935337+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.959573+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f31092402ddf45ee802274c3d3704ee7", "method": "GET", "path": "/api/v1/tasks", "status": 200, "duration_ms": 21.35, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.960022+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:43.988512+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "eb1a658db27f4c1bb51899d0bb326ba7", "method": "GET", "path": "/api/v1/budgets", "status": 200, "duration_ms": 26.06, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:43.988930+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T05:58:44.015728+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c51466e1e38641bca1cb57b05e18b51b", "method": "GET", "path": "/api/v1/budgets", "status": 200, "duration_ms": 24.18, "client_ip": "testclient"}
+{"ts": "2026-11-02T05:58:44.016334+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+query contract: projectId ignored (both projects returned); ledgerLimit ignored (4 instead of 1)
+.{"ts": "2026-11-02T05:58:44.018250+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-review/test_review_repros.py::test_running_task_ignores_stop_gate[pause]
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+13 passed, 2 warnings in 10.26s

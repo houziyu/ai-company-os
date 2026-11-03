@@ -11,7 +11,7 @@
  * Deliberately absent: fabricated metrics, invented percentages, and a
  * "create project" button that does nothing.
  */
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import AppButton from '@/components/AppButton.vue'
@@ -20,9 +20,15 @@ import ErrorState from '@/components/ErrorState.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { ApiError, NetworkError } from '@/api/client'
-import { companyApi, systemApi } from '@/api/endpoints'
+import { budgetsApi, companyApi, governanceApi, systemApi, tasksApi } from '@/api/endpoints'
 import type { CompanyResponse } from '@/api/organization-types'
 import type { ReadinessResponse, ServiceStatus } from '@/api/types'
+import { formatTime, formatTokens, taskStatus } from '@/api/task-presentation'
+import type {
+  BudgetAccountResponse,
+  CompanyStateResponse,
+  TaskSummary,
+} from '@/api/task-types'
 import { useSessionStore } from '@/stores/session'
 
 const session = useSessionStore()
@@ -35,6 +41,47 @@ const company = ref<CompanyResponse | null>(null)
 const loadError = ref<{ message: string; requestId: string | null } | null>(
   null,
 )
+
+// Phase 03 facts. Each is optional: the overview must still render when one of
+// them is unavailable, and it shows "—" rather than an invented number.
+const budget = ref<BudgetAccountResponse | null>(null)
+const companyState = ref<CompanyStateResponse | null>(null)
+const recentTasks = ref<TaskSummary[]>([])
+const taskSnapshot = ref<{ counts: Record<string, number> } | null>(null)
+
+interface OperationalSummary {
+  runningCount: number
+  queuedCount: number
+  succeededCount: number
+  failedCount: number
+  blockedCount: number
+  interruptedCount: number
+  issueCount: number
+}
+
+const operational = computed<OperationalSummary | null>(() => {
+  const snapshot = taskSnapshot.value
+  if (!snapshot) return null
+  // A response without counts (an older server, or a partial mock) still has to
+  // render: fall back to an empty map so the metric shows 0 measured tasks
+  // instead of crashing the page.
+  const counts = snapshot.counts ?? {}
+  const running = (counts.RUNNING ?? 0) + (counts.WAITING_APPROVAL ?? 0)
+  const queued = counts.QUEUED ?? 0
+  return {
+    runningCount: running,
+    queuedCount: queued,
+    succeededCount: counts.SUCCEEDED ?? 0,
+    failedCount: counts.FAILED ?? 0,
+    blockedCount: counts.BLOCKED ?? 0,
+    interruptedCount: counts.INTERRUPTED ?? 0,
+    issueCount:
+      (counts.FAILED ?? 0) +
+      (counts.BLOCKED ?? 0) +
+      (counts.INTERRUPTED ?? 0) +
+      (counts.CANCELLED ?? 0),
+  }
+})
 
 async function load() {
   loading.value = true
@@ -72,14 +119,44 @@ async function load() {
   }
 }
 
-onMounted(load)
+/**
+ * Phase 03 metrics, loaded separately from the service facts.
+ *
+ * They are deliberately not part of ``load()``: the readiness panel must render
+ * as soon as health is known, and a slow or failing task/budget query must not
+ * hold the whole page in a skeleton. A failure leaves each metric as "—".
+ */
+async function loadOperational() {
+  try {
+    const currentCompany = company.value ?? (await companyApi.get().catch(() => null))
+    if (!currentCompany) return
+    const [budgetResult, stateResult, tasks] = await Promise.allSettled([
+      budgetsApi.overview(1),
+      governanceApi.state(),
+      tasksApi.list({ limit: 5 }),
+    ])
+    if (budgetResult.status === 'fulfilled') {
+      budget.value = budgetResult.value.company
+    }
+    if (stateResult.status === 'fulfilled') {
+      companyState.value = stateResult.value
+    }
+    if (tasks.status === 'fulfilled') {
+      // Guard the shape: a partial or older payload must leave the list empty
+      // rather than assign undefined into a ref the template iterates.
+      recentTasks.value = Array.isArray(tasks.value.tasks) ? tasks.value.tasks : []
+      taskSnapshot.value = { counts: tasks.value.counts ?? {} }
+    }
+  } catch {
+    // Nothing to do: the metrics stay "—" and the service panel is unaffected.
+  }
+}
 
-const metricPlaceholders = [
-  { label: '进行中任务', hint: '阶段 03 接入任务调度后显示' },
-  { label: '待决策提案', hint: '阶段 06 接入提案治理后显示' },
-  { label: '已验证交付', hint: '阶段 05 接入验证证据后显示' },
-  { label: 'Token 剩余额度', hint: '阶段 03 接入预算账本后显示' },
-]
+onMounted(async () => {
+  await load()
+  // Started after the service panel has loaded so the metrics never delay it.
+  void loadOperational()
+})
 </script>
 
 <template>
@@ -219,32 +296,129 @@ const metricPlaceholders = [
         </p>
       </section>
 
-      <!-- Honest empty metrics -->
-      <section class="overview__metrics" aria-label="业务指标（尚未接入）">
-        <div
-          v-for="metric in metricPlaceholders"
-          :key="metric.label"
-          class="overview__metric"
-        >
-          <span class="overview__metric-label">{{ metric.label }}</span>
-          <span class="overview__metric-value" aria-label="暂无数据">—</span>
-          <span class="overview__metric-hint acos-caption">{{
-            metric.hint
-          }}</span>
+      <!-- Metrics: only the ones this phase can measure are filled in; the rest
+           stay an em dash rather than a fabricated zero. -->
+      <section class="overview__metrics" aria-label="业务指标">
+        <div class="overview__metric">
+          <span class="overview__metric-label">进行中任务</span>
+          <span class="overview__metric-value acos-tabular">
+            {{ operational ? operational.runningCount + operational.queuedCount : '—' }}
+          </span>
+          <span class="overview__metric-hint acos-caption">
+            {{ operational
+              ? `执行中 ${operational.runningCount} · 排队中 ${operational.queuedCount}`
+              : '任务数据读取失败' }}
+          </span>
+        </div>
+        <div class="overview__metric">
+          <span class="overview__metric-label">待决策提案</span>
+          <span class="overview__metric-value acos-tabular">—</span>
+          <span class="overview__metric-hint acos-caption">阶段 06 接入提案治理后显示</span>
+        </div>
+        <div class="overview__metric">
+          <span class="overview__metric-label">已验证交付</span>
+          <span class="overview__metric-value acos-tabular">
+            {{ operational ? operational.succeededCount : '—' }}
+          </span>
+          <span class="overview__metric-hint acos-caption">阶段 03 起统计任务成功数；验证证据属阶段 05</span>
+        </div>
+        <div class="overview__metric">
+          <span class="overview__metric-label">Token 剩余额度</span>
+          <span class="overview__metric-value acos-tabular">
+            {{ budget ? formatTokens(budget.availableTokens) : '—' }}
+          </span>
+          <span class="overview__metric-hint acos-caption">
+            <template v-if="budget">
+              已用 {{ formatTokens(budget.consumedTokens) }} · 预留
+              {{ formatTokens(budget.reservedTokens) }}
+              <template v-if="budget.needsReconciliationCount > 0">
+                · {{ budget.needsReconciliationCount }} 笔待核对
+              </template>
+            </template>
+            <template v-else>预算数据读取失败</template>
+          </span>
         </div>
       </section>
 
       <section class="overview__panels">
-        <EmptyState
-          title="还没有任务"
-          description="任务调度在阶段 03 接入。当前阶段只提供账号、服务健康检查与工作台骨架，不会创建任何模拟任务。"
-          phase-note="阶段 03 开放项目与任务"
-        />
-        <EmptyState
-          title="没有等待你处理的提案"
-          description="提案中心会在阶段 06 接入 Finding → Proposal → Decision 流程。现在不会出现模拟审批。"
-          phase-note="阶段 06 开放提案与分级治理"
-        />
+        <section class="overview__panel" aria-labelledby="recent-tasks-heading">
+          <div class="overview__panel-head">
+            <h2 id="recent-tasks-heading">近期任务</h2>
+            <AppButton variant="ghost" size="small" @click="router.push('/projects')">
+              查看全部
+            </AppButton>
+          </div>
+          <EmptyState
+            v-if="recentTasks.length === 0"
+            title="还没有任务"
+            description="在项目与任务页创建项目后即可提交任务；任务由 Worker 从持久队列领取。"
+          >
+            <template #action>
+              <AppButton variant="secondary" @click="router.push('/projects')">
+                前往项目与任务
+              </AppButton>
+            </template>
+          </EmptyState>
+          <ul v-else class="overview__tasks">
+            <li v-for="item in recentTasks" :key="item.id" class="overview__task">
+              <button
+                type="button"
+                class="overview__task-button"
+                @click="router.push(`/tasks/${item.id}`)"
+              >
+                <span class="overview__task-title">{{ item.title }}</span>
+                <StatusBadge
+                  :label="taskStatus(item.status).label"
+                  :tone="taskStatus(item.status).tone"
+                />
+                <span class="acos-caption">{{ formatTime(item.updatedAt) }}</span>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <section class="overview__panel" aria-labelledby="blockers-heading">
+          <div class="overview__panel-head">
+            <h2 id="blockers-heading">预算与阻塞</h2>
+            <StatusBadge
+              v-if="companyState"
+              :label="companyState.status === 'PAUSED' ? '公司已暂停' : '公司运行中'"
+              :tone="companyState.status === 'PAUSED' ? 'warning' : 'success'"
+            />
+          </div>
+          <ul class="overview__blockers">
+            <li v-if="companyState?.status === 'PAUSED'">
+              公司已暂停：不会再发起新的模型调用或创建新任务。
+              <template v-if="companyState.pauseReason">
+                原因：{{ companyState.pauseReason }}
+              </template>
+            </li>
+            <li v-if="budget && budget.availableTokens === 0">
+              公司可用 Token 为 0，新的付费调用会被拒绝。
+            </li>
+            <li v-if="operational && operational.blockedCount > 0">
+              {{ operational.blockedCount }} 个任务已阻塞，需要处理后重试。
+            </li>
+            <li v-if="operational && operational.interruptedCount > 0">
+              {{ operational.interruptedCount }} 个任务因 Worker 中断停止；副作用未知的不会自动重放，
+              需要在任务详情人工确认后重试。
+            </li>
+            <li v-if="operational && operational.failedCount > 0">
+              {{ operational.failedCount }} 个任务失败，可在任务详情查看原因并重试。
+            </li>
+            <li
+              v-if="
+                (!companyState || companyState.status !== 'PAUSED') &&
+                  (!operational || operational.issueCount === 0)
+              "
+            >
+              没有需要处理的阻塞项。
+            </li>
+          </ul>
+          <p class="acos-caption">
+            点开任务可查看执行历史、预算预留与审计记录；预算页提供完整账本。
+          </p>
+        </section>
       </section>
 
       <div class="overview__actions">
@@ -401,6 +575,52 @@ const metricPlaceholders = [
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: var(--acos-layout-card-gap);
+}
+
+.overview__tasks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.overview__task {
+  border-top: var(--acos-control-border-width) solid var(--acos-color-border);
+}
+
+.overview__task:first-child {
+  border-top: 0;
+}
+
+.overview__task-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--acos-space-12);
+  padding: var(--acos-space-12) 0;
+  min-height: var(--acos-layout-table-row-min);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  flex-wrap: wrap;
+}
+
+.overview__task-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.overview__blockers {
+  margin: 0;
+  padding-left: var(--acos-space-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--acos-space-8);
 }
 
 .overview__actions {

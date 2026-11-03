@@ -392,6 +392,8 @@ describe('ModelsView', () => {
               kind: 'DEEPSEEK',
               baseUrl: 'https://api.deepseek.com',
               secretRef: 'DEEPSEEK_API_KEY',
+              secretSource: 'ENV',
+              secretState: 'MISSING_ENV',
               secretConfigured: false,
               status: 'ENABLED',
               notes: null,
@@ -432,11 +434,15 @@ describe('ModelsView', () => {
     await flushPromises()
 
     expect(wrapper.text()).toContain('DEEPSEEK_API_KEY')
-    expect(wrapper.text()).toContain('未配置')
-    expect(wrapper.text()).toContain('密钥引用')
-    // No credential-shaped value and no reveal control.
+    expect(wrapper.text()).toContain('未配置（环境变量缺失）')
+    expect(wrapper.text()).toContain('密钥')
+    // No credential-shaped value and no reveal control. A masked key input is
+    // expected in the edit drawer (ADR-0006), but the list shows state only.
     expect(wrapper.text()).not.toMatch(/sk-[A-Za-z0-9]{10,}/)
-    expect(wrapper.findAll('input[type="password"]')).toHaveLength(0)
+    expect(
+      wrapper.findAll('input[type="password"]'),
+      'the provider list must not render a key input until the drawer opens',
+    ).toHaveLength(0)
 
     // The models tab reports JSON capability as unverified, not supported.
     await wrapper.findAll('button').find((b) => b.text().includes('模型（1）'))!.trigger('click')
@@ -464,6 +470,8 @@ describe('ModelsView', () => {
                 kind: 'DEEPSEEK',
                 baseUrl: 'https://api.deepseek.com',
                 secretRef: 'DEEPSEEK_API_KEY',
+                secretSource: 'ENV',
+                secretState: 'CONFIGURED',
                 secretConfigured: true,
                 status: 'ENABLED',
                 notes: null,

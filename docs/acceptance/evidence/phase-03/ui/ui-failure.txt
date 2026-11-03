@@ -1,0 +1,6 @@
+page.waitForURL: Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for navigation until "load"
+============================================================
+    at login (C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase03_ui.cjs:125:16)
+    at async C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase03_ui.cjs:197:5

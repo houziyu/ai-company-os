@@ -27,8 +27,11 @@ Guarantees this module provides:
 * **JSON output verification.** The probe asks for a JSON object and then
   actually parses it; ``supports_json_output`` is only set to true when the
   parse succeeded. Protocol compatibility is not treated as proven capability.
-* **No secrets in logs or payloads.** The credential is read from the server
-  environment at call time and only placed in the Authorization header.
+* **No secrets in logs or payloads.** The credential is supplied either as a
+  literal value (ADR-0006, decrypted by the caller immediately before the call)
+  or as an environment-variable name (Phase 02), and only ever placed in the
+  Authorization header. An explicitly supplied value is authoritative: the
+  adapter never falls back to an environment variable of the same name.
 """
 
 from __future__ import annotations
@@ -78,7 +81,8 @@ _PROBE_USER_PROMPT = 'Return exactly {"ok": true} as valid JSON.'
 # Short, user-facing explanations per error category. Deliberately generic: the
 # provider's own message is never reused, because it can echo request data.
 _ERROR_MESSAGES: Mapping[ProbeErrorCode, str] = {
-    ProbeErrorCode.MISSING_SECRET: "服务端未配置该供应商的密钥引用。",
+    ProbeErrorCode.MISSING_SECRET: "该供应商尚未配置密钥。",
+    ProbeErrorCode.SECRET_UNDECRYPTABLE: "已保存的密钥无法解密，需要重新填写。",
     ProbeErrorCode.INVALID_CONFIG: "供应商配置无效（地址或模型名称不合法）。",
     ProbeErrorCode.AUTH_FAILED: "供应商拒绝了密钥（认证失败）。",
     ProbeErrorCode.RATE_LIMITED: "供应商限流，请稍后再测试。",
@@ -114,7 +118,15 @@ class AdapterError(Exception):
 
 @dataclass(slots=True)
 class ProbeRequest:
-    """Everything the adapter needs; the secret is resolved here, not passed in."""
+    """Everything the adapter needs.
+
+    ``secret_value`` (ADR-0006) is the decrypted credential for a provider whose
+    key is stored in the database. When it is not ``None`` it is the only
+    credential considered — an empty string means "no credential" and is refused
+    rather than replaced by an environment variable that happens to share the
+    reference name. When it is ``None``, ``secret_ref`` (Phase 02) is resolved
+    against the process environment.
+    """
 
     base_url: str
     model_name: str
@@ -125,6 +137,8 @@ class ProbeRequest:
     # Injected for tests: an httpx transport (e.g. MockTransport).
     transport: ProbeTransport | None = None
     environ: Mapping[str, str] | None = field(default=None)
+    # Decrypted credential for a DB-stored key; see the class docstring.
+    secret_value: str | None = field(default=None, repr=False)
 
 
 @dataclass(slots=True)
@@ -169,15 +183,33 @@ def resolve_timeout(configured: float) -> float:
 def read_secret(secret_ref: str | None, environ: Mapping[str, str] | None = None) -> str | None:
     """Return the credential value for ``secret_ref`` from the server environment.
 
-    Only an environment lookup happens here. There is no fallback to a default
-    key and no way to pass a literal secret through the API, which is what makes
-    "界面只显示是否配置" enforceable rather than a UI convention.
+    This is the Phase 02 resolution path. It is only consulted when no literal
+    credential was supplied (ADR-0006 providers store an encrypted key instead).
     """
     if not secret_ref:
         return None
     source = os.environ if environ is None else environ
     value = source.get(secret_ref, "").strip()
     return value or None
+
+
+def resolve_credential(
+    secret_value: str | None,
+    secret_ref: str | None,
+    environ: Mapping[str, str] | None = None,
+) -> str | None:
+    """Return the credential to send, or ``None`` when none is available.
+
+    Precedence is deliberate and one-way: a supplied ``secret_value`` is used
+    exactly as given. If it is present but blank, the provider has no usable
+    credential and the call is refused — falling back to an environment variable
+    would let a cleared key silently start working again from server
+    configuration the operator cannot see, which is the opposite of what
+    "清除密钥" must mean.
+    """
+    if secret_value is not None:
+        return secret_value.strip() or None
+    return read_secret(secret_ref, environ)
 
 
 def parse_json_object(text: str) -> dict[str, Any] | None:
@@ -373,12 +405,11 @@ async def _probe(request: ProbeRequest, *, deadline: float) -> ProbeResult:
     if not request.model_name.strip():
         raise AdapterError(ProbeErrorCode.INVALID_CONFIG)
 
-    secret = read_secret(request.secret_ref, request.environ)
-    if request.secret_ref and secret is None:
-        raise AdapterError(ProbeErrorCode.MISSING_SECRET)
-    if not request.secret_ref:
-        # A provider without a secret reference cannot be probed: sending an
-        # empty bearer token would fail at the provider and look like a wrong key.
+    secret = resolve_credential(request.secret_value, request.secret_ref, request.environ)
+    if secret is None:
+        # No credential: a provider without a key cannot be probed, and sending
+        # an empty bearer token would fail at the provider and look like a wrong
+        # key rather than a configuration gap.
         raise AdapterError(ProbeErrorCode.MISSING_SECRET)
 
     url = chat_completions_url(base_url)

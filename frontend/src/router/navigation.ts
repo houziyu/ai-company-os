@@ -38,7 +38,7 @@ export const navEntries: NavEntry[] = [
     label: '项目与任务',
     path: '/projects',
     purpose: '创建项目、提交任务、跟踪每次执行的状态与证据。',
-    readyPhase: 3,
+    readyPhase: null,
   },
   {
     label: '提案中心',
@@ -56,7 +56,7 @@ export const navEntries: NavEntry[] = [
     label: '预算',
     path: '/budgets',
     purpose: '查看公司、项目额度与 Token 账本明细。',
-    readyPhase: 3,
+    readyPhase: null,
   },
   {
     label: '审计',

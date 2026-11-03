@@ -74,10 +74,14 @@ services:
       PASSWORD_MIN_LENGTH: ${PASSWORD_MIN_LENGTH:-12}
       LOCKOUT_THRESHOLD: ${LOCKOUT_THRESHOLD:-10}
       LOCKOUT_MINUTES: ${LOCKOUT_MINUTES:-5}
-      # Model provider credentials, injected by *name*. A provider row stores
-      # only the variable name; when the variable is absent the UI reports
-      # "未配置" and probes are refused locally rather than sent with an empty key.
-      # Add one line per provider secret reference you configure in the UI.
+      # Data key for provider credentials typed in the model centre (ADR-0006).
+      # Provider keys are stored AES-256-GCM encrypted in the database; this is
+      # the only value that can decrypt them. Keep it out of database backups.
+      SECRET_ENCRYPTION_KEY: ${SECRET_ENCRYPTION_KEY:-}
+      # Legacy Phase 02 source: only provider rows that reference an environment
+      # variable *name* still read this. New providers store an encrypted key
+      # instead, so a deployment configuring everything in the UI can leave it
+      # empty.
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
     depends_on:
       # The API must not start before migrations finish: a reachable-but-empty
@@ -103,9 +107,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: unless-stopped
-    # Phase 01 worker: heartbeat + health endpoint only. No task consumption,
-    # no model calls, no code execution.
-    command: ["python", "-m", "app.workers.health_worker"]
+    # Phase 03 worker: claims queued tasks from the PostgreSQL queue and runs the
+    # labelled demo processor. Still no code execution and no model calls — the
+    # isolated executor is Phase 04.
+    command: ["python", "-m", "app.workers.task_worker"]
     environment:
       DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
       APP_ENV: ${APP_ENV:-production}
@@ -114,6 +119,11 @@ services:
       WORKER_NAME: ${WORKER_NAME:-worker-1}
       WORKER_HEALTH_PORT: "9100"
       WORKER_HEARTBEAT_INTERVAL_SECONDS: ${WORKER_HEARTBEAT_INTERVAL_SECONDS:-5}
+      # Lease, poll and demo pacing are explicit so an operator can shorten a
+      # lease for recovery testing without rebuilding the image.
+      WORKER_LEASE_SECONDS: ${WORKER_LEASE_SECONDS:-30}
+      WORKER_POLL_INTERVAL_SECONDS: ${WORKER_POLL_INTERVAL_SECONDS:-1}
+      DEMO_SLOW_STEP_SECONDS: ${DEMO_SLOW_STEP_SECONDS:-1.5}
     depends_on:
       migrate:
         condition: service_completed_successfully

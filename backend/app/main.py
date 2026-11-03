@@ -18,12 +18,15 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.api.errors import register_error_handlers
 from app.api.middleware import OriginGuardMiddleware, RequestContextMiddleware
-from app.api.v1 import audit, auth, health, model_centre, organization
+from app.api.v1 import audit, auth, health, model_centre, organization, tasks
 from app.config import Settings
 from app.db.session import build_engine, build_session_factory
 from app.logging import configure_logging
 from app.providers.adapter import ProbeTransport
+from app.security.secrets_cipher import SecretCipher
 from app.services.auth_service import AuthService
+from app.services.budget_service import BudgetService
+from app.services.event_feed_service import EventFeedService
 from app.services.health_service import HealthService
 from app.services.model_centre_service import ModelCentreService
 
@@ -88,8 +91,23 @@ def create_app(
     # committed before the provider call, independent of the request transaction
     # (review finding R2).
     app.state.model_centre_service = ModelCentreService(
-        transport=probe_transport, session_factory=session_factory
+        transport=probe_transport,
+        session_factory=session_factory,
+        default_company_budget=settings.company_default_budget_tokens,
+        probe_reservation_tokens=settings.probe_reservation_tokens,
+        # ADR-0006: provider credentials are encrypted at rest. A missing or
+        # malformed data key fails at construction so a deployment cannot run
+        # while silently unable to store (or read) a key.
+        cipher=SecretCipher.from_setting(settings.secret_encryption_key),
     )
+    # Shared budget service: the API reads and the worker writes the same ledger,
+    # so the configured default allowance must come from one place.
+    app.state.budget_service = BudgetService(
+        default_company_limit=settings.company_default_budget_tokens
+    )
+    # The SSE feed publishes events in commit order; one service instance is
+    # enough because the ordering guarantee lives in the database lock.
+    app.state.event_feed_service = EventFeedService()
 
     # CORS exists only for the Vite dev server; the production web container
     # serves the SPA same-origin, so no preflight path exists there.
@@ -111,6 +129,7 @@ def create_app(
     app.include_router(organization.router, prefix=API_PREFIX)
     app.include_router(model_centre.router, prefix=API_PREFIX)
     app.include_router(audit.router, prefix=API_PREFIX)
+    app.include_router(tasks.router, prefix=API_PREFIX)
 
     @app.get("/api/v1/meta", tags=["health"])
     def meta() -> dict[str, object]:

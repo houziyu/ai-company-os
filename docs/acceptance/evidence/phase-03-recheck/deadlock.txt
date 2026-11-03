@@ -1,0 +1,119 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+________________ test_step_start_and_recovery_do_not_deadlock _________________
+
+client = <starlette.testclient.TestClient object at 0x00000283B8011400>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_30a6053a25), autoflush=False, expire_on_commit=False)
+engine = Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_30a6053a25)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000283B7F31940>
+
+    def test_step_start_and_recovery_do_not_deadlock(client, session_factory, engine, monkeypatch):
+        _, claim = claimed(client, session_factory, retries=1)
+        import app.services.execution_service as module
+        now = module.utcnow()
+        clock = {'value': now}
+        monkeypatch.setattr(module, 'utcnow', lambda: clock['value'])
+        service = ExecutionService()
+        reached_company_reserve = threading.Event()
+        recovery_has_company = threading.Event()
+        original = service._assert_startable
+        errors = []
+    
+        def gate(session, **kwargs):
+            original(session, **kwargs)
+            reached_company_reserve.set()  # start_step already owns task and execution.
+            assert recovery_has_company.wait(10)
+    
+        monkeypatch.setattr(service, '_assert_startable', gate)
+    
+        def after_sql(conn, cursor, statement, parameters, context, executemany):
+            if threading.current_thread().name == 'recheck-recovery' and 'FROM companies' in statement and 'FOR UPDATE' in statement:
+                recovery_has_company.set()
+    
+        event.listen(engine, 'after_cursor_execute', after_sql)
+    
+        def complete():
+            try:
+                with session_factory() as session:
+                    service.start_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                        sequence=0, name='concurrent step', estimated_tokens=10)
+                    session.commit()
+            except Exception as exc:
+                errors.append(('complete', type(exc).__name__, getattr(getattr(exc, 'orig', None), 'sqlstate', None)))
+    
+        def recover():
+            try:
+                with session_factory() as session:
+                    ExecutionService().recover_expired_leases(session)
+                    session.commit()
+            except Exception as exc:
+                errors.append(('recover', type(exc).__name__, getattr(getattr(exc, 'orig', None), 'sqlstate', None)))
+    
+        first = threading.Thread(target=complete, name='recheck-complete')
+        second = threading.Thread(target=recover, name='recheck-recovery')
+        try:
+            first.start()
+            assert reached_company_reserve.wait(10)
+            clock['value'] = now + timedelta(minutes=5)
+            second.start()
+            first.join(20)
+            second.join(20)
+            assert not first.is_alive() and not second.is_alive()
+>           assert errors == [], f'Concurrent step/recovery errors: {errors}'
+E           AssertionError: Concurrent step/recovery errors: [('recover', 'OperationalError', '40P01')]
+E           assert [('recover', ...or', '40P01')] == []
+E             
+E             Left contains one more item: ('recover', 'OperationalError', '40P01')
+E             Use -v to get more diff
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:137: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:31:25.729040+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:31:25.911226+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:31:25.915717+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a0e44816f09e4aa4bef0f2b5264aaee1", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 183.42, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:31:25.916558+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:31:25.985422+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:31:25.998697+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "58f0d0c400664bbb903eed397cadbd33", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 78.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:31:25.999144+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:31:26.072280+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b40ea11c61cd4a5ea4319db9e172853c", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 70.79, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:31:26.072754+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:31:26.158737+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0957366acefc4caa8079f80b59129756", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 83.07, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:31:26.159201+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:31:27.574968+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-recheck/test_recheck.py::test_step_start_and_recovery_do_not_deadlock
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_step_start_and_recovery_do_not_deadlock
+1 failed, 3 deselected, 2 warnings in 4.11s

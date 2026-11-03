@@ -21,9 +21,11 @@ Design notes
   ``CHECK (manager_id IS NULL OR manager_id <> id)`` blocks the trivial case at
   the database level. Management never grants resource permissions: no
   authorization code reads ``manager_id``.
-* **Secrets.** ``providers.secret_ref`` stores an *environment variable name*.
-  Nothing in the schema can hold a secret value; ``secret_status`` is derived at
-  read time by looking at the process environment.
+* **Secrets.** ``providers.secret_ref`` (Phase 02) stores an *environment
+  variable name*; ``providers.secret_ciphertext`` (ADR-0006) stores a directly
+  typed credential encrypted with a server-held AES-GCM key. A row has at most
+  one of the two, enforced by a check constraint; no column ever holds plaintext
+  and no read path returns a value.
 * **Usage.** ``provider_usage_records`` records one row per probe call that
   actually reached the provider, keeping probe spend separately attributable
   before Phase 03 introduces the unified budget ledger.
@@ -58,7 +60,7 @@ class Company(Base, TimestampMixin):
     __tablename__ = "companies"
     __table_args__ = (
         CheckConstraint("id = 1", name="single_company"),
-        CheckConstraint("status IN ('ACTIVE')", name="status_known"),
+        CheckConstraint("status IN ('ACTIVE', 'PAUSED')", name="status_known"),
         CheckConstraint("length(btrim(name)) > 0", name="name_not_blank"),
         CheckConstraint("version >= 1", name="version_positive"),
     )
@@ -67,6 +69,10 @@ class Company(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     goal: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="ACTIVE")
+    # Phase 03: company-wide pause stops new paid calls and new task creation.
+    # It is an operational state, not a deletion: history is untouched.
+    paused_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    pause_reason: Mapped[str | None] = mapped_column(String(200), nullable=True)
     # Which template produced this company; kept even if the template changes.
     template_key: Mapped[str] = mapped_column(String(64), nullable=False)
     template_version: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -264,9 +270,13 @@ class AgentDutyOverrideHistory(Base):
 class Provider(Base, TimestampMixin):
     """A model vendor endpoint.
 
-    ``secret_ref`` is an environment variable *name*. ``secret_source`` records
-    how it is resolved so a later phase can add Compose secrets without a
-    semantic change. No column can store a credential value.
+    ``secret_source`` says how the credential is supplied and is authoritative:
+
+    * ``ENV`` — ``secret_ref`` holds an environment variable *name* (Phase 02).
+    * ``DB``  — ``secret_ciphertext`` holds an AES-GCM envelope (ADR-0006).
+
+    At most one of the two columns is non-null, so "where does the key come
+    from" is never ambiguous. Neither column can hold plaintext.
     """
 
     __tablename__ = "providers"
@@ -274,12 +284,24 @@ class Provider(Base, TimestampMixin):
         UniqueConstraint("name", name="uq_providers_name"),
         CheckConstraint("kind IN ('DEEPSEEK', 'OPENAI_COMPATIBLE')", name="kind_known"),
         CheckConstraint("status IN ('ENABLED', 'DISABLED')", name="status_known"),
-        CheckConstraint("secret_source IN ('ENV')", name="secret_source_known"),
+        CheckConstraint("secret_source IN ('ENV', 'DB')", name="secret_source_known"),
         CheckConstraint("length(btrim(name)) > 0", name="name_not_blank"),
         CheckConstraint("base_url ~ '^https?://'", name="base_url_scheme"),
         CheckConstraint(
             "secret_ref IS NULL OR secret_ref ~ '^[A-Z][A-Z0-9_]*$'",
             name="secret_ref_env_name",
+        ),
+        # One credential source per row: never both, and a stored ciphertext only
+        # under the DB source. The reverse (DB with no blob) is legitimate: it is
+        # how "clear the stored key" is represented without inventing a third
+        # source value.
+        CheckConstraint(
+            "secret_ref IS NULL OR secret_ciphertext IS NULL",
+            name="secret_source_single",
+        ),
+        CheckConstraint(
+            "secret_ciphertext IS NULL OR secret_source = 'DB'",
+            name="secret_ciphertext_requires_db",
         ),
     )
 
@@ -288,6 +310,9 @@ class Provider(Base, TimestampMixin):
     kind: Mapped[str] = mapped_column(String(32), nullable=False)
     base_url: Mapped[str] = mapped_column(String(300), nullable=False)
     secret_ref: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # AES-256-GCM envelope ``v1.<kid>.<nonce>.<ciphertext>``; the data key is in
+    # the server environment, never here (ADR-0006).
+    secret_ciphertext: Mapped[str | None] = mapped_column(Text, nullable=True)
     secret_source: Mapped[str] = mapped_column(String(16), nullable=False, default="ENV")
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="ENABLED")
     notes: Mapped[str | None] = mapped_column(String(500), nullable=True)
@@ -298,9 +323,11 @@ class Provider(Base, TimestampMixin):
     # one (review finding R7).
     version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
     # Fingerprint of the fields that determine *where and how* a call is made
-    # (kind, base_url, secret_ref, timeout). Probe evidence is only valid for the
-    # configuration that produced it: when this changes, previously verified
-    # capability no longer describes the current setup (review finding R3).
+    # (kind, base_url, credential marker, timeout). Probe evidence is only valid
+    # for the configuration that produced it: when this changes, previously
+    # verified capability no longer describes the current setup (review finding
+    # R3). The credential marker is the env-var name for ENV rows and a hash of
+    # the ciphertext for DB rows (ADR-0006) — never the credential itself.
     config_fingerprint: Mapped[str] = mapped_column(String(64), nullable=False, server_default="")
 
 

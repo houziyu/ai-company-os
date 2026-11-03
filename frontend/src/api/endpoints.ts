@@ -29,6 +29,20 @@ import type {
   SetupPayload,
   SetupStatus,
 } from './types'
+import type {
+  BudgetOverviewResponse,
+  CompanyStateResponse,
+  ExecutionSummary,
+  PendingReconciliationEntry,
+  ProjectCreatePayload,
+  ProjectListResponse,
+  ProjectSummary,
+  TaskCreatePayload,
+  TaskDetail,
+  TaskListResponse,
+  TaskMutationResponse,
+  TaskStatus,
+} from './task-types'
 
 export const authApi = {
   setupStatus: () =>
@@ -103,4 +117,55 @@ export const modelCentreApi = {
 export const auditApi = {
   events: (params?: { limit?: number; offset?: number; action?: string }) =>
     api.get<AuditListResponse>('/audit/events', { query: params }),
+}
+
+export const projectsApi = {
+  list: () => api.get<ProjectListResponse>('/projects'),
+  get: (projectId: number) => api.get<ProjectSummary>(`/projects/${projectId}`),
+  create: (payload: ProjectCreatePayload) =>
+    api.post<ProjectSummary>('/projects', payload),
+}
+
+export const tasksApi = {
+  list: (params?: {
+    projectId?: number
+    status?: TaskStatus
+    limit?: number
+    offset?: number
+  }) => api.get<TaskListResponse>('/tasks', { query: params }),
+  get: (taskId: number) => api.get<TaskDetail>(`/tasks/${taskId}`),
+  /**
+   * Creating a task is idempotent by key. The caller generates the key once per
+   * submission attempt, so a retried request cannot create a second task.
+   */
+  create: (projectId: number, payload: TaskCreatePayload) =>
+    api.post<TaskMutationResponse>(`/projects/${projectId}/tasks`, payload),
+  /** Cooperative: a running step stops at its next safe point. */
+  cancel: (taskId: number, reason?: string | null) =>
+    api.post<TaskMutationResponse>(`/tasks/${taskId}/cancel`, {
+      reason: reason ?? null,
+    }),
+  retry: (taskId: number, payload: { idempotencyKey: string; expectedAttempt: number }) =>
+    api.post<TaskMutationResponse>(`/tasks/${taskId}/retry`, payload),
+}
+
+export const executionsApi = {
+  get: (executionId: number) =>
+    api.get<ExecutionSummary>(`/executions/${executionId}`),
+  ledger: (executionId: number, after = 0) =>
+    api.get<import('./task-types').ExecutionLedgerPage>(`/executions/${executionId}/ledger`, { query: { after } }),
+}
+
+export const budgetsApi = {
+  overview: (ledgerLimit = 50) =>
+    api.get<BudgetOverviewResponse>('/budgets', { query: { ledgerLimit } }),
+  pendingReconciliation: () =>
+    api.get<PendingReconciliationEntry[]>('/budgets/pending-reconciliation'),
+}
+
+export const governanceApi = {
+  state: () => api.get<CompanyStateResponse>('/company/state'),
+  pause: (reason?: string | null) =>
+    api.post<CompanyStateResponse>('/company/pause', { reason: reason ?? null }),
+  resume: () => api.post<CompanyStateResponse>('/company/resume'),
 }

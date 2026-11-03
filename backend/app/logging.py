@@ -29,6 +29,9 @@ _FIELDS = frozenset(
         "signal",
         "worker",
         "port",
+        "task_id",
+        "execution_id",
+        "count",
     }
 )
 # Event text is code-owned. Never interpolate third-party messages, SQL,
@@ -49,6 +52,16 @@ _EVENTS = frozenset(
         "worker received signal",
         "worker starting (health loop only)",
         "worker stopped",
+        # Phase 03 task consumer. Fixed sentences emitted by our own code, never
+        # provider or user text, so they are safe to surface as-is.
+        "worker starting (task consumer)",
+        "recovered interrupted tasks",
+        "claim failed",
+        "recovery failed",
+        "lease lost while working",
+        "processor crashed",
+        "result rejected",
+        "demo step start failed",
     }
 )
 

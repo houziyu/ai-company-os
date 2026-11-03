@@ -1,0 +1,732 @@
+FFFFFFFFFFFFF                                                            [100%]
+================================== FAILURES ===================================
+_________________ test_running_task_ignores_stop_gate[pause] __________________
+
+client = <starlette.testclient.TestClient object at 0x000002929A0F0830>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_0824ef67a5), autoflush=False, expire_on_commit=False)
+command = 'pause'
+
+    @pytest.mark.parametrize('command', ['pause', 'cancel'])
+    def test_running_task_ignores_stop_gate(client, session_factory, command):
+        headers, project = bootstrap(client)
+        response = create_task(client, headers, project['id'])
+        task_id = response.json()['task']['id']
+        runtime = run_worker(session_factory)
+        claim = runtime.claim_one()
+        url = '/api/v1/company/pause' if command == 'pause' else f'/api/v1/tasks/{task_id}/cancel'
+        assert client.post(url, json={}, headers=headers).status_code == 200
+        runtime.process_claim(claim)
+        with session_factory() as session:
+>           assert session.get(Task, task_id).status == 'SUCCEEDED'
+E           AssertionError: assert 'INTERRUPTED' == 'SUCCEEDED'
+E             
+E             - SUCCEEDED
+E             + INTERRUPTED
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:47: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:28.063438+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:28.229747+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:28.234408+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d9a6f79c48f547f98ea4042e3ae413b7", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 167.06, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:28.235278+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:28.313147+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:28.327570+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7fac08a56eb94702b50226b9e7801c54", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 89.36, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:28.328051+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:28.405287+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "11a73a20feb243a0a438a69c66dec9ab", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 74.91, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:28.405779+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:28.493684+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "47d7f5c4e59a43f68ba4e9d7e1af6a18", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 84.74, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:28.494160+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:28.549415+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e42c5838e577461886baf81985e587fe", "method": "POST", "path": "/api/v1/company/pause", "status": 200, "duration_ms": 27.25, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:28.549894+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company/pause "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:28.939188+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+_________________ test_running_task_ignores_stop_gate[cancel] _________________
+
+client = <starlette.testclient.TestClient object at 0x000002929B3DE210>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_ba5f136205), autoflush=False, expire_on_commit=False)
+command = 'cancel'
+
+    @pytest.mark.parametrize('command', ['pause', 'cancel'])
+    def test_running_task_ignores_stop_gate(client, session_factory, command):
+        headers, project = bootstrap(client)
+        response = create_task(client, headers, project['id'])
+        task_id = response.json()['task']['id']
+        runtime = run_worker(session_factory)
+        claim = runtime.claim_one()
+        url = '/api/v1/company/pause' if command == 'pause' else f'/api/v1/tasks/{task_id}/cancel'
+        assert client.post(url, json={}, headers=headers).status_code == 200
+        runtime.process_claim(claim)
+        with session_factory() as session:
+>           assert session.get(Task, task_id).status == 'SUCCEEDED'
+E           AssertionError: assert 'CANCELLED' == 'SUCCEEDED'
+E             
+E             - SUCCEEDED
+E             + CANCELLED
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:47: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:29.927066+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:30.080371+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:30.086031+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bec1db5876be4f7aa13cd71c1c3c151c", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 155.82, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.086708+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.160549+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:30.174840+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "723f1c1b147f467889d4045711b7f939", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 84.8, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.175387+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.248845+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a9cb3a936b92493e9d6bf3d1300bb0f8", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 70.11, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.249595+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.338781+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "44b25f574bc141fdb3ceb19d7f5b3559", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 85.05, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.339262+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.404216+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "aab2694c2510402b99726e21c0cfae24", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 34.65, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.404707+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:30.472549+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+___________________ test_expired_lease_can_write_and_renew ____________________
+
+client = <starlette.testclient.TestClient object at 0x000002929B3DEAD0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_892ae633b2), autoflush=False, expire_on_commit=False)
+
+    def test_expired_lease_can_write_and_renew(client, session_factory):
+        _, claim = claimed(client, session_factory)
+        expire(session_factory, claim)
+        service = ExecutionService()
+        with session_factory() as session:
+>           step = service.start_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                                      sequence=0, name='after expiry', estimated_tokens=10)
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\services\execution_service.py:366: in start_step
+    task, execution = self._lock_fenced_execution(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <app.services.execution_service.ExecutionService object at 0x000002929B641B50>
+session = <sqlalchemy.orm.session.Session object at 0x000002929B7A9450>
+execution_id = 1, fencing_token = 1
+
+    def _lock_fenced_execution(
+        self, session: Session, *, execution_id: int, fencing_token: int
+    ) -> tuple[Task, TaskExecution]:
+        """Lock the task then the execution and verify the attempt may still write.
+    
+        The lock order is fixed at ``task -> execution`` for every writer in this
+        module, including recovery, so the verification cannot be invalidated by a
+        concurrent recovery between the check and the following write (R3).
+    
+        The lease is checked here as well as in :meth:`heartbeat`: a worker whose
+        lease lapsed must not write even if recovery has not run yet (R2).
+        """
+        execution_ref = session.execute(
+            select(TaskExecution.task_id).where(TaskExecution.id == execution_id)
+        ).one_or_none()
+        if execution_ref is None:
+            raise ExecutionNotFoundError()
+        task = session.scalars(
+            select(Task).where(Task.id == execution_ref[0]).with_for_update()
+        ).one_or_none()
+        if task is None:  # pragma: no cover - FK guarantees it
+            raise TaskNotFoundError()
+        execution = session.scalars(
+            select(TaskExecution).where(TaskExecution.id == execution_id).with_for_update()
+        ).one_or_none()
+        if execution is None:  # pragma: no cover - row was just read
+            raise ExecutionNotFoundError()
+        if execution.fencing_token != fencing_token or execution.status != "RUNNING":
+            raise LeaseLostError(execution_id)
+        if execution.lease_expires_at is None or execution.lease_expires_at <= utcnow():
+>           raise LeaseLostError(execution_id)
+E           app.domain.errors.LeaseLostError: LEASE_LOST: 该执行已失去租约，结果未被接受。
+
+app\services\execution_service.py:956: LeaseLostError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:30.631775+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:30.787818+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:30.792610+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d5b5003e7e194da1959b6e8daa0f8370", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 158.45, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.793165+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.860836+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:30.874225+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a5c16ef270d846539f0b0bc92c91f0af", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 78.11, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.874783+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:30.945917+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5f443591afe84d0e844b33e2fc8ba02a", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.23, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:30.946407+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:31.030593+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "eddcd8814da942adb9875093db67996c", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 80.98, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.031033+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:31.091690+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+______________ test_fence_check_does_not_protect_following_write ______________
+
+client = <starlette.testclient.TestClient object at 0x000002929A0108A0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_082e4e8a4d), autoflush=False, expire_on_commit=False)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002929A012060>
+
+    def test_fence_check_does_not_protect_following_write(client, session_factory, monkeypatch):
+        _, claim = claimed(client, session_factory)
+        service = ExecutionService()
+>       original = service._assert_fence
+                   ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'ExecutionService' object has no attribute '_assert_fence'
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:68: AttributeError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:31.249102+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:31.393678+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:31.400078+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "185ba13439fd462d8f45e17faec596e1", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 148.6, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.400958+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:31.475205+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:31.489082+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "10fd6cde93304c73a5842f95a7d07517", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 84.85, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.489542+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:31.564487+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "de327e6908f941f58c2d07874d5f7755", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 71.62, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.564944+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:31.651393+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "dcb553f6022741a88df213f79d1f2350", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 83.53, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.651847+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:31.684477+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+______________ test_recovery_without_retry_budget_escapes_worker ______________
+
+client = <starlette.testclient.TestClient object at 0x0000029299FAA2C0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_1bb85211c6), autoflush=False, expire_on_commit=False)
+
+    def test_recovery_without_retry_budget_escapes_worker(client, session_factory):
+        _, claim = claimed(client, session_factory, project_budget=1000, retries=1)
+        expire(session_factory, claim)
+>       with pytest.raises(BudgetInsufficientError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE BudgetInsufficientError
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:91: Failed
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:31.837887+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:31.981558+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:31.986519+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ddf0005c097e44fc80245217fb89f430", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 146.05, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:31.987091+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.056764+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:32.069762+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ee2d1d008a844ba6a179410ba0004eab", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 79.78, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.070222+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.153513+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9212e953bbf641f4a78d4def9196cf01", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 80.07, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.154218+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.245328+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3515697e02644f9ea57c26395822c40d", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 87.63, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.245822+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.357201+00:00", "level": "INFO", "logger": "app.workers.task_worker", "message": "recovered interrupted tasks", "count": 1}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.workers.task_worker:task_worker.py:198 recovered interrupted tasks
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:32.367318+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+____________ test_cancelled_recovery_releases_unknown_company_cost ____________
+
+client = <starlette.testclient.TestClient object at 0x000002929BB56F90>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_66c6c2c3b7), autoflush=False, expire_on_commit=False)
+
+    def test_cancelled_recovery_releases_unknown_company_cost(client, session_factory):
+        headers, claim = claimed(client, session_factory)
+        with session_factory() as session:
+            ExecutionService().start_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                                          sequence=0, name='in-flight', estimated_tokens=200)
+            session.commit()
+        assert client.post(f'/api/v1/tasks/{claim.task_id}/cancel', json={}, headers=headers).status_code == 200
+        expire(session_factory, claim)
+        run_worker(session_factory).recover()
+        with session_factory() as session:
+            accounts = {a.scope: a for a in session.scalars(select(BudgetAccount)).all()}
+            assert accounts['TASK'].consumed_tokens == 200
+>           assert accounts['COMPANY'].consumed_tokens == accounts['PROJECT'].consumed_tokens == 0
+E           assert 1000 == 0
+E            +  where 1000 = <app.models.tasks.BudgetAccount object at 0x000002929BC34680>.consumed_tokens
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:111: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:32.535640+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:32.691725+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:32.697539+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "66dd4d4537c94660a07fef68930c5b64", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 159.03, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.698111+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.768578+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:32.782132+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8221408eb09c437ab83b112690b3d565", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 81.62, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.782625+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.851601+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "22cd1a64b40f47948f2f04d1af082886", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 66.37, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.852100+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:32.939647+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3d1551b81943461da4ceae82f33d90ef", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 84.6, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:32.940094+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:33.022725+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7dedd7ee62c7439d9a06e1581f167d5f", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 28.59, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:33.023187+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:33.087374+00:00", "level": "INFO", "logger": "app.workers.task_worker", "message": "recovered interrupted tasks", "count": 1}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+INFO     app.workers.task_worker:task_worker.py:198 recovered interrupted tasks
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:33.099127+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+___________ test_failed_step_unknown_usage_becomes_known_execution ____________
+
+client = <starlette.testclient.TestClient object at 0x000002929B557350>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_dec0d6c87c), autoflush=False, expire_on_commit=False)
+
+    def test_failed_step_unknown_usage_becomes_known_execution(client, session_factory):
+        headers, project = bootstrap(client)
+        create_task(client, headers, project['id'], demo_behavior='PERMANENT_FAILURE')
+        run_worker(session_factory).run_once()
+        with session_factory() as session:
+            execution = session.scalars(select(TaskExecution)).one()
+            failed = session.scalars(select(TaskExecutionStep).where(TaskExecutionStep.status == 'FAILED')).one()
+            accounts = {a.scope: a for a in session.scalars(select(BudgetAccount)).all()}
+            assert not failed.usage_known
+>           assert execution.usage_known and not execution.needs_reconciliation
+E           assert (False)
+E            +  where False = <app.models.tasks.TaskExecution object at 0x000002929BB6BD90>.usage_known
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:125: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:33.254788+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:33.416592+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:33.422041+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0eac44d3d1414d27ba7d0f1a55b4faf9", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 164.67, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:33.422573+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:33.495211+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:33.508808+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0e08a447c28f4f51bc4ffeb2e3a0d4d0", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 83.44, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:33.509239+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:33.577230+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cf2ada84a8a049d1ae5f802d170e9bd7", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 65.29, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:33.577726+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:33.663426+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ca617955efb2448192483ef929593959", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 82.29, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:33.663896+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:33.843412+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+__________ test_unknown_reservations_invisible_in_reconciliation_api __________
+
+client = <starlette.testclient.TestClient object at 0x000002929BC07790>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_ffc82dcf36), autoflush=False, expire_on_commit=False)
+
+    def test_unknown_reservations_invisible_in_reconciliation_api(client, session_factory):
+        headers, project = bootstrap(client)
+        create_task(client, headers, project['id'], demo_behavior='UNKNOWN_USAGE')
+        run_worker(session_factory).run_once()
+        with session_factory() as session:
+            flagged = session.scalars(select(BudgetReservation).where(BudgetReservation.needs_reconciliation.is_(True))).all()
+            assert len(flagged) == 4
+        overview = client.get('/api/v1/budgets').json()
+>       assert overview['pendingReconciliationCount'] == 0
+E       assert 4 == 0
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:139: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:33.989944+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:34.148194+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:34.152718+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8fab3cc5d5fa4ff7b767e383bed308b0", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 160.75, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.153197+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:34.226421+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:34.239404+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ab008e03a25e492083eb2343d559e967", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 83.45, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.239951+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:34.313575+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "434cf0ad09e04c7899aac72f9fa5e907", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 70.44, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.314053+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:34.401566+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f9cc5bad79c6447b867eec499f130ff3", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 84.37, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.402026+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:34.614943+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a48d432ffc834791813f091c4f306d0e", "method": "GET", "path": "/api/v1/budgets", "status": 200, "duration_ms": 39.36, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.615501+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/budgets "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:34.624919+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+_________________ test_auto_retry_leaks_partial_company_hold __________________
+
+client = <starlette.testclient.TestClient object at 0x000002929BE3EBE0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_69b5533763), autoflush=False, expire_on_commit=False)
+
+    def test_auto_retry_leaks_partial_company_hold(client, session_factory):
+        headers, project = bootstrap(client, budget_tokens=1000)
+        create_task(client, headers, project['id'], demo_behavior='TRANSIENT_FAILURE', max_auto_retries=1)
+        run_worker(session_factory).run_once()
+        with session_factory() as session:
+            assert session.scalars(select(Task)).one().status == 'BLOCKED'
+            holds = session.scalars(select(BudgetReservation).where(BudgetReservation.status == 'RESERVED')).all()
+>           assert len(holds) == 1 and holds[0].scope == 'COMPANY' and holds[0].amount_tokens == 1000
+E           assert (0 == 1)
+E            +  where 0 = len([])
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:152: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:34.778223+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:34.938108+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:34.943431+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "58bc602184334f0ba04ab2f705dac556", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 162.72, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:34.943985+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.018889+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:35.032730+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d39b0e03ac7c402bae7e69beae3941a5", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 86.26, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.033195+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.105237+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "65f7ebce06dc4512a2cf4a4f41b118bb", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 69.1, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.105726+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.188028+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "92dfe3f159af430a859f49ba4fef5b2c", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 79.28, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.188483+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:35.387219+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+______________ test_cancelling_interrupted_task_never_completes _______________
+
+client = <starlette.testclient.TestClient object at 0x000002929BF69D00>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_5db7ddba22), autoflush=False, expire_on_commit=False)
+
+    def test_cancelling_interrupted_task_never_completes(client, session_factory):
+        headers, claim = claimed(client, session_factory)
+        expire(session_factory, claim)
+        run_worker(session_factory).recover()
+        response = client.post(f'/api/v1/tasks/{claim.task_id}/cancel', json={}, headers=headers)
+        assert response.status_code == 200
+        with session_factory() as session:
+            task = session.get(Task, claim.task_id)
+>           assert task.status == 'INTERRUPTED' and task.cancel_requested_at is not None
+E           AssertionError: assert ('CANCELLED' == 'INTERRUPTED'
+E             
+E             - INTERRUPTED
+E             + CANCELLED)
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:164: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:35.543197+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:35.703950+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:35.709596+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0452c4a4bd2e472c96b23b40849c88d0", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 163.08, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.710244+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.781353+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:35.794661+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "98b3c37abf6d4d229d7baa9f43ba1e23", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 81.09, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.795139+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.864627+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "54cbef57dd4649e08fb0d5ccfc062aaf", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 66.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.865115+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:35.949207+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2129858b5cfe42d99ea2418022ecdcea", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 80.57, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:35.949714+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:36.037904+00:00", "level": "INFO", "logger": "app.workers.task_worker", "message": "recovered interrupted tasks", "count": 1}
+{"ts": "2026-11-02T08:09:36.078298+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2a4bf7a4640847a3bf7b85d8baf2d7eb", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 37.9, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.078737+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.workers.task_worker:task_worker.py:198 recovered interrupted tasks
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:36.092231+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+___________________ test_concurrent_commits_skip_sse_event ____________________
+
+client = <starlette.testclient.TestClient object at 0x000002929C2D0C00>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_9c791f39a9), autoflush=False, expire_on_commit=False)
+
+    def test_concurrent_commits_skip_sse_event(client, session_factory):
+        headers, project = bootstrap(client)
+        for _ in range(2):
+            assert create_task(client, headers, project['id']).status_code == 201
+        service = ExecutionService()
+        with session_factory() as first, session_factory() as second:
+            low_claim = service.claim_next(first, worker_id='first')
+            low_id = first.scalars(select(DomainEvent.id).where(DomainEvent.execution_id == low_claim.execution_id)).one()
+            high_claim = service.claim_next(second, worker_id='second')
+            high_id = second.scalars(select(DomainEvent.id).where(DomainEvent.execution_id == high_claim.execution_id)).one()
+            assert high_id > low_id
+            second.commit()
+>           delivered = _fetch_events(session_factory, low_id - 1, None)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: _fetch_events() missing 1 required positional argument: 'project_id'
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:182: TypeError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:36.249999+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:36.394970+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:36.400382+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3199333217fd4408909d93dc1a3cdee5", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 148.03, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.400966+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:36.468774+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:36.484672+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e91a703ac5964d9c85e71f0698328f54", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 79.34, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.485234+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:36.558528+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a03cbb545fb547c9b8e9ccdc12d38f35", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 70.21, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.559025+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:36.640358+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9d39a4dec54a432798d62e10d9462187", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 78.1, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.640826+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:36.710576+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ce733e63754545229cdc1e606a2505ca", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 66.72, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:36.711029+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:36.812111+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+______________ test_task_creation_ignores_configured_zero_budget ______________
+
+client = <starlette.testclient.TestClient object at 0x000002929C4E5BF0>
+app = <fastapi.applications.FastAPI object at 0x000002929C5E5090>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_0c9e1504d3), autoflush=False, expire_on_commit=False)
+
+    def test_task_creation_ignores_configured_zero_budget(client, app, session_factory):
+        # Actual application setting and read-service agree on zero; TaskService constructs its own default.
+        app.state.settings.company_default_budget_tokens = 0
+        app.state.budget_service._default_company_limit = 0
+        headers, project = bootstrap(client)
+        response = create_task(client, headers, project['id'])
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"BUDGET_INSUFFICIENT","message":"公司可用额度不足：需要 1000 Token，当前可用 0 Token。","requestId":"60a0b01323804644b8a2cc7b8e4b0176","fieldErrors":[],"details":{"scope":"COMPANY","requestedTokens":1000,"availableTokens":0}}
+E       assert 409 == 201
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:195: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:36.964347+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:37.114199+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:37.119255+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f291cc5c245341f99a2d44ea78a07e34", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 152.1, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.119804+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.190702+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:37.205038+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b2db8968bb5d494f8250fa91c40fdb24", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 82.35, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.205573+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.275953+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "29cb3a30348d41b19b1b94bab5c4846a", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 67.64, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.276471+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.319832+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "60a0b01323804644b8a2cc7b8e4b0176", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 409, "duration_ms": 40.54, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.320375+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 409 Conflict"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:37.328528+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+____________________ test_frontend_query_names_are_ignored ____________________
+
+client = <starlette.testclient.TestClient object at 0x000002929BE3FCE0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55440/acos_test_2f45aa5715), autoflush=False, expire_on_commit=False)
+
+    def test_frontend_query_names_are_ignored(client, session_factory):
+        headers, first = bootstrap(client)
+        second = client.post('/api/v1/projects', headers=headers, json={
+            'key': 'SECOND', 'name': 'Second', 'objective': 'Other project',
+            'runMode': 'DEMO', 'budgetTokens': 100000,
+        }).json()
+        for project in (first, second):
+            assert create_task(client, headers, project['id']).status_code == 201
+        # These are the exact names used in frontend/src/api/endpoints.ts.
+        response = client.get('/api/v1/tasks', params={'projectId': first['id']}).json()
+>       assert {t['projectId'] for t in response['tasks']} == {first['id'], second['id']}
+E       assert {1} == {1, 2}
+E         
+E         Extra items in the right set:
+E         2
+E         Use -v to get more diff
+
+..\docs\acceptance\evidence\phase-03-review\test_review_repros.py:212: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:09:37.458783+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:09:37.607781+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:09:37.612280+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "12661d3dad1040b3a72311e08111a5d6", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 151.11, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.612825+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.678916+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:09:37.692657+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5b5aa21e641c466f895b3a41e37c1575", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 76.02, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.693196+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.765147+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "993aea3a4907408d834db31d208d5aa5", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.99, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.765866+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.797903+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1cad276660ea4ea9b73a13b149219cb3", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 28.68, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.798441+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:37.946805+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "65ce644597bc4b11a4b72ff79628ad28", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 145.88, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:37.947257+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:38.015521+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9fcfa3068e4c420aadb17b8d6ad33127", "method": "POST", "path": "/api/v1/projects/2/tasks", "status": 201, "duration_ms": 65.38, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:38.016024+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:09:38.046706+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cedc74cd67574764a979c9659a6da092", "method": "GET", "path": "/api/v1/tasks", "status": 200, "duration_ms": 27.75, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:09:38.047130+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/2/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/tasks?projectId=1 "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:09:38.059576+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-review/test_review_repros.py::test_running_task_ignores_stop_gate[pause]
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_running_task_ignores_stop_gate[pause]
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_running_task_ignores_stop_gate[cancel]
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_expired_lease_can_write_and_renew
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_fence_check_does_not_protect_following_write
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_recovery_without_retry_budget_escapes_worker
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_cancelled_recovery_releases_unknown_company_cost
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_failed_step_unknown_usage_becomes_known_execution
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_unknown_reservations_invisible_in_reconciliation_api
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_auto_retry_leaks_partial_company_hold
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_cancelling_interrupted_task_never_completes
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_concurrent_commits_skip_sse_event
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_task_creation_ignores_configured_zero_budget
+FAILED ..\docs\acceptance\evidence\phase-03-review\test_review_repros.py::test_frontend_query_names_are_ignored
+13 failed, 2 warnings in 11.00s

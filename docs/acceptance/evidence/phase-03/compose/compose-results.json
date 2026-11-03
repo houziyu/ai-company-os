@@ -1,0 +1,53 @@
+{
+  "checks": [
+    {
+      "case": "compose-scale",
+      "ok": true,
+      "containers": {
+        "worker": "cd42542560cde51403bbfa430a80ef259347b43503b517fe75f3dc2b74461849",
+        "worker2": "33dfb2a2e29d04aa75d3689e218f87eb3c3eade2a3e3345c903b807cc83b8dc8"
+      },
+      "states": {
+        "worker": "NAME                         IMAGE                                COMMAND                   SERVICE   CREATED         STATUS                   PORTS\nacos-phase03-test-worker-1   ai-company-os-backend:phase03-test   \"python -m app.worke…\"   worker    2 minutes ago   Up 2 minutes (healthy)   8000/tcp",
+        "worker2": "NAME                          IMAGE                                COMMAND                   SERVICE   CREATED         STATUS                   PORTS\nacos-phase03-test-worker2-1   ai-company-os-backend:phase03-test   \"python -m app.worke…\"   worker2   2 minutes ago   Up 2 minutes (healthy)   8000/tcp"
+      }
+    },
+    {
+      "case": "container-claim",
+      "ok": true,
+      "task_id": 8,
+      "execution_count": 1,
+      "winner": "worker-2",
+      "fencing_token": 1
+    },
+    {
+      "case": "container-killed",
+      "ok": true,
+      "service": "worker",
+      "container": "cd42542560cde51403bbfa430a80ef259347b43503b517fe75f3dc2b74461849",
+      "worker_id": "worker-1",
+      "execution_id": 11,
+      "attempt": 1,
+      "kill_exit": 0,
+      "kill_stderr": "Container acos-phase03-test-worker-1 Killing \n Container acos-phase03-test-worker-1 Killed"
+    },
+    {
+      "case": "container-recovery",
+      "ok": true,
+      "task_id": 9,
+      "statuses": [
+        "INTERRUPTED",
+        "SUCCEEDED"
+      ],
+      "attempts": [
+        1,
+        2
+      ],
+      "recovery_note": "租约过期；处理器步骤幂等且仍有重试次数，已重新排队。",
+      "final_status": "SUCCEEDED"
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "out_dir": "C:\\Users\\admin\\Desktop\\ai-company-os\\docs\\acceptance\\evidence\\phase-03\\compose"
+}

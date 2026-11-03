@@ -1,0 +1,33 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (../docs/acceptance/evidence/phase-03-audit-20261103/vitest.audit.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+ ❯ ../docs/acceptance/evidence/phase-03-audit-20261103/ui-audit.spec.ts (1 test | 1 failed) 92ms
+   × marks the task snapshot stale when the final event arrives but its GET fails 90ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  ../docs/acceptance/evidence/phase-03-audit-20261103/ui-audit.spec.ts > marks the task snapshot stale when the final event arrives but its GET fails
+AssertionError: expected 'audit task#11 · 项目 audit 返回任务看板  取消任务…' not to contain '已连接，实时更新中'
+
+Expected: "已连接，实时更新中"
+Received: "audit task#11 · 项目 audit 返回任务看板  取消任务 执行中已连接，实时更新中 演练运行（确定性处理器，非真实模型输出） 任务目标audit执行尝试 每次尝试独立记录；切换历史尝试不会改变任务当前状态。 还没有执行任务在队列中等待 Worker 领取。领取后会生成独立的执行记录、租约与步骤。时间线还没有事件任务创建、领取、步骤与结果都会写入事件日志。额度尚未创建任务账户。 任务额度从项目额度中划出；公司额度是更上层的限制。未知用量保守计入。 基本信息项目audit负责人未指定尝试次数1自动重试上限0创建时间2026/11/3 09:00:00更新时间2026/11/3 09:00:00 执行模式：演练（确定性处理器）"
+
+ ❯ ../docs/acceptance/evidence/phase-03-audit-20261103/ui-audit.spec.ts:52:32
+     50|     // The notification connection being alive does not prove the GET …
+     51|     // is current. The failed re-read must be visible, with a retry pa…
+     52|     expect(wrapper.text()).not.toContain('已连接，实时更新中')
+       |                                ^
+     53|   } finally {
+     54|     wrapper.unmount()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  10:43:11
+   Duration  3.59s (import 49%, environment 29%, transform 17%, setup 3%, tests 3%)
+

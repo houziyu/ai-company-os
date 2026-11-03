@@ -10,11 +10,17 @@ Separation the phase plan requires ("保存配置与联网探测分开"):
   **not** save any configuration; a probe uses the already-persisted provider
   settings, so "test" can never silently apply an unconfirmed edit.
 
-Secret handling: only ``secret_ref`` (an environment variable *name*) is stored.
-``secret_configured`` in the response is computed by looking at the process
-environment at read time. There is no endpoint that returns, logs or accepts a
-credential value, which is verified by tests that scan responses, the database,
-logs and the built frontend bundle.
+Secret handling (ADR-0006, superseding the Phase 02 env-name-only rule):
+
+* A credential typed by the operator is AES-GCM encrypted immediately and stored
+  in ``providers.secret_ciphertext``. The data key lives in
+  ``SECRET_ENCRYPTION_KEY`` on the server, never in the database.
+* Rows created under the Phase 02 rule keep ``secret_source = 'ENV'`` and their
+  ``secret_ref`` variable name; they still resolve from the process environment.
+* No endpoint, log line, audit detail or response contains a credential, its
+  length, a prefix/suffix or the ciphertext. ``secret_state`` reports one of
+  ``NONE / CONFIGURED / MISSING_ENV / UNDECRYPTABLE``; decryption happens once,
+  immediately before a paid call.
 """
 
 from __future__ import annotations
@@ -28,25 +34,34 @@ from dataclasses import dataclass
 from urllib.parse import urlsplit
 
 import httpx
+from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.domain.enums import (
     AuditAction,
     AuditActorType,
+    CompanyStatus,
     ProbeErrorCode,
     ProbeOutcome,
     ProviderKind,
     ProviderStatus,
+    ReservationKind,
+    SecretSource,
+    SecretState,
     UsageSource,
 )
 from app.domain.errors import (
+    BudgetInsufficientError,
+    CompanyPausedError,
     ConcurrentUpdateError,
     FieldError,
     ModelNotFoundError,
     ProviderNotFoundError,
+    ServiceUnavailableError,
     ValidationFailedError,
 )
-from app.models.organization import Model, ModelProbe, Provider
+from app.models.organization import Company, Model, ModelProbe, Provider
+from app.models.tasks import BudgetReservation
 from app.providers.adapter import (
     AdapterError,
     AdapterErrorWithUsage,
@@ -62,6 +77,12 @@ from app.repositories.organization_repository import (
     ProviderRepository,
     UsageRepository,
 )
+from app.security.secrets_cipher import (
+    MAX_PLAINTEXT_CHARS,
+    EncryptionNotConfiguredError,
+    SecretCipher,
+)
+from app.services.budget_service import BudgetService
 
 logger = logging.getLogger(__name__)
 
@@ -75,9 +96,13 @@ MAX_TIMEOUT_SECONDS = 120.0
 
 ENV_NAME_PATTERN = re.compile(r"^[A-Z][A-Z0-9_]*$")
 DEEPSEEK_BASE_URL = "https://api.deepseek.com"
-# Environment variable *name* used by the preset; never a credential value.
+# Environment variable *name* offered as the suggested source; never a value.
 DEEPSEEK_SECRET_REF = "DEEPSEEK_API_KEY"  # noqa: S105
 DEEPSEEK_MODEL = "deepseek-v4.1-flash"
+# A literal key may be pasted with surrounding whitespace or a newline; those are
+# trimmed. Anything else control-ish is rejected instead of being sent to a
+# provider and stored, where it would surface only as a confusing auth failure.
+_CREDENTIAL_MAX = MAX_PLAINTEXT_CHARS
 
 
 @dataclass(slots=True)
@@ -91,6 +116,9 @@ class ProviderInput:
     status: str
     notes: str | None
     timeout_seconds: float
+    # Validated literal credential awaiting encryption, or None to leave the
+    # stored credential untouched. Never stored as given.
+    secret_value: str | None = None
 
 
 @dataclass(slots=True)
@@ -98,6 +126,7 @@ class ProviderView:
     provider: Provider
     models: Sequence[Model]
     secret_configured: bool
+    secret_state: SecretState
 
 
 @dataclass(slots=True)
@@ -111,6 +140,32 @@ def _clean(value: str) -> str:
     return value.strip()
 
 
+def marker_for(ciphertext: str | None, secret_ref: str | None) -> str:
+    """The credential component of a configuration fingerprint.
+
+    Shared by the persistence paths, which know the stored columns directly, and
+    :func:`credential_marker`, which derives the same value from a provider row.
+    """
+    if ciphertext:
+        digest = hashlib.sha256(ciphertext.encode("utf-8")).hexdigest()
+        return f"db:{digest[:16]}"
+    return secret_ref or ""
+
+
+def credential_marker(provider: Provider) -> str:
+    """Return the non-secret fingerprint component describing the credential.
+
+    * ``ENV`` rows: the variable name (byte-identical to the Phase 02 behaviour,
+      so stored fingerprints stay valid across the upgrade).
+    * ``DB`` rows: ``db:<hash of the ciphertext>``. Ciphertext changes whenever
+      the key is replaced, so probe evidence is invalidated exactly when the
+      credential changes. Hashing the ciphertext — not the plaintext — keeps the
+      marker from becoming a cheap offline oracle for a candidate key.
+    * No credential: the empty string.
+    """
+    return marker_for(provider.secret_ciphertext, provider.secret_ref)
+
+
 def config_fingerprint(
     *, kind: str, base_url: str, secret_ref: str | None, timeout_seconds: float
 ) -> str:
@@ -119,10 +174,13 @@ def config_fingerprint(
     Probe evidence is only meaningful for the configuration that produced it. The
     fingerprint deliberately excludes the display name, notes and status: renaming
     a provider does not change what a probe measured, but changing the endpoint,
-    the credential reference, the protocol kind or the timeout does (review
-    findings R3 and R7). ``secret_ref`` — a variable *name* — is hashed rather
-    than the secret value, so rotating the value of the same variable is a
-    configuration change the operator chose to make without exposing anything.
+    the credential, the protocol kind or the timeout does (review findings R3 and
+    R7).
+
+    ``secret_ref`` is the credential *marker* from :func:`credential_marker`, not
+    a value. The payload key keeps its Phase 02 name so every fingerprint already
+    in the database still reproduces — ADR-0006 changed what is stored, not the
+    hash inputs of existing rows.
     """
     payload = {
         "kind": kind,
@@ -149,12 +207,20 @@ class ModelCentreService:
         *,
         transport: httpx.AsyncBaseTransport | None = None,
         session_factory: sessionmaker[Session] | None = None,
+        default_company_budget: int = 1_000_000,
+        probe_reservation_tokens: int = 512,
+        cipher: SecretCipher | None = None,
     ) -> None:
         self._providers = ProviderRepository()
         self._models = ModelRepository()
         self._probes = ProbeRepository()
         self._usage = UsageRepository()
         self._audit = AuditRepository()
+        # Phase 03: a probe is a paid call, so it draws on the same company
+        # allowance as task execution. The hold is committed with the PENDING
+        # intent, before the network call, and settled afterwards.
+        self._budget = BudgetService(default_company_limit=default_company_budget)
+        self._probe_reservation_tokens = probe_reservation_tokens
         # Tests inject an httpx.MockTransport here. Production passes nothing,
         # so the real network path is the only one that exists in a deployment.
         self._transport = transport
@@ -162,10 +228,42 @@ class ModelCentreService:
         # commit: the request transaction must not be the only place the fact of
         # a paid call exists (review finding R2).
         self._session_factory = session_factory
+        # ADR-0006 credential encryption. A cipher with no data key refuses to
+        # encrypt; it never falls back to storing plaintext.
+        self._cipher = cipher if cipher is not None else SecretCipher()
 
     # ------------------------------------------------------------- queries
-    def secret_configured(self, secret_ref: str | None) -> bool:
-        return read_secret(secret_ref) is not None
+    def secret_configured(self, provider: Provider | str | None) -> bool:
+        """Whether a usable credential is available for this provider.
+
+        Accepts a provider row or a bare environment-variable name (the Phase 02
+        call sites pass the name). "Usable" means a stored key this server can
+        decrypt, or an environment variable that is actually set.
+        """
+        if isinstance(provider, Provider):
+            return self.secret_state(provider) is SecretState.CONFIGURED
+        return read_secret(provider) is not None
+
+    def secret_state(self, provider: Provider) -> SecretState:
+        """Classify the provider's credential without exposing anything.
+
+        Cheap by design: a stored blob is only checked for format and key id, so
+        listing providers never performs AES work. The first real decryption
+        happens in :meth:`probe_model`, immediately before the paid call.
+        """
+        if provider.secret_ciphertext:
+            return (
+                SecretState.CONFIGURED
+                if self._cipher.can_decrypt(provider.secret_ciphertext)
+                else SecretState.UNDECRYPTABLE
+            )
+        if provider.secret_ref:
+            return (
+                SecretState.CONFIGURED
+                if read_secret(provider.secret_ref) is not None
+                else SecretState.MISSING_ENV
+            )
+        return SecretState.NONE
 
     def list_providers(self, session: Session) -> list[ProviderView]:
         providers = self._providers.list_all(session)
@@ -173,7 +271,8 @@ class ModelCentreService:
             ProviderView(
                 provider=provider,
                 models=self._models.list_for_provider(session, provider.id),
-                secret_configured=self.secret_configured(provider.secret_ref),
+                secret_configured=self.secret_configured(provider),
+                secret_state=self.secret_state(provider),
             )
             for provider in providers
         ]
@@ -182,10 +281,12 @@ class ModelCentreService:
         provider = self._providers.get(session, provider_id)
         if provider is None:
             raise ProviderNotFoundError()
+        state = self.secret_state(provider)
         return ProviderView(
             provider=provider,
             models=self._models.list_for_provider(session, provider.id),
-            secret_configured=self.secret_configured(provider.secret_ref),
+            secret_configured=state is SecretState.CONFIGURED,
+            secret_state=state,
         )
 
     def list_models(self, session: Session) -> Sequence[Model]:
@@ -220,6 +321,22 @@ class ModelCentreService:
         }
 
     # ----------------------------------------------------------- providers
+    def _encrypt_credential(self, value: str) -> str:
+        """Encrypt a typed credential, refusing when no data key is configured.
+
+        A deployment without ``SECRET_ENCRYPTION_KEY`` cannot store a key. It is
+        refused with a 503 that names the setting, because the only alternative
+        would be writing plaintext — exactly what ADR-0006 exists to prevent.
+        """
+        try:
+            return self._cipher.encrypt(value)
+        except EncryptionNotConfiguredError as exc:
+            raise ServiceUnavailableError(
+                "服务端未配置 SECRET_ENCRYPTION_KEY，无法保存供应商密钥。"
+                "请先在部署环境中生成并配置该值（32 字节随机值的 base64）。",
+                details={"setting": "SECRET_ENCRYPTION_KEY"},
+            ) from exc
+
     def create_provider(
         self,
         session: Session,
@@ -232,6 +349,7 @@ class ModelCentreService:
         notes: str | None,
         timeout_seconds: float | None,
         actor_user_id: int,
+        secret_value: str | None = None,
         request_id: str | None = None,
         ip_address: str | None = None,
     ) -> Provider:
@@ -240,6 +358,7 @@ class ModelCentreService:
             kind=kind,
             base_url=base_url,
             secret_ref=secret_ref,
+            secret_value=secret_value,
             status=status,
             notes=notes,
             timeout_seconds=timeout_seconds,
@@ -247,22 +366,35 @@ class ModelCentreService:
         if self._providers.get_by_name(session, cleaned.name) is not None:
             raise ValidationFailedError([FieldError("name", "该供应商名称已存在。")])
 
+        # A typed key is encrypted before anything is persisted; a legacy
+        # environment reference is stored as a name, exactly as in Phase 02.
+        ciphertext = (
+            self._encrypt_credential(cleaned.secret_value)
+            if cleaned.secret_value is not None
+            else None
+        )
+        source = SecretSource.DB if ciphertext is not None else SecretSource.ENV
+        stored_ref = None if ciphertext is not None else cleaned.secret_ref
+
         provider = self._providers.create(
             session,
             name=cleaned.name,
             kind=cleaned.kind,
             base_url=cleaned.base_url,
-            secret_ref=cleaned.secret_ref,
+            secret_ref=stored_ref,
+            secret_ciphertext=ciphertext,
+            secret_source=source.value,
             status=cleaned.status,
             notes=cleaned.notes,
             timeout_seconds=cleaned.timeout_seconds,
             config_fingerprint=config_fingerprint(
                 kind=cleaned.kind,
                 base_url=cleaned.base_url,
-                secret_ref=cleaned.secret_ref,
+                secret_ref=marker_for(ciphertext, stored_ref),
                 timeout_seconds=cleaned.timeout_seconds,
             ),
         )
+
         self._audit.add(
             session,
             action=AuditAction.PROVIDER_CREATED.value,
@@ -273,10 +405,11 @@ class ModelCentreService:
             target_id=str(provider.id),
             request_id=request_id,
             ip_address=ip_address,
+            # Source and presence only: never the key, its length or a prefix.
             detail=(
                 f"name={provider.name};kind={provider.kind};"
-                f"secret_ref={provider.secret_ref or 'none'};"
-                f"secret_configured={self.secret_configured(provider.secret_ref)}"
+                f"secret_source={provider.secret_source};"
+                f"secret_configured={self.secret_configured(provider)}"
             ),
         )
         logger.info("provider created", extra={"user_id": actor_user_id})
@@ -298,6 +431,8 @@ class ModelCentreService:
         timeout_seconds: float | None,
         expected_version: int,
         actor_user_id: int,
+        secret_value: str | None = None,
+        change_secret_value: bool = False,
         request_id: str | None = None,
         ip_address: str | None = None,
     ) -> Provider:
@@ -311,6 +446,15 @@ class ModelCentreService:
         ``notes_provided`` separates "field omitted" from "field explicitly
         cleared": the UI sends ``notes: null`` to erase the text, which must not
         be read as "keep the old value" (review finding R9).
+
+        Credentials follow the same "omitted vs. cleared" rule, twice over:
+
+        * ``change_secret_value=True`` with a value replaces the stored key
+          (and drops any legacy environment reference).
+        * ``change_secret_value=True`` with ``secret_value=None``/blank clears
+          the stored key. Nothing falls back to an environment variable.
+        * ``change_secret_value=False`` leaves the credential untouched, so an
+          edit form that never shows the key cannot erase it.
         """
         provider = self._providers.get(session, provider_id, for_update=True)
         if provider is None:
@@ -318,6 +462,9 @@ class ModelCentreService:
         if provider.version != expected_version:
             raise ConcurrentUpdateError("provider")
 
+        # A legacy client may still submit an environment variable name. It is
+        # only honoured when the request is explicitly changing the reference;
+        # otherwise the stored credential stays as it is.
         resolved_secret_ref = provider.secret_ref if not change_secret_ref else secret_ref
         resolved_notes = notes if notes_provided else provider.notes
         cleaned = self._validate_provider(
@@ -325,6 +472,7 @@ class ModelCentreService:
             kind=kind if kind is not None else provider.kind,
             base_url=base_url if base_url is not None else provider.base_url,
             secret_ref=resolved_secret_ref,
+            secret_value=secret_value if change_secret_value else None,
             status=status if status is not None else provider.status,
             notes=resolved_notes,
             timeout_seconds=(
@@ -335,6 +483,28 @@ class ModelCentreService:
         existing = self._providers.get_by_name(session, cleaned.name)
         if existing is not None and existing.id != provider.id:
             raise ValidationFailedError([FieldError("name", "该供应商名称已存在。")])
+
+        # Credential transition, decided before touching the row so an encryption
+        # failure leaves the stored key unchanged.
+        new_ciphertext = provider.secret_ciphertext
+        new_ref = provider.secret_ref
+        new_source = provider.secret_source
+        credential_changed = False
+        if change_secret_value:
+            credential_changed = True
+            if cleaned.secret_value is not None:
+                new_ciphertext = self._encrypt_credential(cleaned.secret_value)
+                new_ref = None
+                new_source = SecretSource.DB.value
+            else:
+                new_ciphertext = None
+                new_ref = None
+                new_source = SecretSource.ENV.value
+        elif change_secret_ref:
+            credential_changed = True
+            new_ciphertext = None
+            new_ref = cleaned.secret_ref
+            new_source = SecretSource.ENV.value
 
         previous_fingerprint = provider.config_fingerprint
         changed: list[str] = []
@@ -347,9 +517,12 @@ class ModelCentreService:
         if provider.base_url != cleaned.base_url:
             provider.base_url = cleaned.base_url
             changed.append("base_url")
-        if provider.secret_ref != cleaned.secret_ref:
-            provider.secret_ref = cleaned.secret_ref
-            changed.append("secret_ref")
+        if credential_changed:
+            provider.secret_ref = new_ref
+            provider.secret_ciphertext = new_ciphertext
+            provider.secret_source = new_source
+            # The audit records that it changed, never what it changed to.
+            changed.append("credential")
         if provider.status != cleaned.status:
             provider.status = cleaned.status
             changed.append("status")
@@ -366,7 +539,7 @@ class ModelCentreService:
         new_fingerprint = config_fingerprint(
             kind=provider.kind,
             base_url=provider.base_url,
-            secret_ref=provider.secret_ref,
+            secret_ref=credential_marker(provider),
             timeout_seconds=float(provider.timeout_seconds),
         )
         provider.config_fingerprint = new_fingerprint
@@ -392,8 +565,8 @@ class ModelCentreService:
             ip_address=ip_address,
             detail=(
                 f"fields={','.join(sorted(changed))};version={provider.version};"
-                f"secret_ref={provider.secret_ref or 'none'};"
-                f"secret_configured={self.secret_configured(provider.secret_ref)};"
+                f"secret_source={provider.secret_source};"
+                f"secret_configured={self.secret_configured(provider)};"
                 f"capability_invalidated={invalidated}"
             ),
         )
@@ -425,13 +598,15 @@ class ModelCentreService:
         kind: str,
         base_url: str,
         secret_ref: str | None,
+        secret_value: str | None,
         status: str,
         notes: str | None,
         timeout_seconds: float | None,
     ) -> ProviderInput:
         cleaned_name = _clean(name)
         cleaned_url = _clean(base_url).rstrip("/")
-        cleaned_secret = _clean(secret_ref) if secret_ref else None
+        cleaned_ref = _clean(secret_ref) if secret_ref else None
+        cleaned_value = _clean(secret_value) if secret_value else None
         cleaned_notes = _clean(notes) if notes else None
 
         field_errors: list[FieldError] = []
@@ -447,19 +622,33 @@ class ModelCentreService:
             )
         elif len(cleaned_url) > MAX_BASE_URL:
             field_errors.append(FieldError("baseUrl", f"地址不能超过 {MAX_BASE_URL} 个字符。"))
-        if cleaned_secret and not ENV_NAME_PATTERN.match(cleaned_secret):
+        if cleaned_ref and cleaned_value is not None:
+            field_errors.append(
+                FieldError("secretValue", "只能选择一种密钥来源：直接填写密钥，或引用环境变量名。")
+            )
+        elif cleaned_ref and not ENV_NAME_PATTERN.match(cleaned_ref):
+            # Legacy path: a Phase 02 client may still send an environment
+            # variable name. It stays strictly validated so a pasted key can
+            # never be mistaken for one.
             field_errors.append(
                 FieldError(
                     "secretRef",
                     "密钥引用必须是服务端环境变量名（大写字母、数字、下划线，以字母开头）。",
                 )
             )
-        elif cleaned_secret and len(cleaned_secret) > 128:
+        elif cleaned_ref and len(cleaned_ref) > 128:
             field_errors.append(FieldError("secretRef", "密钥引用名称过长。"))
+        if cleaned_value is not None:
+            if len(cleaned_value) > _CREDENTIAL_MAX:
+                field_errors.append(
+                    FieldError("secretValue", f"密钥不能超过 {_CREDENTIAL_MAX} 个字符。")
+                )
+            elif any(ord(char) < 0x20 or ord(char) == 0x7F for char in cleaned_value):
+                field_errors.append(
+                    FieldError("secretValue", "密钥包含换行或控制字符，请检查后重新粘贴。")
+                )
         if status not in {item.value for item in ProviderStatus}:
             field_errors.append(FieldError("status", "未知的供应商状态。"))
-        if cleaned_secret and len(cleaned_secret) > 128:
-            field_errors.append(FieldError("secretRef", "密钥引用名称过长。"))
         if cleaned_notes and len(cleaned_notes) > MAX_NOTES:
             field_errors.append(FieldError("notes", f"备注不能超过 {MAX_NOTES} 个字符。"))
         timeout = DEFAULT_TIMEOUT_SECONDS if timeout_seconds is None else float(timeout_seconds)
@@ -477,10 +666,11 @@ class ModelCentreService:
             name=cleaned_name,
             kind=kind,
             base_url=cleaned_url,
-            secret_ref=cleaned_secret,
+            secret_ref=cleaned_ref,
             status=status,
             notes=cleaned_notes,
             timeout_seconds=timeout,
+            secret_value=cleaned_value,
         )
 
     # -------------------------------------------------------------- models
@@ -644,9 +834,28 @@ class ModelCentreService:
         fingerprint = provider.config_fingerprint or config_fingerprint(
             kind=provider.kind,
             base_url=provider.base_url,
-            secret_ref=provider.secret_ref,
+            secret_ref=credential_marker(provider),
             timeout_seconds=float(provider.timeout_seconds),
         )
+
+        # Resolve the credential once, before any spend. A stored key this
+        # server cannot decrypt is a configuration problem that no request can
+        # fix, so the probe is refused locally (call_count 0, no usage row, no
+        # budget settlement) with a message that says what to do.
+        secret_value: str | None = None
+        if provider.secret_ciphertext:
+            secret_value = self._cipher.decrypt(provider.secret_ciphertext)
+            if secret_value is None:
+                return self._record_local_refusal(
+                    session,
+                    model=model,
+                    provider=provider,
+                    code=ProbeErrorCode.SECRET_UNDECRYPTABLE,
+                    actor_user_id=actor_user_id,
+                    request_id=request_id,
+                    ip_address=ip_address,
+                    config_fp=fingerprint,
+                )
 
         # ---- phase 0: refusals that make no call at all --------------------
         if provider.status != ProviderStatus.ENABLED.value:
@@ -672,21 +881,66 @@ class ModelCentreService:
                 config_fp=fingerprint,
             )
 
-        # ---- phase 1: commit the intent before touching the network --------
-        probe_row = self._commit_probe_intent(
-            session,
-            model_id=model.id,
-            provider_id=provider.id,
-            actor_user_id=actor_user_id,
-            request_id=request_id,
-            config_fp=fingerprint,
-        )
+        # Phase 03: a probe is a paid call, so the same company-wide gates apply.
+        company = session.get(Company, 1)
+        if company is not None and company.status == CompanyStatus.PAUSED.value:
+            return self._record_local_refusal(
+                session,
+                model=model,
+                provider=provider,
+                code=ProbeErrorCode.COMPANY_PAUSED,
+                actor_user_id=actor_user_id,
+                request_id=request_id,
+                ip_address=ip_address,
+                config_fp=fingerprint,
+            )
+
+        # ---- phase 1: commit the intent and its budget hold before the call --
+        # The hold is committed in the same short transaction as the PENDING
+        # intent. If this process dies mid-call, both survive: the intent says
+        # "usage unknown" and the hold stays *reserved* (never released), which is
+        # the conservative reading of a call that may have been paid for.
+        #
+        # Before the company exists there is no allowance to draw on (Phase 02
+        # allows configuring and testing models during setup). Such a probe is
+        # still recorded — with its usage — but it books no budget hold, and the
+        # response says so instead of implying the spend was budgeted.
+        budgeted = company is not None
+        try:
+            probe_row = self._commit_probe_intent(
+                session,
+                model_id=model.id,
+                provider_id=provider.id,
+                actor_user_id=actor_user_id,
+                request_id=request_id,
+                config_fp=fingerprint,
+                reserve_tokens=self._probe_reservation_tokens if budgeted else 0,
+            )
+        except (BudgetInsufficientError, CompanyPausedError) as exc:
+            return self._record_local_refusal(
+                session,
+                model=model,
+                provider=provider,
+                code=(
+                    ProbeErrorCode.COMPANY_PAUSED
+                    if isinstance(exc, CompanyPausedError)
+                    else ProbeErrorCode.BUDGET_INSUFFICIENT
+                ),
+                actor_user_id=actor_user_id,
+                request_id=request_id,
+                ip_address=ip_address,
+                config_fp=fingerprint,
+                message=exc.message,
+            )
 
         request = ProbeRequest(
             base_url=provider.base_url,
             model_name=model.logical_name,
             kind=ProviderKind(provider.kind),
+            # For a DB-stored key the literal value is authoritative; the adapter
+            # never falls back to an environment variable for it.
             secret_ref=provider.secret_ref,
+            secret_value=secret_value,
             timeout_seconds=provider.timeout_seconds,
             max_output_tokens=model.max_output_tokens,
             transport=self._transport,
@@ -752,16 +1006,21 @@ class ModelCentreService:
         actor_user_id: int,
         request_id: str | None,
         config_fp: str,
+        reserve_tokens: int = 0,
     ) -> ModelProbe:
-        """Write and COMMIT the PENDING intent in its own transaction.
+        """Write and COMMIT the PENDING intent (and its budget hold) on its own.
 
         Uses a dedicated session so committing does not also commit whatever else
         the request has pending. Without a configured factory (unit tests calling
         the service directly) the intent still exists in the caller's session, and
         the adapter-level call still happens exactly once.
+
+        The hold is committed together with the intent: a crash after this point
+        leaves the tokens reserved rather than silently available.
         """
         if self._session_factory is None:
-            return self._probes.create_intent(
+            self._check_probe_company(session, reserve_tokens)
+            row = self._probes.create_intent(
                 session,
                 model_id=model_id,
                 provider_id=provider_id,
@@ -769,7 +1028,10 @@ class ModelCentreService:
                 request_id=request_id,
                 config_fingerprint=config_fp,
             )
+            self._reserve_probe_budget(session, probe_id=row.id, amount=reserve_tokens)
+            return row
         with self._session_factory() as intent_session:
+            self._check_probe_company(intent_session, reserve_tokens)
             row = self._probes.create_intent(
                 intent_session,
                 model_id=model_id,
@@ -778,6 +1040,7 @@ class ModelCentreService:
                 request_id=request_id,
                 config_fingerprint=config_fp,
             )
+            self._reserve_probe_budget(intent_session, probe_id=row.id, amount=reserve_tokens)
             intent_session.commit()
             probe_id = row.id
         # Re-read into the caller's session so phase 2 updates the committed row.
@@ -785,6 +1048,71 @@ class ModelCentreService:
         if committed is None:  # pragma: no cover - the row was just committed
             raise RuntimeError("probe intent row disappeared after commit")
         return committed
+
+    def _check_probe_company(self, session: Session, reserve_tokens: int) -> None:
+        # Authoritative stop gate: serialised with pause and held until the
+        # intent and reservation commit. No network I/O happens under this lock.
+        if reserve_tokens > 0:
+            company = self._budget.lock_company(session)
+            if company.status == CompanyStatus.PAUSED.value:
+                raise CompanyPausedError()
+
+    def _reserve_probe_budget(
+        self, session: Session, *, probe_id: int, amount: int
+    ) -> BudgetReservation | None:
+        if amount <= 0:
+            return None
+        return self._budget.reserve_company_allowance(
+            session,
+            amount=amount,
+            kind=ReservationKind.PROBE,
+            owner_ref=probe_id,
+            project_id=None,
+            task_id=None,
+            execution_id=None,
+            probe_id=probe_id,
+            detail=f"probe:{probe_id}",
+        )
+
+    def _settle_probe_budget(
+        self,
+        session: Session,
+        *,
+        probe_id: int,
+        prompt_tokens: int | None,
+        completion_tokens: int | None,
+        call_count: int,
+    ) -> None:
+        """Reconcile the probe's hold with what the provider reported.
+
+        * no call at all → release any committed hold;
+        * usage reported  → settle to the reported total;
+        * usage unknown   → keep the full hold as consumed and flag it for manual
+          reconciliation; releasing it would silently assume a free call.
+        """
+        reservation = session.scalars(
+            select(BudgetReservation).where(
+                BudgetReservation.probe_id == probe_id,
+                BudgetReservation.kind == ReservationKind.PROBE.value,
+                BudgetReservation.status == "RESERVED",
+            )
+        ).one_or_none()
+        if reservation is None:
+            return
+        if call_count == 0:
+            self._budget.release(
+                session, reservation_id=reservation.id, detail=f"probe-local-refusal:{probe_id}"
+            )
+            return
+        known = prompt_tokens is not None and completion_tokens is not None
+        total = (prompt_tokens or 0) + (completion_tokens or 0) if known else None
+        self._budget.settle(
+            session,
+            reservation_id=reservation.id,
+            actual_tokens=total,
+            known=known,
+            detail=f"probe:{probe_id}",
+        )
 
     def _record_local_refusal(
         self,
@@ -797,6 +1125,7 @@ class ModelCentreService:
         request_id: str | None,
         ip_address: str | None,
         config_fp: str,
+        message: str | None = None,
     ) -> ProbeOutcomeRecord:
         """Record a refusal that made no call. call_count stays 0."""
         row = self._probes.create_refusal(
@@ -814,7 +1143,7 @@ class ModelCentreService:
             provider=provider,
             outcome=ProbeOutcome.FAILURE,
             error_code=code,
-            message=_failure_message(code),
+            message=message or _failure_message(code),
             actor_user_id=actor_user_id,
             request_id=request_id,
             ip_address=ip_address,
@@ -989,6 +1318,13 @@ class ModelCentreService:
                 prompt_tokens=prompt_tokens,
                 completion_tokens=completion_tokens,
             )
+        self._settle_probe_budget(
+            session,
+            probe_id=row.id,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            call_count=call_count,
+        )
         session.flush()
 
         detail_bits = [
@@ -1035,16 +1371,22 @@ class ModelCentreService:
 _LOCAL_ONLY_CODES = frozenset(
     {
         ProbeErrorCode.MISSING_SECRET,
+        ProbeErrorCode.SECRET_UNDECRYPTABLE,
         ProbeErrorCode.INVALID_CONFIG,
         ProbeErrorCode.PROVIDER_DISABLED,
         ProbeErrorCode.MODEL_DISABLED,
+        ProbeErrorCode.COMPANY_PAUSED,
+        ProbeErrorCode.BUDGET_INSUFFICIENT,
     }
 )
 
 
 def _failure_message(code: ProbeErrorCode) -> str:
     return {
-        ProbeErrorCode.MISSING_SECRET: "服务端未配置该供应商的密钥引用，未发起请求。",
+        ProbeErrorCode.MISSING_SECRET: "该供应商尚未配置密钥，未发起请求。",
+        ProbeErrorCode.SECRET_UNDECRYPTABLE: (
+            "已保存的密钥无法解密（服务端加密密钥已更换或缺失），请在模型中心重新填写密钥。"
+        ),
         ProbeErrorCode.INVALID_CONFIG: "供应商配置无效，未发起请求。",
         ProbeErrorCode.AUTH_FAILED: "供应商拒绝了密钥（认证失败）。",
         ProbeErrorCode.RATE_LIMITED: "供应商限流，请稍后重试。",
@@ -1055,4 +1397,6 @@ def _failure_message(code: ProbeErrorCode) -> str:
         ProbeErrorCode.INVALID_JSON_OUTPUT: "模型输出不是有效 JSON，JSON 能力未通过验证。",
         ProbeErrorCode.PROVIDER_DISABLED: "供应商已停用，未发起请求。",
         ProbeErrorCode.MODEL_DISABLED: "模型已停用，未发起请求。",
+        ProbeErrorCode.COMPANY_PAUSED: "公司已暂停，未发起请求。",
+        ProbeErrorCode.BUDGET_INSUFFICIENT: "公司可用 Token 额度不足，未发起请求。",
     }[code]

@@ -1,0 +1,318 @@
+FFFFFFF                                                                  [100%]
+================================== FAILURES ===================================
+_____________ test_missing_secret_does_not_leave_budget_reserved ______________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:63: in test_missing_secret_does_not_leave_budget_reserved
+    assert account.reserved_tokens == 0, f"No provider call, but reserved={account.reserved_tokens}"
+E   AssertionError: No provider call, but reserved=512
+E   assert 512 == 0
+E    +  where 512 = <app.models.tasks.BudgetAccount object at 0x0000024C4DC67A80>.reserved_tokens
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:22.066586+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Running upgrade e5b7c9d1a2f4 -> f6c8d0e2b4a7, Re-publish history above both legacy cursor domains without losing events.
+INFO  [alembic.runtime.migration] Running upgrade f6c8d0e2b4a7 -> a7d2e5c81b64, provider credentials: encrypted at rest (ADR-0006)
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:22.294592+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:22.300764+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a10a4057990a4cf4873b4e7849539b97", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 230.57, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.301734+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:22.393041+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:22.413484+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7d9c3c6496e64fc4b7fab85eca071e95", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 107.37, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.414300+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:22.506187+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "38688efd236142aabf0ef8dafabe49a5", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 87.25, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.506961+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:22.535440+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:22.540831+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b2e9feffcf6143ec9c49bbae4abd54a1", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 30.12, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.541368+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:22.576654+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7eaa3c4d8415406db63f14dba904b58c", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 30.85, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.577114+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:22.677726+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7e398785492f4986b7627968b3e461bf", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 96.26, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:22.678161+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:23.163489+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________________ test_partial_probe_usage_is_conservative ___________________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:77: in test_partial_probe_usage_is_conservative
+    assert (hold.settled_tokens, hold.needs_reconciliation) == (hold.amount_tokens, True), (
+E   AssertionError: partial usage settled=7, hold=512, reconciliation=False
+E   assert (7, False) == (512, True)
+E     
+E     At index 0 diff: 7 != 512
+E     Use -v to get more diff
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:24.081475+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:24.228192+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:24.233782+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ed27822d53ab48b8ac11596eb319109a", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 149.01, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.234533+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.315816+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:24.329202+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f9f40278eba04515a08d36b6cb6e4504", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 90.51, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.330021+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.422410+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "115814614a834b03a24cb34a7bb14d88", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 88.67, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.423181+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.451936+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:24.457641+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a6e240fbd8c54124946a7f47f7d62894", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 29.81, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.458224+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.498350+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "dfd34bec30a3405697be82f693af7ea2", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 35.31, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.499226+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.506603+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-03T02:41:24.657967+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.698506+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a15eb74a1a614d26987124c409ac16f3", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 188.66, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:24.698954+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:24.700984+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:24.715529+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________ test_pause_committed_before_probe_reservation_blocks_call __________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:107: in test_pause_committed_before_probe_reservation_blocks_call
+    assert not calls, f"Provider called {len(calls)} time(s) after pause committed"
+E   AssertionError: Provider called 1 time(s) after pause committed
+E   assert not [<Request('POST', 'https://audit.invalid/v1/chat/completions')>]
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:24.865394+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:25.025048+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:25.031427+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c9b5071ed4194271b3c098a93f9b36c0", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 163.13, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.032000+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.099538+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:25.111877+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f0fa17f0861748cfb44ebe3ea8d54487", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 76.15, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.112367+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.178427+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f2c195153cc84f5188f444e431c907c1", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 62.71, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.178891+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.197047+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:25.201586+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "aa32e02bbb45458280e286935d1f632f", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 19.43, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.202008+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.225582+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ce88444e781a4b49a3ab5ce5603779af", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.08, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.225999+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.229463+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-03T02:41:25.332348+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.359815+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a4177ac18a694951a9a4ba0b54ba2686", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 128.71, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.360225+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:25.361459+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:25.367193+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+_____________ test_fence_cannot_modify_step_of_another_execution ______________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:139: in test_fence_cannot_modify_step_of_another_execution
+    assert step.status == "RUNNING", f"Unrelated execution changed first step to {step.status}"
+E   AssertionError: Unrelated execution changed first step to SUCCEEDED
+E   assert 'SUCCEEDED' == 'RUNNING'
+E     
+E     - RUNNING
+E     + SUCCEEDED
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:25.522053+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:25.665531+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:25.932737+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "33939361b77c4aabac1f892b3caa546c", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 408.23, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:25.933279+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.011667+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:26.026003+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "15fbf914fe894afab1c09bb02a946390", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 89.93, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.026424+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.095654+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7235281c1b2a4443926b22406f70e60a", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 66.19, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.096095+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.175485+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1f06cb0801ef46398cc8667769d5e822", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 76.59, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.175926+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.279256+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "118392270f804cfe8b807588a8943a3a", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 53.46, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.279849+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:26.332665+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+______________ test_duplicate_step_result_keeps_usage_consistent ______________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:153: in test_duplicate_step_result_keeps_usage_consistent
+    assert step.prompt_tokens == hold.settled_tokens == 40, (
+E   AssertionError: step=7, settled ledger=40
+E   assert 7 == 40
+E    +  where 7 = <app.models.tasks.TaskExecutionStep object at 0x0000024C4F814AF0>.prompt_tokens
+E    +  and   40 = <app.models.tasks.BudgetReservation object at 0x0000024C4F8B1450>.settled_tokens
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:26.478685+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:26.644892+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:26.649280+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f9276a355294458e934417e70b26bbdf", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 167.83, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.649765+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.713716+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:26.726332+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0b638cddde984b88824e8461fc00930c", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 73.42, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.726804+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.797609+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4fc342c3537f46c68e49145c8c2caac0", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.36, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.798037+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:26.874799+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "bfd52075c50f45a1836cf8c077d82bec", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 74.12, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:26.875247+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:26.973728+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________________ test_step_update_publishes_progress_event __________________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:166: in test_step_update_publishes_progress_event
+    assert events, "Step committed, but no progress event exists for SSE to deliver"
+E   AssertionError: Step committed, but no progress event exists for SSE to deliver
+E   assert []
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:27.101620+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:27.243536+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:27.249107+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "466967eb153d4680ae57c9b5d038d510", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 145.24, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.249636+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:27.313192+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:27.325706+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8045ffffa8b047e881ee7cf1b3ad42ff", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 73.33, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.326133+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:27.391631+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9ca2c8e7cbd243e69ebaab3f48f69119", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 62.53, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.392097+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:27.470207+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "33fc227be21e42bca85a620afbcffad4", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 75.74, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.470628+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:27.552248+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+________ test_repeated_retry_command_does_not_schedule_another_attempt ________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:183: in test_repeated_retry_command_does_not_schedule_another_attempt
+    assert runtime.run_once() is False, "Duplicate retry scheduled a third execution"
+E   AssertionError: Duplicate retry scheduled a third execution
+E   assert True is False
+E    +  where True = run_once()
+E    +    where run_once = <app.workers.task_worker.WorkerRuntime object at 0x0000024C4DD06E40>.run_once
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:41:27.704949+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:41:27.845847+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:41:27.852444+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d449d3f4a54a4533abd9732b78d72c03", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 145.17, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.852971+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:27.917887+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:41:27.931383+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "cba97727fa2f487485f88f052c11d1ec", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 75.8, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.931864+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:27.996599+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d30434b8e9754559ad6cad3d4831879f", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 61.64, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:27.997046+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:28.073575+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "43786edae39944028d83833e054d97ae", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 74.17, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:28.074007+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:28.282589+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "6f62b4dc43c246cfb4ca043c393d62fb", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 200, "duration_ms": 52.96, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:28.283020+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:41:28.493353+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "74765ce0da224c5ba894593be1299603", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 200, "duration_ms": 54.53, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:41:28.493807+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/retry "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/retry "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:41:28.650051+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-audit-20261103/test_audit.py::test_missing_secret_does_not_leave_budget_reserved
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_missing_secret_does_not_leave_budget_reserved
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_partial_probe_usage_is_conservative
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_pause_committed_before_probe_reservation_blocks_call
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_fence_cannot_modify_step_of_another_execution
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_duplicate_step_result_keeps_usage_consistent
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_step_update_publishes_progress_event
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_repeated_retry_command_does_not_schedule_another_attempt
+7 failed, 2 warnings in 7.77s

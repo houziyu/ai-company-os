@@ -242,3 +242,141 @@ class ModelBindingUnavailableError(AppError):
             status_code=409,
             field_errors=[FieldError("modelId", reason)],
         )
+
+
+# ------------------------------------------------------------------ phase 03
+class ProjectNotFoundError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            code="PROJECT_NOT_FOUND",
+            message="项目不存在。",
+            status_code=404,
+        )
+
+
+class TaskNotFoundError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            code="TASK_NOT_FOUND",
+            message="任务不存在。",
+            status_code=404,
+        )
+
+
+class ExecutionNotFoundError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            code="EXECUTION_NOT_FOUND",
+            message="执行记录不存在。",
+            status_code=404,
+        )
+
+
+class InvalidTaskTransitionError(AppError):
+    """A requested state change is not allowed from the task's current state.
+
+    The server owns the state machine; the browser may only request named
+    commands (cancel, retry) and never writes ``status`` directly.
+    """
+
+    def __init__(self, current: str, action: str) -> None:
+        super().__init__(
+            code="INVALID_TASK_TRANSITION",
+            message=f"任务当前状态（{current}）不允许执行该操作（{action}）。",
+            status_code=409,
+            details={"currentStatus": current, "action": action},
+        )
+
+
+class IdempotencyConflictError(AppError):
+    """Same idempotency key, different request body."""
+
+    def __init__(self, resource: str) -> None:
+        super().__init__(
+            code="IDEMPOTENCY_CONFLICT",
+            message="该请求编号已被不同的请求使用，请刷新后重新提交。",
+            status_code=409,
+            details={"resource": resource},
+        )
+
+
+class BudgetInsufficientError(AppError):
+    """The requested allowance exceeds what is available at this scope."""
+
+    def __init__(self, *, scope: str, requested: int, available: int) -> None:
+        labels = {"COMPANY": "公司", "PROJECT": "项目", "TASK": "任务"}
+        label = labels.get(scope, scope)
+        super().__init__(
+            code="BUDGET_INSUFFICIENT",
+            message=(
+                f"{label}可用额度不足：需要 {requested} Token，当前可用 {max(available, 0)} Token。"
+            ),
+            status_code=409,
+            details={
+                "scope": scope,
+                "requestedTokens": requested,
+                "availableTokens": max(available, 0),
+            },
+        )
+
+
+class CompanyPausedError(AppError):
+    """Company-wide pause blocks new paid calls and new task creation."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            code="COMPANY_PAUSED",
+            message="公司处于暂停状态，已阻止新的模型调用与任务创建。恢复公司后可继续。",
+            status_code=409,
+        )
+
+
+class RunModeUnavailableError(AppError):
+    """A run mode has no implementation yet and is refused, never downgraded."""
+
+    def __init__(self, mode: str) -> None:
+        super().__init__(
+            code="RUN_MODE_UNAVAILABLE",
+            message=(
+                f"运行模式 {mode} 尚未实现：本阶段只提供明确标识的演练处理器。"
+                "系统不会把真实运行静默降级为演练。"
+            ),
+            status_code=409,
+            details={"runMode": mode},
+        )
+
+
+class LeaseLostError(AppError):
+    """A worker tried to write with a fencing token it no longer holds."""
+
+    def __init__(self, execution_id: int) -> None:
+        super().__init__(
+            code="LEASE_LOST",
+            message="该执行已失去租约，结果未被接受。",
+            status_code=409,
+            details={"executionId": execution_id},
+        )
+
+
+class ExecutionStoppedError(Exception):
+    """A step must not start: a stop signal is in force.
+
+    This is *not* an API error — no HTTP request returns it. It is raised inside
+    the execution kernel so every path that would open a new paid call passes the
+    same server-side gate (company pause, task/execution cancel, expired lease).
+    The processor catches it and reports a stopped outcome; it never invents one.
+    """
+
+    def __init__(self, reason: str, message: str) -> None:
+        super().__init__(message)
+        self.reason = reason
+        self.message = message
+
+
+class ExecutionAlreadySettledError(AppError):
+    def __init__(self) -> None:
+        super().__init__(
+            code="EXECUTION_ALREADY_RESOLVED",
+            message="该执行已有结果，不能再次结算。",
+            status_code=409,
+        )

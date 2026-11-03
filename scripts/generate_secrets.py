@@ -13,6 +13,7 @@ development, so it is the one interpreter we can rely on.
 from __future__ import annotations
 
 import argparse
+import base64
 import secrets
 import sys
 from datetime import UTC, datetime
@@ -50,6 +51,11 @@ LOCKOUT_MINUTES=5
 
 WEB_BIND_ADDRESS={web_bind_address}
 WEB_PORT={web_port}
+
+# Data key for provider credentials typed in the model centre (ADR-0006).
+# Keep it out of database backups: losing it means every saved provider key must
+# be re-entered, and replacing it has the same effect.
+SECRET_ENCRYPTION_KEY={secret_encryption_key}
 
 WORKER_NAME=worker-1
 WORKER_HEARTBEAT_INTERVAL_SECONDS=5
@@ -102,6 +108,8 @@ def main() -> int:
         cookie_secure="true" if args.secure_cookie else "false",
         web_bind_address=args.bind,
         web_port=args.port,
+        # 32 random bytes, base64 — the format the backend validates at startup.
+        secret_encryption_key=base64.b64encode(secrets.token_bytes(32)).decode("ascii"),
     )
 
     ENV_PATH.write_text(content, encoding="utf-8")

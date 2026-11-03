@@ -2,11 +2,12 @@
 
 Two rules shape this module:
 
-1. **No secret ever crosses this boundary.** A request may carry
-   ``secret_ref`` (an environment variable name). A response carries
-   ``secret_ref`` plus ``secret_configured``. There is no read-secret endpoint,
-   and the provider ``notes`` field is length-capped free text that is validated
-   before storage.
+1. **No credential is ever read back.** A request may carry a literal
+   ``secretValue`` (stored AES-GCM encrypted, ADR-0006) or the legacy
+   ``secretRef`` environment-variable name. A response carries the reference
+   name, the source, the state (``NONE / CONFIGURED / MISSING_ENV /
+   UNDECRYPTABLE``) and nothing derived from the key. There is no
+   read-secret endpoint.
 2. **Saving and probing are separate commands.** ``PATCH``/``POST`` on providers
    and models never touch the network; ``POST /models/{id}/probe`` performs
    exactly one call against already-persisted settings and records its own
@@ -33,6 +34,7 @@ from app.api.schemas_organization import (
     ProviderUpdateRequest,
     UsageSummary,
 )
+from app.domain.enums import SecretState
 from app.domain.model_evidence import evidence_is_stale, json_capability
 from app.models.organization import Model, ModelProbe, Provider
 from app.repositories.organization_repository import (
@@ -61,7 +63,7 @@ def _service(request: Request) -> ModelCentreService:
 
 
 def _provider_response(
-    provider: Provider, *, model_count: int, secret_configured: bool
+    provider: Provider, *, model_count: int, secret_state: SecretState
 ) -> ProviderResponse:
     return ProviderResponse(
         id=provider.id,
@@ -70,7 +72,12 @@ def _provider_response(
         version=provider.version,
         base_url=provider.base_url,
         secret_ref=provider.secret_ref,
-        secret_configured=secret_configured,
+        secret_source=provider.secret_source,  # type: ignore[arg-type]
+        secret_state=secret_state.value,  # type: ignore[arg-type]
+        # "Configured" means usable right now, not merely present. A stored key
+        # the server cannot decrypt is reported as UNDECRYPTABLE and is not
+        # silently rounded to "not configured" — the fix is different.
+        secret_configured=secret_state is SecretState.CONFIGURED,
         status=provider.status,  # type: ignore[arg-type]
         notes=provider.notes,
         timeout_seconds=float(provider.timeout_seconds),
@@ -172,9 +179,7 @@ def model_centre(
                     provider_kind=provider.kind if provider else None,
                     model_status=model.status if model else None,  # type: ignore[arg-type]
                     provider_status=provider.status if provider else None,  # type: ignore[arg-type]
-                    secret_configured=(
-                        service.secret_configured(provider.secret_ref) if provider else None
-                    ),
+                    secret_configured=(service.secret_configured(provider) if provider else None),
                     json_verified=json_capability(model, provider) if model else None,
                     assigned_at=assignment.started_at if assignment else None,
                 )
@@ -187,7 +192,7 @@ def model_centre(
             _provider_response(
                 view.provider,
                 model_count=len(view.models),
-                secret_configured=view.secret_configured,
+                secret_state=view.secret_state,
             )
             for view in providers
         ],
@@ -195,11 +200,7 @@ def model_centre(
             _model_response(
                 model,
                 provider_by_id.get(model.provider_id),
-                secret_configured=service.secret_configured(
-                    provider_by_id[model.provider_id].secret_ref
-                    if model.provider_id in provider_by_id
-                    else None
-                ),
+                secret_configured=service.secret_configured(provider_by_id.get(model.provider_id)),
             )
             for model in models
         ],
@@ -242,6 +243,7 @@ def create_provider(
         kind=payload.kind,
         base_url=payload.base_url,
         secret_ref=payload.secret_ref,
+        secret_value=payload.secret_value,
         status=payload.status,
         notes=payload.notes,
         timeout_seconds=payload.timeout_seconds,
@@ -252,7 +254,7 @@ def create_provider(
     return _provider_response(
         provider,
         model_count=0,
-        secret_configured=service.secret_configured(provider.secret_ref),
+        secret_state=service.secret_state(provider),
     )
 
 
@@ -273,6 +275,8 @@ def update_provider(
         base_url=payload.base_url,
         secret_ref=payload.secret_ref,
         change_secret_ref=payload.change_secret_ref,
+        secret_value=payload.secret_value,
+        change_secret_value=payload.change_secret_value,
         status=payload.status,
         notes=payload.notes,
         # Distinguish "notes omitted" from "notes explicitly cleared": the form
@@ -288,7 +292,7 @@ def update_provider(
     return _provider_response(
         view.provider,
         model_count=len(view.models),
-        secret_configured=view.secret_configured,
+        secret_state=view.secret_state,
     )
 
 
@@ -316,7 +320,7 @@ def create_model(
     return _model_response(
         model,
         provider,
-        secret_configured=service.secret_configured(provider.secret_ref if provider else None),
+        secret_configured=service.secret_configured(provider),
     )
 
 
@@ -345,7 +349,7 @@ def update_model(
     return _model_response(
         model,
         provider,
-        secret_configured=service.secret_configured(provider.secret_ref if provider else None),
+        secret_configured=service.secret_configured(provider),
     )
 
 

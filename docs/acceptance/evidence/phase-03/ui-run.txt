@@ -1,0 +1,19 @@
+{"passed":true,"viewports":["1440x900","1024x768","390x844","360x800"],"pageErrors":0}
+node:_http_server:411
+    throw new ERR_HTTP_HEADERS_SENT('write');
+    ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot write headers after they are sent to the client
+    at ServerResponse.writeHead (node:_http_server:411:11)
+    at ClientRequest.<anonymous> (C:\Users\admin\Desktop\ai-company-os\scripts\verify_phase03_ui.cjs:70:11)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at Socket.socketErrorListener (node:_http_client:766:5)
+    at Socket.emit (node:events:514:28)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+
+Node.js v24.21.0

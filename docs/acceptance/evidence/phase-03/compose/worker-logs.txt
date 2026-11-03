@@ -1,0 +1,6 @@
+worker-1   | {"ts": "2026-11-02T04:11:12.869289+00:00", "level": "INFO", "logger": "__main__", "message": "worker starting (task consumer)", "worker": "worker-1"}
+worker-1   | {"ts": "2026-11-02T04:11:25.127122+00:00", "level": "INFO", "logger": "__main__", "message": "recovered interrupted tasks", "count": 1}
+worker2-1  | {"ts": "2026-11-02T04:11:12.889515+00:00", "level": "INFO", "logger": "__main__", "message": "worker starting (task consumer)", "worker": "worker-2"}
+worker2-1  | {"ts": "2026-11-02T04:14:03.272712+00:00", "level": "INFO", "logger": "__main__", "message": "recovered interrupted tasks", "count": 1}
+
+--- stderr ---

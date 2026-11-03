@@ -72,6 +72,18 @@ const router = createRouter({
       meta: { title: '项目与任务' },
     },
     {
+      path: '/tasks/:id(\\d+)',
+      name: 'task-detail',
+      component: withShell(() => import('@/views/TaskDetailView.vue')),
+      meta: { title: '任务详情' },
+    },
+    {
+      path: '/executions/:id(\\d+)',
+      name: 'execution-detail',
+      component: withShell(() => import('@/views/ExecutionDetailView.vue')),
+      meta: { title: '执行详情' },
+    },
+    {
       path: '/proposals',
       name: 'proposals',
       component: withShell(() => import('@/views/ProposalsView.vue')),

@@ -268,8 +268,10 @@ async function modelCentreChecks(page, suffix) {
   await page.getByRole('button', { name: '填入 DeepSeek 预设' }).click()
   await page.locator('#field-provider-name').fill('DeepSeek 预设')
   await page.screenshot({ path: path.join(out, `models-provider-form-${suffix}.png`), fullPage: true })
-  // There is no field anywhere in this drawer that accepts a credential value.
-  assert.equal(await providerDrawer.locator('input[type=password]').count(), 0)
+  // ADR-0006: the drawer takes the key directly, masked, and starts empty.
+  const keyInput = providerDrawer.locator('input[type=password]')
+  assert.equal(await keyInput.count(), 1, 'the key field must be present and masked')
+  assert.equal(await keyInput.inputValue(), '', 'the key field must start empty')
   await providerDrawer.getByRole('button', { name: '保存配置', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'DeepSeek 预设' })).toBeVisible({ timeout: 15000 })
 
@@ -283,10 +285,11 @@ async function modelCentreChecks(page, suffix) {
   await expect(page.getByText('模型（1）', { exact: false })).toBeVisible({ timeout: 15000 })
   await page.screenshot({ path: path.join(out, `models-providers-${suffix}.png`), fullPage: true })
 
-  // 未配置 must be visible; no credential input may exist anywhere.
+  // 未配置 must be visible, and no credential value may be present anywhere in
+  // the page. The key input itself lives inside the (closed) drawer.
   await expect(page.getByText('未配置', { exact: true }).first()).toBeVisible()
   const passwordInputs = await page.locator('input[type=password]').count()
-  assert.equal(passwordInputs, 0, 'a password input exists on the model centre page')
+  assert.equal(passwordInputs, 0, 'the closed drawer must not render a key input')
   const bodyText = await page.locator('body').innerText()
   assert(!/sk-[A-Za-z0-9]{16,}/.test(bodyText), 'a credential-shaped string appears on the page')
   report(`model centre shows 未配置 ${suffix}`, { passwordInputs })

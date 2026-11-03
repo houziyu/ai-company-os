@@ -1,0 +1,48 @@
+{
+  "checks": [
+    {
+      "case": "restart-queued-before",
+      "ok": true,
+      "task_id": 10,
+      "status": "QUEUED",
+      "executions": 0,
+      "workers": "stopped"
+    },
+    {
+      "case": "restart-inflight-stopped",
+      "ok": true,
+      "task_id": 11,
+      "execution_id": 14,
+      "attempt": 1,
+      "worker": "worker-2",
+      "lease_expires_at": "2026-11-02T04:14:29.675998Z",
+      "stopped_at_epoch": 1793592878.7
+    },
+    {
+      "case": "restart-queued",
+      "ok": true,
+      "task_id": 10,
+      "status": "SUCCEEDED",
+      "executions": 1,
+      "executed_by": "worker-1"
+    },
+    {
+      "case": "restart-running",
+      "ok": true,
+      "task_id": 11,
+      "statuses": [
+        "INTERRUPTED",
+        "SUCCEEDED"
+      ],
+      "attempts": [
+        1,
+        2
+      ],
+      "recovery_note": "租约过期；处理器步骤幂等且仍有重试次数，已重新排队。",
+      "final_status": "SUCCEEDED"
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "out_dir": "C:\\Users\\admin\\Desktop\\ai-company-os\\docs\\acceptance\\evidence\\phase-03\\restart"
+}

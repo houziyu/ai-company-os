@@ -56,6 +56,8 @@ const provider = {
   version: 3,
   baseUrl: 'https://api.deepseek.com',
   secretRef: 'DEEPSEEK_API_KEY',
+  secretSource: 'ENV',
+  secretState: 'MISSING_ENV',
   secretConfigured: false,
   status: 'ENABLED',
   notes: null,

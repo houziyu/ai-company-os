@@ -1,0 +1,5 @@
+NAME                           IMAGE                                COMMAND                   SERVICE    CREATED          STATUS                    PORTS
+acos-phase03-test-api-1        ai-company-os-backend:phase03-test   "uvicorn app.asgi:ap…"   api        4 minutes ago    Up 3 minutes (healthy)    8000/tcp
+acos-phase03-test-postgres-1   postgres:17-alpine                   "docker-entrypoint.s…"   postgres   11 minutes ago   Up 11 minutes (healthy)   5432/tcp
+acos-phase03-test-web-1        ai-company-os-web:phase03-test       "/docker-entrypoint.…"   web        4 minutes ago    Up 3 minutes (healthy)    127.0.0.1:18085->8080/tcp
+acos-phase03-test-worker2-1    ai-company-os-backend:phase03-test   "python -m app.worke…"   worker2    2 minutes ago    Up 2 minutes (healthy)    8000/tcp

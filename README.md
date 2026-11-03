@@ -1,8 +1,8 @@
 # AI Company OS
 
-当前实施到阶段 02；2026-11-02 修复第二版复审的 5 项 P2，后端 170 项、前端 93 项测试通过。最新结果见 [第二版修复验收](docs/acceptance/phase-02-v2-fixes.md) 与 [修复交接](docs/handoff/phase-02-v2-fixes.md)；功能范围见 [阶段 02 验收](docs/acceptance/phase-02.md)，历次质检与修复证据保持原样。**真实浏览器 200% 缩放、真实供应商连通性与真实进程强杀恢复仍未验证**，阶段 02 仍部分完成，阶段 03 未开始。
+当前实施到阶段 03；2026-11-02 完成持久任务调度与预算，后端 195 项、前端 103 项测试通过。最新结果见 [阶段 03 验收](docs/acceptance/phase-03.md) 与 [交接](docs/handoff/phase-03.md)。**阶段 02 的真实浏览器 200% 缩放、真实供应商连通性与真实进程强杀恢复仍未验证**；阶段 03 另有独立的操作系统级强杀恢复证据。
 
-受控的 AI 研发公司运行平台：单所有者、单公司、多项目。当前**阶段 01 与阶段 02 已实现**——账号体系、Compose 部署、公司初始化向导、五个岗位与五名独立员工、组织编辑器、模型中心与统一模型适配接口可运行；任务调度、预算、隔离执行与提案审批属于后续阶段，尚未实现。
+受控的 AI 研发公司运行平台：单所有者、单公司、多项目。当前**阶段 01、02、03 已实现**——账号体系、Compose 部署、公司初始化向导、五岗位五员工、组织编辑器、模型中心与统一适配接口，以及持久任务队列、执行记录、三层 Token 预算与任务看板。隔离执行器、五岗位交付闭环、提案审批与知识库属于后续阶段。
 
 技术基线：FastAPI + Pydantic + SQLAlchemy 2 + Alembic、PostgreSQL 17、Vue 3 + TypeScript + Vite + Vue Router + Pinia + Element Plus、Docker Compose。
 
@@ -15,7 +15,7 @@
 - 中文工作台外壳：九个一级导航，未开放页面显示明确的空状态与开放阶段，不提供假按钮。
 - 顶栏连接状态为实测值：轮询就绪接口，未就绪或断网时显示"连接中断"。
 - 设计 token 由 `docs/design/design-tokens.json` 生成 CSS 与 Element Plus 主题映射。
-- Worker 仅维持心跳并暴露自身健康端点，不消费任务、不调用模型、不执行代码。
+- Worker 维持心跳并暴露健康端点（阶段 01 行为保留为其基础职责）。
 
 ## 阶段 02 实际可用的功能
 
@@ -26,10 +26,10 @@
   - 身份与履历只追加：没有删除端点，归档保留工号、岗位、职责履历与模型绑定历史。
 - **模型中心**（`/models`）：供应商、模型、员工分配三个分区（不会把 Agent ID 当模型 ID）。
   - 支持 DeepSeek 预设与自定义 OpenAI 兼容接口；Base URL 接受 `host`、`host/v1`、完整 `chat/completions` 三种写法。
-  - **密钥只存环境变量名**（`secret_ref`），数据库没有任何列可存密钥值；界面只显示“已配置/未配置”，没有密钥输入框或回显按钮。
+  - **密钥在界面直接填写**：服务端用 AES-256-GCM 加密后保存（`providers.secret_ciphertext`，数据密钥在环境变量 `SECRET_ENCRYPTION_KEY`）。保存后不回显，列表只显示“已配置 / 未配置 / 无法解密”。旧的环境变量引用（`secret_ref`）仍兼容。
   - 保存配置与联网探测是两个独立命令：保存不触网，测试使用已保存的配置。
 - **统一模型适配接口**（`backend/app/providers/adapter.py`）：单次调用、硬超时（1–120 秒）、稳定错误分类（认证失败/限流/超时/网络/HTTP/响应格式/JSON 无效）、JSON 输出校验。协议兼容**不**被当作能力已验证：`supportsJsonOutput` 在探测成功前为“未验证”。
-- **探测用量独立登记**：每次探测最多一次调用（数据库约束 `call_count <= 1`），不自动重试；即使返回无效 JSON 也登记已消耗的 Token；供应商未返回用量时记录为“未知”，不记为 0。这些记录将在阶段 03 并入统一预算。
+- **探测用量独立登记**：每次探测最多一次调用（数据库约束 `call_count <= 1`），不自动重试；即使返回无效 JSON 也登记已消耗的 Token；供应商未返回用量时记录为“未知”，不记为 0。阶段 03 起探测同时受公司预算约束（见下）。
 - **审计**（`/audit`）：公司、岗位、员工、状态、模型绑定、供应商、模型与探测结果均写入审计记录；审计界面只读、可筛选、服务端二次脱敏。
 
 ### 第二版复审修复（2026-11-02）
@@ -49,7 +49,24 @@
 - **用量与超时如实**：只报告一个维度时不再把另一个当作 0，汇总区分完整/部分/未计量（R4）；配置的超时是覆盖连接、读取、解析的总预算，并有响应体积上限（R6）。
 - **界面行为可靠**：资料保存成功但改绑失败时提示已保存范围并继续可用（R8）；模型中心三个标签可用键盘到达（R10）；选择“未绑定”会真正解绑并保留历史（R11）；备注可清空（R9）。
 
-明确**未**实现：任务调度、预算账本、隔离执行器、提案与审批、知识库、招聘与调岗审批、员工账号。这些属于阶段 03—08。
+## 阶段 03 实际可用的功能
+
+- **项目与任务**（`/projects`）：创建项目（编号、目标、运行模式、Token 额度）；任务看板按业务状态分组，可切列表；手机默认列表。看板只渲染有任务的状态列，空状态在工具条以文字说明，避免空列把真实卡片挤出可视区。
+- **任务详情**（`/tasks/:id`）：目标与验收、每次执行的独立记录（attempt、worker、fencing token、租约）、增量时间线、本次执行账本。取消是**协作式**的：排队任务立即取消，运行中的调用在安全检查点停止并记录停止时的用量；失败/阻塞/中断可重试，重试创建**新的执行 ID** 并重新预留额度，旧证据与账本保留。
+- **执行详情**（`/executions/:id`）：步骤时间线（预估/输入/输出/耗时）与逐笔账本（预留、结算、释放）。
+- **预算**（`/budgets`）：公司、项目两层额度的上限/已用/预留/可用四值；待核对用量单列；账本明细可按预留/结算/释放筛选。未配置价格时只显示 Token，不折算金额；不提供「充值」或在线改额度（无此命令，界面不承诺）。
+- **持久队列与 Worker**：PostgreSQL 事务领取（`SKIP LOCKED`）、租约、心跳、单调 fencing token；旧租约的结果写入被拒绝。Worker 进程退出后，过期尝试标记 `INTERRUPTED`（`interruptedUnknownSideEffects=true`），只有声明幂等的处理器才自动重排，否则等人工作业。
+- **真实故障证据**：两个真实 worker 进程竞争、操作系统级强杀（`taskkill /F`）、两个 worker 容器 + `docker kill`、整栈停机再启动，均验证了「中断 → 新执行 ID → 完成」。见[阶段 03 验收](docs/acceptance/phase-03.md)。
+- **事件与 SSE**：`domain_events` 自增 ID；`Last-Event-ID` 或 `?after=` 严格回放其后事件；浏览器在事件流被中断时显示「连接中断，结果可能未更新」并自行退避重连（非 2xx 是 EventSource 的致命错误，浏览器不会自动重试）。
+- **公司暂停**：顶栏固定入口。暂停后不再发起新的模型调用、不再创建新任务、Worker 不再领取；正在进行的调用按检查点停止或收尾。恢复后可继续。
+- **确定性演练处理器**：所有任务执行都是演练（`SUCCESS`/`TRANSIENT_FAILURE`/`PERMANENT_FAILURE`/`SLOW`/`UNKNOWN_USAGE`/`TIMEOUT`），页面明确标注「演练运行（确定性处理器，非真实模型输出）」。`REAL` 运行模式在服务端被拒绝（409 `RUN_MODE_UNAVAILABLE`），**不会**静默降级。
+- **未知用量**：一律按预留额度保守计入已用并标记「待核对」，`usage_tokens` 保持 `NULL`，不写 0。结算与预留在数据库层有唯一索引防重复。
+
+### 升级注意（阶段 03 迁移）
+
+新迁移 `c41f7b93e2a5` 为每个既有公司补建一个**额度 0** 的公司预算账户。升级后需显式设置额度，否则新任务会被拒绝（`BUDGET_INSUFFICIENT`）——这是刻意的失败，不是 bug。降级到 `8c24a71d9e03` 会删除阶段 03 全部表并把暂停状态复位，只在无任务数据时安全。详见[阶段 03 验收](docs/acceptance/phase-03.md)。
+
+明确**未**实现：隔离执行器与工具网关、五岗位交付闭环、提案与审批、知识库、招聘与调岗审批、员工账号、真实模型执行。这些属于阶段 04—08。
 
 ## 快速启动
 
@@ -151,6 +168,17 @@ node scripts/verify_phase02_zoom200.cjs --method=equiv
 
 `verify_phase02.py` 只在全新栈上运行（会创建所有者）；重跑前需删除该项目的数据卷。`verify_phase02_zoom200.cjs --method=equiv` 是 200% 缩放的**等效布局**门禁；`--method=os-input` 是真实浏览器缩放尝试，在当前主机被输入通道问题阻塞，详见 [阶段 02 验收](docs/acceptance/phase-02.md)。
 
+阶段 03 提供隔离入口（端口 `18085`、项目 `acos-phase03-test`、独立卷，两个 worker 服务）：
+
+```powershell
+./scripts/phase03_test_stack.ps1 -ComposeArgs @('up','-d','--build','--scale','worker=1','--scale','worker2=1')
+./backend/.venv/Scripts/python.exe scripts/verify_phase03_compose.py
+./backend/.venv/Scripts/python.exe scripts/verify_phase03_restart.py
+./scripts/phase03_test_stack.ps1 -ComposeArgs @('stop')   # 保留容器与卷
+```
+
+不依赖 Compose 的证据脚本：`scripts/verify_phase03_migration.py`（迁移往返，自建临时库）、`scripts/verify_phase03_runtime.py`（真实 API + 两个真实 worker 进程 + 操作系统级强杀，需 `PHASE03_DATABASE_URL` 指向隔离库）、`scripts/verify_phase03_ui.cjs`（真实构建 SPA + 真实 API 的四视口截图与键盘检查，需 `PHASE03_UI_BASE_URL`）。`phase03_test_stack.ps1 stop` 不会删除数据卷。
+
 ## 配置与秘密
 
 复制 `.env.example` 为 `.env` 并替换占位值，或使用 `scripts/generate_secrets.py` 生成随机值。`.env` 已在 `.gitignore` 中，不得提交。
@@ -167,11 +195,12 @@ node scripts/verify_phase02_zoom200.cjs --method=equiv
 | `LOCKOUT_THRESHOLD` / `LOCKOUT_MINUTES` | 窗口内失败次数上限与锁定时长 |
 | `WEB_BIND_ADDRESS` / `WEB_PORT` | 发布端口，默认只监听 `127.0.0.1:8080` |
 | `ENABLE_API_DOCS` | 是否暴露 `/api/docs`，默认关闭 |
-| `DEEPSEEK_API_KEY` | 供应商密钥的**值**，只存在于 api 进程环境；数据库仅存变量名。留空即模型中心显示“未配置” |
+| `SECRET_ENCRYPTION_KEY` | 供应商密钥的加密主密钥（32 字节随机值的 base64）。缺失时模型中心拒绝保存密钥，不会明文入库 |
+| `DEEPSEEK_API_KEY` | 旧式来源：以环境变量名引用密钥时的**值**，只存在于 api 进程环境。直接在模型中心填写密钥的新配置无需填写 |
 
 ### 数据库迁移与备份
 
-阶段 02 有三次迁移：`7b41c9d2f0aa`（公司/组织/模型表）、`3f8d2c6a91b4`（配置版本与指纹、`PENDING` 探测、按维度用量）、`8c24a71d9e03`（旧指纹与能力证据修复，当前 head）。最后一项是在线数据迁移，不删除历史；降级不会复活已失效的旧证据。升级前先备份数据库并记录当前版本，升级后验证迁移版本与就绪接口。完整命令与降级注意事项见[第二版修复验收](docs/acceptance/phase-02-v2-fixes.md)。
+迁移历史（当前 head `a7d2e5c81b64`）：`6a790d8c2b88`（阶段 01）、`7b41c9d2f0aa`（公司/组织/模型表）、`3f8d2c6a91b4`（配置版本与指纹、`PENDING` 探测、按维度用量）、`8c24a71d9e03`（旧指纹与能力证据修复）、`c41f7b93e2a5`（阶段 03 任务、执行、事件、消息、预算）、`e5b7c9d1a2f4` 与 `f6c8d0e2b4a7`（事件发布游标与兼容重放）、`a7d2e5c81b64`（供应商密钥加密存储，ADR-0006）。`8c24a71d9e03` 是在线数据迁移，不删除历史；`c41f7b93e2a5` 为既有公司补建额度 0 的公司预算账户，升级后需显式设置额度。升级前先备份数据库并记录当前版本，升级后验证迁移版本与就绪接口。完整命令、降级边界与验证方式见[阶段 03 验收](docs/acceptance/phase-03.md)与[密钥存储验收](docs/acceptance/provider-secret-storage.md)。`a7d2e5c81b64` 的降级在仍有加密密钥时会拒绝执行，需先清除这些密钥。
 
 密钥处理约定：
 
@@ -179,10 +208,13 @@ node scripts/verify_phase02_zoom200.cjs --method=equiv
 - 日志为 JSON 结构化输出，事件文本和 extra 字段均使用白名单（请求 ID、方法、路径、状态、耗时等）；不记录请求体、Cookie、Authorization 头或密码。INFO/DEBUG 下 SQLAlchemy 均维持 WARNING，数据库引擎隐藏参数；异常只记录类型与栈位置，不记录异常原文、局部变量或源码行。
 - `GET /api/v1/system/status` 只返回非敏感的部署事实（版本、迁移版本、Worker 心跳时间），有测试断言其响应不含密码、连接串或 `secret` 字样。
 - 浏览器只收到会话与 CSRF 两个 Cookie；数据库连接串从不进入前端。
-- **模型供应商密钥**：数据库的 `providers.secret_ref` 只存环境变量名（约束为大写字母/数字/下划线）；没有任何列可存密钥值。界面只显示“已配置/未配置”，没有输入或回显密钥的控件。探测失败时供应商响应正文（可能回显密钥）被丢弃，只保留稳定错误码。有测试用 canary 值扫描全部 API 响应与全部表的所有列。
-- 探测用量与预算无关：阶段 02 只把每次探测的 Token 记入独立表，未知用量记为 `NULL`，阶段 03 才并入统一账本。
+- **模型供应商密钥**：界面直接填写的密钥由服务端用 AES-256-GCM 加密后存入 `providers.secret_ciphertext`，主密钥来自环境变量 `SECRET_ENCRYPTION_KEY`，永远不在数据库中。响应只返回来源（`ENV`/`DB`）与状态（`NONE`/`CONFIGURED`/`MISSING_ENV`/`UNDECRYPTABLE`），不返回密钥、长度或任何派生值；审计只记录来源与是否配置。服务端缺失主密钥时拒绝保存（不会明文写入）；主密钥更换后旧密文无法解密，探测在本地拒绝且不产生费用。旧式 `providers.secret_ref` 环境变量名继续可用。探测失败时供应商响应正文（可能回显密钥）被丢弃，只保留稳定错误码。有测试用 canary 值扫描全部 API 响应、全部表的所有列与日志。
+- **备份含义变化**：数据库备份现在包含**密文**。只有备份与 `SECRET_ENCRYPTION_KEY` 同时泄露才构成密钥泄露，请分别保管两者。
+- 探测用量自阶段 03 起纳入公司预算：探测在提交 `PENDING` 意图的同一短事务内持一笔公司预留，结束后按上报用量结算；公司暂停或额度不足时在本地拒绝且不发起请求。建公司前的探测不占额度（此时没有公司），响应会如实说明。
 
 **轮换数据库密码**：`generate_secrets.py --force` 会生成新密码，但已存在的数据库卷里仍是旧密码，直接重启会使 API 无法连接。正确步骤是先用旧凭据登录数据库执行 `ALTER USER acos WITH PASSWORD '...'`，再更新 `.env` 并重启。
+
+**更换 `SECRET_ENCRYPTION_KEY`**：已保存的供应商密钥无法用新主密钥解密，模型中心会显示“无法解密”，探测在本地拒绝并发进行。系统不会批量重加密历史密文；更换后请在每个供应商上重新填写密钥。不要删除或丢失该值，它不在数据库备份中。
 
 ## 数据卷与持久化
 
@@ -222,8 +254,8 @@ backend/
   app/services/     应用服务：认证、健康检查、组织、模型中心
   app/providers/    统一模型适配接口（唯一与供应商通信的地方）
   app/repositories/ 数据访问
-  app/models/       SQLAlchemy 表定义（entities.py 阶段 01，organization.py 阶段 02）
-  app/workers/      阶段 01 心跳 Worker
+  app/models/       SQLAlchemy 表定义（entities.py 阶段 01，organization.py 阶段 02，tasks.py 阶段 03）
+  app/workers/      阶段 03 任务消费者（task_worker）与确定性演练处理器（demo_processor）
   alembic/          迁移脚本
   tests/            真实 PostgreSQL 集成测试
 frontend/
@@ -242,8 +274,11 @@ docs/               规范、验收与交接记录
 
 ## 已知限制
 
-- 任务、提案、知识、预算四个页面仍是带说明的空状态；组织、模型中心与审计已接入真实功能。
-- Worker 不做任何工作，只是证明进程模型与健康链路可用。
+- 提案与知识两个页面仍是带说明的空状态；概览、组织、模型中心、项目与任务、预算、审计已接入真实功能。
+- Worker 只运行**确定性演练处理器**：不调用真实模型、不执行生成代码、不接触 Docker socket。真实执行属阶段 04/05。
+- 真实运行模式（`REAL`）在服务端被拒绝，不会被静默降级为演练。
+- 预算账户余额是缓存值，账本是事实来源；目前没有自动对账任务。
+- 既有公司升级后公司额度为 0，需运营显式设置，否则新任务被拒绝。
 - 真实浏览器 200% 缩放仍未验证：本机自动化 Chrome 虽已置为前台，但 OS 注入的按键没有到达其渲染器（页面记录 0 个键盘事件）。等效布局门禁已通过，但不能替代真实缩放。
 - 探测的中断行为用注入异常验证（`PENDING` 意图不随请求事务回滚），未做操作系统级进程强杀。
 - 真实 DeepSeek 连通性未验证（无密钥）。协议模拟覆盖了正常 JSON、错误密钥、超时、无效 JSON 四类场景。
@@ -259,6 +294,9 @@ docs/               规范、验收与交接记录
 - 设计规范：[docs/design/](docs/design/)
 - 阶段 01 验收：[docs/acceptance/phase-01.md](docs/acceptance/phase-01.md)
 - 阶段 01 交接：[docs/handoff/phase-01.md](docs/handoff/phase-01.md)
+- 阶段 03 验收：[docs/acceptance/phase-03.md](docs/acceptance/phase-03.md)（含[证据索引](docs/acceptance/evidence/phase-03/README.md)）
+- 阶段 03 交接：[docs/handoff/phase-03.md](docs/handoff/phase-03.md)
+- ADR-0004 任务调度与预算：[docs/decisions/0004-phase-03-task-scheduling-and-budget.md](docs/decisions/0004-phase-03-task-scheduling-and-budget.md)
 - 阶段 02 验收：[docs/acceptance/phase-02.md](docs/acceptance/phase-02.md)（含[证据索引](docs/acceptance/evidence/phase-02/README.md)）
 - 阶段 02 交接：[docs/handoff/phase-02.md](docs/handoff/phase-02.md)
 - 阶段 02 独立质检（原始，未修改）：[docs/acceptance/phase-02-review.md](docs/acceptance/phase-02-review.md)

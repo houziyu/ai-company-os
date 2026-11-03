@@ -323,7 +323,7 @@ async function submit() {
           :hint="
             centre?.providers.some((p) => p.secretConfigured)
               ? undefined
-              : '当前供应商的密钥引用在服务端尚未配置；可以先绑定，密钥配置后即可测试连接。'
+              : '当前供应商尚未配置可用密钥；可以先绑定，密钥在模型中心填写后即可测试连接。'
           "
           :error="fieldErrors.modelId ?? null"
         >

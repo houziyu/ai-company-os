@@ -1,0 +1,225 @@
+........FF..                                                             [100%]
+================================== FAILURES ===================================
+__________ test_cancelled_step_settles_once_at_all_scopes[False-64] ___________
+
+client = <starlette.testclient.TestClient object at 0x000001173D143BD0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_9dfb569923), autoflush=False, expire_on_commit=False)
+known = False, expected = 64
+
+    @pytest.mark.parametrize("known,expected", [(False, 64), (True, 0)])
+    def test_cancelled_step_settles_once_at_all_scopes(client, session_factory, known, expected):
+        from app.services.execution_service import ProcessorOutcome
+    
+        headers, claim = claimed(client, session_factory)
+        service = ExecutionService()
+        with session_factory() as session:
+            step = service.start_step(
+                session,
+                execution_id=claim.execution_id,
+                fencing_token=claim.fencing_token,
+                sequence=0,
+                name="cancelled call",
+                estimated_tokens=64,
+            )
+            session.commit()
+        assert (
+            client.post(f"/api/v1/tasks/{claim.task_id}/cancel", json={}, headers=headers).status_code
+            == 200
+        )
+        for _ in range(2):
+            with session_factory() as session:
+                service.finish_step(
+                    session,
+                    execution_id=claim.execution_id,
+                    fencing_token=claim.fencing_token,
+                    step_id=step.id,
+                    status=StepStatus.CANCELLED,
+                    prompt_tokens=0 if known else None,
+                    completion_tokens=0 if known else None,
+                    usage_known=known,
+                )
+                session.commit()
+        with session_factory() as session:
+            service.complete(
+                session,
+                execution_id=claim.execution_id,
+                fencing_token=claim.fencing_token,
+                outcome=ProcessorOutcome(
+                    succeeded=False,
+                    summary=None,
+                    prompt_tokens=None,
+                    completion_tokens=None,
+                    usage_known=known,
+                    cancelled=True,
+                ),
+            )
+            session.commit()
+        with session_factory() as session:
+            accounts = {a.scope: a for a in session.scalars(select(BudgetAccount))}
+            assert accounts["TASK"].consumed_tokens == expected
+            for scope in ("COMPANY", "PROJECT"):
+                assert accounts[scope].consumed_tokens == (0 if known else claim.task_budget_tokens)
+            assert all(a.reserved_tokens == 0 for a in accounts.values())
+            entries = [
+                row
+                for row in ledger_snapshot(session)
+>               if row["step_id"] == step.id and row["entry_kind"] == "SETTLE"
+                   ^^^^^^^^^^^^^^
+            ]
+E           KeyError: 'step_id'
+
+tests\test_phase03_recheck_fixes.py:393: KeyError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:53:28.606806+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:53:28.807644+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:53:28.813776+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c58b41d3fe574665824b0d2ebfaea4b5", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 203.78, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:28.814676+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:28.927491+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:53:28.946426+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a6022049270c491f906cdb60881ab2c2", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 126.16, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:28.947142+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:29.040576+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "636ccacfee4647709707ba7187556dc5", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 88.44, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:29.041155+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:29.139897+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "92b6e186621841d88714b97c92416439", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 96.17, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:29.140495+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:29.236661+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "963457ecf2114987bcec3ac19f3268d1", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 34.51, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:29.237143+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:53:29.743046+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+___________ test_cancelled_step_settles_once_at_all_scopes[True-0] ____________
+
+client = <starlette.testclient.TestClient object at 0x000001173D515040>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_8efcf69d25), autoflush=False, expire_on_commit=False)
+known = True, expected = 0
+
+    @pytest.mark.parametrize("known,expected", [(False, 64), (True, 0)])
+    def test_cancelled_step_settles_once_at_all_scopes(client, session_factory, known, expected):
+        from app.services.execution_service import ProcessorOutcome
+    
+        headers, claim = claimed(client, session_factory)
+        service = ExecutionService()
+        with session_factory() as session:
+            step = service.start_step(
+                session,
+                execution_id=claim.execution_id,
+                fencing_token=claim.fencing_token,
+                sequence=0,
+                name="cancelled call",
+                estimated_tokens=64,
+            )
+            session.commit()
+        assert (
+            client.post(f"/api/v1/tasks/{claim.task_id}/cancel", json={}, headers=headers).status_code
+            == 200
+        )
+        for _ in range(2):
+            with session_factory() as session:
+                service.finish_step(
+                    session,
+                    execution_id=claim.execution_id,
+                    fencing_token=claim.fencing_token,
+                    step_id=step.id,
+                    status=StepStatus.CANCELLED,
+                    prompt_tokens=0 if known else None,
+                    completion_tokens=0 if known else None,
+                    usage_known=known,
+                )
+                session.commit()
+        with session_factory() as session:
+            service.complete(
+                session,
+                execution_id=claim.execution_id,
+                fencing_token=claim.fencing_token,
+                outcome=ProcessorOutcome(
+                    succeeded=False,
+                    summary=None,
+                    prompt_tokens=None,
+                    completion_tokens=None,
+                    usage_known=known,
+                    cancelled=True,
+                ),
+            )
+            session.commit()
+        with session_factory() as session:
+            accounts = {a.scope: a for a in session.scalars(select(BudgetAccount))}
+            assert accounts["TASK"].consumed_tokens == expected
+            for scope in ("COMPANY", "PROJECT"):
+                assert accounts[scope].consumed_tokens == (0 if known else claim.task_budget_tokens)
+            assert all(a.reserved_tokens == 0 for a in accounts.values())
+            entries = [
+                row
+                for row in ledger_snapshot(session)
+>               if row["step_id"] == step.id and row["entry_kind"] == "SETTLE"
+                   ^^^^^^^^^^^^^^
+            ]
+E           KeyError: 'step_id'
+
+tests\test_phase03_recheck_fixes.py:393: KeyError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:53:29.921340+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:53:30.090075+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:53:30.095937+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "35315370f14d434b8f1a808b7abf3264", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 172.24, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:30.096986+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:30.172033+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:53:30.185598+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c6b52b2db224412da37b810ed4ad5949", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 85.1, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:30.186053+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:30.258213+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e1e7fdd599c346f69c74c2d900a64188", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.52, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:30.258751+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:30.349872+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "71960f0cc3c1421d9f56f0e8ad142dcf", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 88.36, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:30.350378+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:53:30.442123+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4bd80d0b1ab042ec97a05783fd4986b7", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 34.56, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:53:30.442595+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:53:30.553927+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_phase03_recheck_fixes.py::test_cancel_queued_retry_does_not_charge_previous_attempt_again
+tests/test_phase03_recheck_fixes.py::test_migration_keeps_old_cursor_when_event_ids_have_gaps
+tests/test_phase03_recheck_fixes.py::test_migration_keeps_old_cursor_when_event_ids_have_gaps
+tests/test_phase03_recheck_fixes.py::test_migration_replays_both_cursor_domains_and_preserves_business_data
+tests/test_phase03_recheck_fixes.py::test_migration_replays_both_cursor_domains_and_preserves_business_data
+tests/test_phase03_recheck_fixes.py::test_migration_replays_both_cursor_domains_and_preserves_business_data
+tests/test_phase03_recheck_fixes.py::test_migration_replays_both_cursor_domains_and_preserves_business_data
+tests/test_phase03_recheck_fixes.py::test_migration_replays_both_cursor_domains_and_preserves_business_data
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_phase03_recheck_fixes.py::test_cancelled_step_settles_once_at_all_scopes[False-64]
+FAILED tests/test_phase03_recheck_fixes.py::test_cancelled_step_settles_once_at_all_scopes[True-0]
+2 failed, 10 passed, 9 warnings in 14.57s

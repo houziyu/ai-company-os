@@ -1,0 +1,13 @@
+
+> ai-company-os-frontend@0.1.0 test C:\Users\admin\Desktop\ai-company-os\frontend
+> vitest run
+
+
+ RUN  v5.0.5 C:/Users/admin/Desktop/ai-company-os/frontend
+
+
+ Test Files  14 passed (14)
+      Tests  116 passed (116)
+   Start at  11:02:01
+   Duration  7.55s (import 46%, environment 41%, tests 8%, setup 3%, transform 2%)
+

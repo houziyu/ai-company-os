@@ -32,6 +32,9 @@ import ErrorState from '@/components/ErrorState.vue'
 import { useLogout } from '@/composables/useLogout'
 import { useSessionStore } from '@/stores/session'
 import { useServiceHealth } from '@/composables/useServiceHealth'
+import { governanceApi } from '@/api/endpoints'
+import { ApiError, NetworkError } from '@/api/client'
+import type { CompanyStateResponse } from '@/api/task-types'
 
 interface NavItem {
   label: string
@@ -81,6 +84,43 @@ const isCollapsed = ref(false)
 let mediaQuery: MediaQueryList | null = null
 let collapsedQuery: MediaQueryList | null = null
 
+// Company governance state. Read from the server (never assumed), and only when
+// a company exists: before initialization `/company/state` legitimately 404s.
+const companyState = ref<CompanyStateResponse | null>(null)
+const pausingCompany = ref(false)
+const companyActionError = ref<string | null>(null)
+
+async function loadCompanyState() {
+  if (!session.isAuthenticated || session.companyInitialized === false) return
+  try {
+    companyState.value = await governanceApi.state()
+  } catch (error) {
+    // 404 before the wizard is normal; anything else leaves the badge hidden
+    // rather than showing a guessed status.
+    if (!(error instanceof ApiError && error.status === 404)) {
+      companyState.value = null
+    }
+  }
+}
+
+async function toggleCompanyPause() {
+  if (!companyState.value || pausingCompany.value) return
+  pausingCompany.value = true
+  companyActionError.value = null
+  try {
+    companyState.value =
+      companyState.value.status === 'PAUSED'
+        ? await governanceApi.resume()
+        : await governanceApi.pause('从顶部栏暂停公司')
+  } catch (error) {
+    if (error instanceof ApiError) companyActionError.value = error.message
+    else if (error instanceof NetworkError) companyActionError.value = error.message
+    else companyActionError.value = '公司状态更新失败，请稍后重试。'
+  } finally {
+    pausingCompany.value = false
+  }
+}
+
 function syncCollapsed() {
   isCollapsed.value = collapsedQuery?.matches ?? false
 }
@@ -99,6 +139,7 @@ onMounted(() => {
       // A failure here only costs the label; it must not interrupt the page.
     })
   }
+  void loadCompanyState()
   mediaQuery = window.matchMedia('(max-width: 767px)')
   syncNarrow()
   mediaQuery.addEventListener('change', syncNarrow)
@@ -248,6 +289,26 @@ async function navigate(path: string) {
             class="app-shell__status"
             :title="connectionTitle"
           />
+          <!-- Company pause is fixed in the topbar (UI-SPEC §5) so it is never
+               hidden in a menu. The badge reports the server's state; the button
+               performs a real command. It lives in the context group rather than
+               the account group because it is a company fact, not an account
+               action. -->
+          <StatusBadge
+            v-if="companyState"
+            :label="companyState.status === 'PAUSED' ? '公司已暂停' : '公司运行中'"
+            :tone="companyState.status === 'PAUSED' ? 'warning' : 'success'"
+          />
+          <AppButton
+            v-if="companyState"
+            size="small"
+            :variant="companyState.status === 'PAUSED' ? 'primary' : 'secondary'"
+            :loading="pausingCompany"
+            :loading-text="companyState.status === 'PAUSED' ? '恢复中…' : '暂停中…'"
+            @click="toggleCompanyPause"
+          >
+            {{ companyState.status === 'PAUSED' ? '恢复公司' : '暂停公司' }}
+          </AppButton>
         </div>
 
         <div class="app-shell__topbar-actions">
@@ -283,6 +344,13 @@ async function navigate(path: string) {
             retry-label="进入登录页"
             @retry="router.push('/login')"
           />
+          <p
+            v-if="companyActionError"
+            class="app-shell__governance-error"
+            role="alert"
+          >
+            {{ companyActionError }}
+          </p>
           <slot />
         </div>
       </main>
@@ -479,6 +547,7 @@ async function navigate(path: string) {
   align-items: center;
   gap: var(--acos-space-8);
   min-width: 0;
+  flex-wrap: wrap;
 }
 
 .app-shell__company {
@@ -492,6 +561,16 @@ async function navigate(path: string) {
   display: flex;
   align-items: center;
   gap: var(--acos-space-12);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.app-shell__governance-error {
+  margin: 0 0 var(--acos-space-16);
+  padding: var(--acos-space-12) var(--acos-space-16);
+  background: var(--acos-color-danger-subtle);
+  color: var(--acos-color-danger);
+  border-radius: var(--acos-radius-control);
 }
 
 .app-shell__user {

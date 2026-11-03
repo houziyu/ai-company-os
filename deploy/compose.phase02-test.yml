@@ -3,6 +3,8 @@
 #
 # The provider key is intentionally left empty: this stack exercises the
 # "未配置" path and the protocol simulator, never a real provider call.
+# SECRET_ENCRYPTION_KEY is supplied by the calling script so a key can still be
+# saved (encrypted) without reaching a real provider.
 services:
   migrate:
     image: ai-company-os-backend:phase02-test

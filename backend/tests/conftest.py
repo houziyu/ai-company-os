@@ -7,6 +7,7 @@ check constraints or transactional DDL).
 
 from __future__ import annotations
 
+import base64
 import os
 import uuid
 from collections.abc import Iterator
@@ -68,6 +69,12 @@ def database_url(database_template: str) -> Iterator[str]:
         engine.dispose()
 
 
+# Fixed test data key for provider-credential encryption (ADR-0006). A real
+# deployment generates its own; tests need a stable key so a provider saved in
+# one app instance can be probed by another.
+TEST_SECRET_ENCRYPTION_KEY = base64.b64encode(b"0123456789abcdef0123456789abcdef").decode()
+
+
 @pytest.fixture()
 def settings(database_url: str) -> Settings:
     return Settings(
@@ -81,6 +88,7 @@ def settings(database_url: str) -> Settings:
         password_min_length=12,
         lockout_threshold=3,
         lockout_minutes=5,
+        secret_encryption_key=TEST_SECRET_ENCRYPTION_KEY,
     )
 
 

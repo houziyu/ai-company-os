@@ -13,7 +13,7 @@ from datetime import datetime
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.domain.enums import ProbeOutcome, SecretSource
+from app.domain.enums import ProbeOutcome
 from app.models.organization import (
     Agent,
     AgentDutyOverrideHistory,
@@ -311,6 +311,8 @@ class ProviderRepository:
         kind: str,
         base_url: str,
         secret_ref: str | None,
+        secret_ciphertext: str | None,
+        secret_source: str,
         status: str,
         notes: str | None,
         timeout_seconds: float,
@@ -321,7 +323,8 @@ class ProviderRepository:
             kind=kind,
             base_url=base_url,
             secret_ref=secret_ref,
-            secret_source=SecretSource.ENV.value,
+            secret_ciphertext=secret_ciphertext,
+            secret_source=secret_source,
             status=status,
             notes=notes,
             timeout_seconds=timeout_seconds,

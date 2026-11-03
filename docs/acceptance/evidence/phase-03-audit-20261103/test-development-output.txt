@@ -1,0 +1,944 @@
+FFFFFFF                                                                  [100%]
+================================== FAILURES ===================================
+_____________ test_missing_secret_does_not_leave_budget_reserved ______________
+
+client = <starlette.testclient.TestClient object at 0x00000195F4B05BE0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_4773b72ab3), autoflush=False, expire_on_commit=False)
+
+    def test_missing_secret_does_not_leave_budget_reserved(client, session_factory):
+        headers, _ = bootstrap(client)
+        model_id = configured_model(client, headers)
+        response = client.post(f"/api/v1/models/{model_id}/probe", headers=headers)
+        assert response.status_code == 200, response.text
+        assert response.json()["callCount"] == 0
+        assert response.json()["errorCode"] == "MISSING_SECRET"
+        with session_factory() as session:
+            account = session.scalar(select(BudgetAccount).where(BudgetAccount.scope == "COMPANY"))
+>           assert account.reserved_tokens == 0, f"No provider call, but reserved={account.reserved_tokens}"
+E           AssertionError: No provider call, but reserved=512
+E           assert 512 == 0
+E            +  where 512 = <app.models.tasks.BudgetAccount object at 0x00000195F4A17A80>.reserved_tokens
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:63: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:39:57.264987+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Running upgrade e5b7c9d1a2f4 -> f6c8d0e2b4a7, Re-publish history above both legacy cursor domains without losing events.
+INFO  [alembic.runtime.migration] Running upgrade f6c8d0e2b4a7 -> a7d2e5c81b64, provider credentials: encrypted at rest (ADR-0006)
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:39:57.417367+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:39:57.422828+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "36bc00a8bcd745cf9533a91c0f1d33bc", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 154.97, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.423683+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:57.492291+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:57.505705+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "dcef7570e728424b93c44559e1b0878a", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 79.1, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.506187+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:57.577449+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "236fc5fba7064f08b4f4b881b88c6631", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 68.69, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.577903+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:57.596036+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:57.599965+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b648fa556da245f39c13c40c96a3947f", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 19.38, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.600364+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:57.625879+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "442fc7450a9c4ddcaf3149b4a6cd29a9", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 22.47, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.626278+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:57.732134+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b6fda027446d47449635e4607b61b542", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 103.15, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:57.732551+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models/1/probe "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:39:58.074809+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________________ test_partial_probe_usage_is_conservative ___________________
+
+client = <starlette.testclient.TestClient object at 0x00000195F4B7DE50>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_41af8af20d), autoflush=False, expire_on_commit=False)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000195F4B0F5C0>
+
+    def test_partial_probe_usage_is_conservative(client, session_factory, monkeypatch):
+        headers, _ = bootstrap(client)
+        monkeypatch.setenv("AUDIT_MODEL_KEY", "test-only")
+        model_id = configured_model(client, headers, "AUDIT_MODEL_KEY")
+        with transport_client(client, lambda request: provider_response({"prompt_tokens": 7})) as fresh:
+            response = fresh.post(f"/api/v1/models/{model_id}/probe", headers=headers)
+        assert response.status_code == 200, response.text
+        assert response.json()["callCount"] == 1
+        assert response.json()["usageKnown"] is False
+        with session_factory() as session:
+            hold = session.scalar(select(BudgetReservation).where(BudgetReservation.kind == "PROBE"))
+>           assert (hold.settled_tokens, hold.needs_reconciliation) == (hold.amount_tokens, True), (
+                f"partial usage settled={hold.settled_tokens}, hold={hold.amount_tokens}, "
+                f"reconciliation={hold.needs_reconciliation}"
+            )
+E           AssertionError: partial usage settled=7, hold=512, reconciliation=False
+E           assert (7, False) == (512, True)
+E             
+E             At index 0 diff: 7 != 512
+E             Use -v to get more diff
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:77: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:39:58.908809+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:39:59.079419+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.085054+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e1cf2084b2854e8f802a95d65658685b", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 174.03, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.085555+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.147938+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.160509+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d1f7e27c89274e008ffa7e1aebfe4ae2", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 72.39, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.160977+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.225507+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5004bc7bc85a4fd69aa21ae560282333", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 61.85, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.225981+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.243312+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.247284+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "53cb4d0b7244462c8fa6975d8db02318", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 18.54, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.247674+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.271816+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0af9c0f1f06847e0b8389e1860b5e1d0", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 21.53, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.272254+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.276000+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-03T02:39:59.386428+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.418690+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "41bbc01dcdb449d2aff28d033f606565", "method": "POST", "path": "/api/v1/models/1/probe", "status": 200, "duration_ms": 141.21, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.419133+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.420516+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:39:59.434632+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________ test_pause_committed_before_probe_reservation_blocks_call __________
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_utils.py", line 104, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 847, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py", line 104, in test_pause_committed_before_probe_reservation_blocks_call
+    |     with transport_client(client, handler) as fresh:
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 1144, in post
+    |     return self.request(
+    |            ~~~~~~~~~~~~^
+    |         "POST",
+    |         ^^^^^^^
+    |     ...<11 lines>...
+    |         extensions=extensions,
+    |         ^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 518, in request
+    |     return super().request(
+    |            ~~~~~~~~~~~~~~~^
+    |         method,
+    |         ^^^^^^^
+    |     ...<11 lines>...
+    |         extensions=extensions,
+    |         ^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 825, in request
+    |     return self.send(request, auth=auth, follow_redirects=follow_redirects)
+    |            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 928, in send
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 922, in send
+    |     response.read()
+    |     ~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 881, in read
+    |     self._content = b"".join(self.iter_bytes())
+    |                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 897, in iter_bytes
+    |     for raw_bytes in self.iter_raw():
+    |                      ~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 951, in iter_raw
+    |     for raw_stream_bytes in self.stream:
+    |                             ^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 153, in __iter__
+    |     for chunk in self._stream:
+    |                  ^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 384, in iter_body
+    |     exit_stack.close()
+    |     ~~~~~~~~~~~~~~~~^^
+    |   File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 627, in close
+    |     self.__exit__(None, None, None)
+    |     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 619, in __exit__
+    |     raise exc
+    |   File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 604, in __exit__
+    |     if cb(*exc_details):
+    |        ~~^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 399, in close_app
+    |     raise exception
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\from_thread.py", line 265, in _call_func
+    |     retval = await retval_or_awaitable
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 366, in run_app
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\applications.py", line 1194, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 37, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 102, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    |     await self.simple_response(scope, receive, send, request_headers=headers)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 149, in simple_response
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\routing.py", line 683, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2811, in app
+    |     await route.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1839, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2894, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1865, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1328, in handle
+    |     await effective_context.app(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 166, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 152, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 745, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 374, in run_endpoint_function
+    |     return await run_in_threadpool(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |         _run_sync_endpoint, function=dependant.call, arguments=values
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    |     return await anyio.to_thread.run_sync(func)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    |     result = context.run(func, *args)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 244, in _run_sync_endpoint
+    |     return function(**arguments)
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\v1\model_centre.py", line 370, in probe_model
+    |     outcome = service.probe_model(
+    |         session,
+    |     ...<3 lines>...
+    |         ip_address=client_ip(request),
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 909, in probe_model
+    |     probe_row = self._commit_probe_intent(
+    |         session,
+    |     ...<5 lines>...
+    |         reserve_tokens=self._probe_reservation_tokens if budgeted else 0,
+    |     )
+    |   File "C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py", line 93, in pause_before_intent
+    |     CompanyGovernanceService().pause(pause_session, owner_user_id=1, reason="audit pause")
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | AssertionError: assert 503 == 200
+    |  +  where 503 = <Response [503 Service Unavailable]>.status_code
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py", line 104, in test_pause_committed_before_probe_reservation_blocks_call
+    with transport_client(client, handler) as fresh:
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 1144, in post
+    return self.request(
+           ~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 518, in request
+    return super().request(
+           ~~~~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 928, in send
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 922, in send
+    response.read()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 881, in read
+    self._content = b"".join(self.iter_bytes())
+                    ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 897, in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ~~~~~~~~~~~~~^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_models.py", line 951, in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\httpx\_client.py", line 153, in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 384, in iter_body
+    exit_stack.close()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 627, in close
+    self.__exit__(None, None, None)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 619, in __exit__
+    raise exc
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 604, in __exit__
+    if cb(*exc_details):
+       ~~^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 399, in close_app
+    raise exception
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\from_thread.py", line 265, in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\testclient.py", line 366, in run_app
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\applications.py", line 1194, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 37, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\middleware.py", line 102, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2811, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1839, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2894, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1865, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1328, in handle
+    await effective_context.app(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 166, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 152, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 745, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\routing.py", line 374, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\telemetry\_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\api\v1\model_centre.py", line 370, in probe_model
+    outcome = service.probe_model(
+        session,
+    ...<3 lines>...
+        ip_address=client_ip(request),
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\backend\app\services\model_centre_service.py", line 909, in probe_model
+    probe_row = self._commit_probe_intent(
+        session,
+    ...<5 lines>...
+        reserve_tokens=self._probe_reservation_tokens if budgeted else 0,
+    )
+  File "C:\Users\admin\Desktop\ai-company-os\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py", line 93, in pause_before_intent
+    CompanyGovernanceService().pause(pause_session, owner_user_id=1, reason="audit pause")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: assert 503 == 200
+ +  where 503 = <Response [503 Service Unavailable]>.status_code
+
+The above exception was the direct cause of the following exception:
+
+client = <starlette.testclient.TestClient object at 0x00000195F4BA6520>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000195F4BA4D60>
+
+    def test_pause_committed_before_probe_reservation_blocks_call(client, monkeypatch):
+        headers, _ = bootstrap(client)
+        monkeypatch.setenv("AUDIT_MODEL_KEY", "test-only")
+        model_id = configured_model(client, headers, "AUDIT_MODEL_KEY")
+        original = ModelCentreService._commit_probe_intent
+    
+        def pause_before_intent(self, *args, **kwargs):
+            # Arrange the legitimate interleaving after the unlocked read but before
+            # the reservation transaction acquires its company lock.
+            paused = client.post("/api/v1/company/pause", json={}, headers=headers)
+            assert paused.status_code == 200
+            return original(self, *args, **kwargs)
+    
+        monkeypatch.setattr(ModelCentreService, "_commit_probe_intent", pause_before_intent)
+        calls = []
+    
+        def handler(request):
+            calls.append(request)
+            return provider_response({"prompt_tokens": 7, "completion_tokens": 3})
+    
+        with transport_client(client, handler) as fresh:
+>           response = fresh.post(f"/api/v1/models/{model_id}/probe", headers=headers)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:518: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:928: in send
+    raise exc
+.venv\Lib\site-packages\httpx\_client.py:922: in send
+    response.read()
+.venv\Lib\site-packages\httpx\_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:384: in iter_body
+    exit_stack.close()
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:627: in close
+    self.__exit__(None, None, None)
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:619: in __exit__
+    raise exc
+..\..\..\AppData\Local\Programs\Python\Python313\Lib\contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:399: in close_app
+    raise exception
+.venv\Lib\site-packages\anyio\from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\applications.py:1194: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\fastapi\telemetry\_asgi.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\api\middleware.py:37: in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\middleware\base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv\Lib\site-packages\starlette\middleware\base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv\Lib\site-packages\starlette\middleware\base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+app\api\middleware.py:102: in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\middleware\base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv\Lib\site-packages\starlette\middleware\base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv\Lib\site-packages\starlette\middleware\cors.py:91: in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+.venv\Lib\site-packages\starlette\middleware\cors.py:149: in simple_response
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2811: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1839: in handle
+    await self.original_router.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2894: in handle
+    await included_router._handle_selected(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1865: in _handle_selected
+    await original_route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1328: in handle
+    await effective_context.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:166: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:152: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:745: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:374: in run_endpoint_function
+    return await run_in_threadpool(
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\telemetry\_api.py:244: in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+app\api\v1\model_centre.py:370: in probe_model
+    outcome = service.probe_model(
+app\services\model_centre_service.py:909: in probe_model
+    probe_row = self._commit_probe_intent(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <app.services.model_centre_service.ModelCentreService object at 0x00000195F4B0F230>
+args = (<sqlalchemy.orm.session.Session object at 0x00000195F4AB6E40>,)
+kwargs = {'model_id': 1, 'provider_id': 1, 'actor_user_id': 1, 'request_id': 'd6f93e95ba1d43e3b6ad79573a772c1a', ...}
+
+    def pause_before_intent(self, *args, **kwargs):
+        # Arrange the legitimate interleaving after the unlocked read but before
+        # the reservation transaction acquires its company lock.
+        with session_factory() as pause_session:
+>           CompanyGovernanceService().pause(pause_session, owner_user_id=1, reason="audit pause")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert 503 == 200
+E            +  where 503 = <Response [503 Service Unavailable]>.status_code
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:93: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:39:59.589395+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:39:59.761167+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.766584+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d06b1da0d9004332b17f1a28f75f74ef", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 173.44, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.767150+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.833740+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.845874+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "793952277fe442f48fe5922f13806e70", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 76.29, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.846302+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.907929+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ee52edf7031443298a09aef7ed96ec60", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 59.27, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.908343+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.924795+00:00", "level": "INFO", "logger": "app.services.model_centre_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:39:59.929297+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fffad888d7ff4a6dbef6f758fd8f5408", "method": "POST", "path": "/api/v1/providers", "status": 201, "duration_ms": 18.76, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.929726+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.955057+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "493a9efeb2344f538824837c9cd3c9a5", "method": "POST", "path": "/api/v1/models", "status": 201, "duration_ms": 22.64, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:39:59.955511+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:39:59.959188+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+{"ts": "2026-11-03T02:40:45.420727+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "database error handling request", "error": "OperationalError", "request_id": "0b03d6b0bd984c2cba04d9b0278bde0c"}
+{"ts": "2026-11-03T02:40:45.421349+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0b03d6b0bd984c2cba04d9b0278bde0c", "method": "POST", "path": "/api/v1/company/pause", "status": 503, "duration_ms": 45421.25, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:45.421925+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:45.425575+00:00", "level": "ERROR", "logger": "app.api.errors", "message": "unhandled exception", "error": "AssertionError", "exception_type": "AssertionError", "traceback": [{"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\errors.py", "line": 164, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_asgi.py", "line": 151, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 37, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 203, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\middleware.py", "line": 102, "function": "dispatch"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 179, "function": "call_next"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\base.py", "line": 149, "function": "coro"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 91, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\cors.py", "line": 149, "function": "simple_response"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py", "line": 63, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\middleware\\asyncexitstack.py", "line": 18, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\routing.py", "line": 683, "function": "__call__"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2811, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1839, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 2894, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1865, "function": "_handle_selected"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 1328, "function": "handle"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 166, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 53, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\_exception_handler.py", "line": 42, "function": "wrapped_app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 152, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 745, "function": "app"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\routing.py", "line": 374, "function": "run_endpoint_function"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\starlette\\concurrency.py", "line": 34, "function": "run_in_threadpool"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\to_thread.py", "line": 65, "function": "run_sync"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 2706, "function": "run_sync_in_worker_thread"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\anyio\\_backends\\_asyncio.py", "line": 1100, "function": "run"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\.venv\\Lib\\site-packages\\fastapi\\telemetry\\_api.py", "line": 244, "function": "_run_sync_endpoint"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\api\\v1\\model_centre.py", "line": 370, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\backend\\app\\services\\model_centre_service.py", "line": 909, "function": "probe_model"}, {"file": "C:\\Users\\admin\\Desktop\\ai-company-os\\docs\\acceptance\\evidence\\phase-03-audit-20261103\\test_audit.py", "line": 93, "function": "pause_before_intent"}]}
+{"ts": "2026-11-03T02:40:45.436747+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:45.437982+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.services.model_centre_service:model_centre_service.py:414 provider created
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/providers "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/models "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:40:45.720885+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+_____________ test_fence_cannot_modify_step_of_another_execution ______________
+
+client = <starlette.testclient.TestClient object at 0x00000195F6279EB0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_cecd091b9c), autoflush=False, expire_on_commit=False)
+
+    
+    def test_fence_cannot_modify_step_of_another_execution(client, session_factory):
+        headers, first = claimed(client, session_factory)
+        step_id = open_step(session_factory, first)
+        assert create_task(client, headers, first.project_id).status_code == 201
+        second = _claim(session_factory, worker_id="second-worker")
+        try:
+            finish_step(session_factory, second, step_id, 7)
+        except AppError:
+            pass
+        with session_factory() as session:
+>           step = session.get(TaskExecutionStep, step_id)
+E           AssertionError: Unrelated execution changed first step to SUCCEEDED
+E           assert 'SUCCEEDED' == 'RUNNING'
+E             
+E             - RUNNING
+E             + SUCCEEDED
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:138: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:40:45.878489+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:40:46.062940+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:40:46.071362+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8df511ae9a234e7eb113a0067a45d350", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 190.33, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.072181+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.146072+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:40:46.158764+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8e973020e0b946089df6374162188f67", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 81.72, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.159185+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.224154+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a045c92cd10a42208dc81e09ec2019a1", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 61.62, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.224645+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.319643+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "418aca274f424f0789129a2bc0d02902", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 90.93, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.320085+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.436077+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a1cba721afd7474ab0794761d00736b5", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 57.6, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.436528+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:40:46.493213+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+______________ test_duplicate_step_result_keeps_usage_consistent ______________
+
+client = <starlette.testclient.TestClient object at 0x00000195F6A306B0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_c95df7009b), autoflush=False, expire_on_commit=False)
+
+    
+    def test_duplicate_step_result_keeps_usage_consistent(client, session_factory):
+        _, claim = claimed(client, session_factory)
+        step_id = open_step(session_factory, claim)
+        finish_step(session_factory, claim, step_id, 40)
+        try:
+            finish_step(session_factory, claim, step_id, 7)
+        except AppError:
+            pass
+        with session_factory() as session:
+            step = session.get(TaskExecutionStep, step_id)
+>           hold = session.scalar(select(BudgetReservation).where(BudgetReservation.step_id == step_id))
+E           AssertionError: step=7, settled ledger=40
+E           assert 7 == 40
+E            +  where 7 = <app.models.tasks.TaskExecutionStep object at 0x00000195F649B130>.prompt_tokens
+E            +  and   40 = <app.models.tasks.BudgetReservation object at 0x00000195F7CBF250>.settled_tokens
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:152: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:40:46.643900+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:40:46.803649+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:40:46.808889+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "5ec9a52f071241a6ab2b6f87f36b1568", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 161.94, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.809414+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.873764+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:40:46.886286+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e88bc9959b3c456eb1b7d9916ac7ec01", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 74.54, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.886712+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:46.953558+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "3e732983dc3c4dd19cdad22331502493", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 64.7, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:46.953973+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:47.041470+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b59f50fba4ed40a1a50709843f5938cb", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 83.18, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:47.041973+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:40:47.142045+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+__________________ test_step_update_publishes_progress_event __________________
+
+client = <starlette.testclient.TestClient object at 0x00000195F6A31BF0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_0209934d7f), autoflush=False, expire_on_commit=False)
+
+    
+    def test_step_update_publishes_progress_event(client, session_factory):
+        _, claim = claimed(client, session_factory)
+        step_id = open_step(session_factory, claim)
+        finish_step(session_factory, claim, step_id, 40)
+        with session_factory() as session:
+            events = session.scalars(select(DomainEvent).where(
+                DomainEvent.task_id == claim.task_id,
+>               DomainEvent.event_type == "TASK_STEP_UPDATED")).all()
+E           AssertionError: Step committed, but no progress event exists for SSE to deliver
+E           assert []
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:165: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:40:47.274251+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:40:47.455555+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:40:47.463905+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "814918253f3345f68fc88f2606fe8027", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 186.89, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:47.464552+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:47.553902+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:40:47.567020+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "89447b71af494576b321665bd2473ba8", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 98.02, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:47.567539+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:47.635529+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0267301239094a6ba7ceb5694bd66d2a", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 65.17, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:47.636011+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:47.724003+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "324051225b4c4f90874d0485a9271635", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 85.74, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:47.724515+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:40:47.820135+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+________ test_repeated_retry_command_does_not_schedule_another_attempt ________
+
+client = <starlette.testclient.TestClient object at 0x00000195F649B680>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://acos:***@127.0.0.1:55449/acos_test_c5f805bd73), autoflush=False, expire_on_commit=False)
+
+    
+    def test_repeated_retry_command_does_not_schedule_another_attempt(client, session_factory):
+        headers, project = bootstrap(client)
+        task_id = create_task(client, headers, project["id"],
+                              demo_behavior="PERMANENT_FAILURE", max_auto_retries=0).json()["task"]["id"]
+        runtime = run_worker(session_factory)
+        assert runtime.run_once()
+        # Same request key represents the same logical retry even when the response
+        # was lost and its newly scheduled execution has already finished.
+        request_headers = {**headers, "Idempotency-Key": "audit-logical-retry"}
+        url = f"/api/v1/tasks/{task_id}/retry"
+        assert client.post(url, json={}, headers=request_headers).status_code == 200
+        assert runtime.run_once()
+        response = client.post(url, json={}, headers=request_headers)
+>       assert response.status_code == 200, response.text
+E       AssertionError: Duplicate retry scheduled a third execution
+E       assert True is False
+E        +  where True = run_once()
+E        +    where run_once = <app.workers.task_worker.WorkerRuntime object at 0x00000195F4B067B0>.run_once
+
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:182: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:40:47.951596+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:40:48.089796+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:40:48.094552+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "275a0e93c18148a1afe68cd1051751d4", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 140.69, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.095087+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:48.161919+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:40:48.174988+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "94b90a26ba234f99a8f2c2c9b5011b36", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 77.03, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.175429+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:48.242125+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8806b692f3f44b0cbb9bb47ab6a07dc9", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 64.06, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.242739+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:48.332834+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "403f66d625534e11855817220cb720b5", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 86.97, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.333277+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:48.580462+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "e166dea2c1714d71aa4b02136dd39828", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 200, "duration_ms": 56.48, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.580920+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:40:48.803969+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4d1c74eac1c14343bf7e5480eff199ab", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 200, "duration_ms": 61.92, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:40:48.804432+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/retry "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/retry "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:40:48.967399+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-audit-20261103/test_audit.py::test_missing_secret_does_not_leave_budget_reserved
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_missing_secret_does_not_leave_budget_reserved
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_partial_probe_usage_is_conservative
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_pause_committed_before_probe_reservation_blocks_call
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_fence_cannot_modify_step_of_another_execution
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_duplicate_step_result_keeps_usage_consistent
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_step_update_publishes_progress_event
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_repeated_retry_command_does_not_schedule_another_attempt
+7 failed, 2 warnings in 52.61s

@@ -1,0 +1,52 @@
+# Isolated Phase 03 acceptance stack.
+#
+# Always use with -p acos-phase03-test and --env-file .env.example; it never
+# shares images, ports or the database volume with the development or production
+# stack.
+#
+# Two worker services run from the *same* image so the "two workers race for one
+# task" evidence comes from two real, separate containers rather than from two
+# threads inside one process.
+services:
+  migrate:
+    image: ai-company-os-backend:phase03-test
+  api:
+    image: ai-company-os-backend:phase03-test
+  worker:
+    image: ai-company-os-backend:phase03-test
+    command: ["python", "-m", "app.workers.task_worker"]
+  worker2:
+    image: ai-company-os-backend:phase03-test
+    command: ["python", "-m", "app.workers.task_worker"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL in .env}
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      WORKER_NAME: worker-2
+      WORKER_HEALTH_PORT: "9101"
+      WORKER_HEARTBEAT_INTERVAL_SECONDS: ${WORKER_HEARTBEAT_INTERVAL_SECONDS:-5}
+      WORKER_LEASE_SECONDS: ${WORKER_LEASE_SECONDS:-12}
+      WORKER_POLL_INTERVAL_SECONDS: ${WORKER_POLL_INTERVAL_SECONDS:-1}
+      DEMO_SLOW_STEP_SECONDS: ${DEMO_SLOW_STEP_SECONDS:-20}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      # The second worker answers on its own port; without this its healthcheck
+      # would probe 9100 and report the first worker's health.
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9101/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    stop_grace_period: 20s
+  web:
+    image: ai-company-os-web:phase03-test
+volumes:
+  postgres_data:
+    name: acos-phase03-test_postgres_data

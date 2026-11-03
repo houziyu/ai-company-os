@@ -10,9 +10,10 @@
  *    is "保存配置"; "测试连接" is a secondary action that calls a different
  *    endpoint against already-saved settings, so a probe can never apply an
  *    unconfirmed edit.
- * 2. **No secret is displayed or collected as a value.** The form takes an
- *    environment-variable *name* and the list shows 已配置/未配置. There is no
- *    input where a key could be typed, pasted or revealed.
+ * 2. **A key is submitted once and never shown again.** The form takes the API
+ *    key the operator typed, masks it, and leaves it empty when editing so an
+ *    unfilled box means "keep the saved key". The list shows a state badge
+ *    (已配置 / 未配置 / 无法解密), never a value, and there is no reveal action.
  *
  * A probe spends tokens, so the button is disabled while a probe runs, the
  * warning is shown before the action, and the result reports whether usage was
@@ -106,7 +107,11 @@ const editingProvider = ref<ProviderResponse | null>(null)
 const formName = ref('')
 const formKind = ref<ProviderKind>('DEEPSEEK')
 const formBaseUrl = ref('')
-const formSecretRef = ref('')
+// The key box is always empty on open: a stored key is never sent to the
+// browser, so there is nothing to prefill and no value to leak into the DOM.
+const formSecretValue = ref('')
+// True when the operator explicitly clears the saved key in the edit drawer.
+const formClearSecret = ref(false)
 const formTimeout = ref<number>(30)
 const formTimeoutText = ref<string>('30')
 const formNotes = ref('')
@@ -167,8 +172,22 @@ function statusLabel(status: Enablement): string {
 }
 
 function secretLabel(provider: ProviderResponse): string {
-  if (!provider.secretRef) return '未设置密钥引用'
-  return provider.secretConfigured ? '已配置' : '未配置'
+  switch (provider.secretState) {
+    case 'CONFIGURED':
+      return provider.secretSource === 'ENV' ? '已配置（环境变量）' : '已配置（加密保存）'
+    case 'UNDECRYPTABLE':
+      return '无法解密'
+    case 'MISSING_ENV':
+      return '未配置（环境变量缺失）'
+    default:
+      return '未配置'
+  }
+}
+
+function secretTone(provider: ProviderResponse): 'success' | 'warning' | 'danger' {
+  if (provider.secretState === 'CONFIGURED') return 'success'
+  if (provider.secretState === 'UNDECRYPTABLE') return 'danger'
+  return 'warning'
 }
 
 /** Truthful capability text: protocol compatibility is not verified ability. */
@@ -207,7 +226,8 @@ function openCreateProvider() {
   formName.value = ''
   formKind.value = 'DEEPSEEK'
   formBaseUrl.value = preset.value?.baseUrl ?? ''
-  formSecretRef.value = preset.value?.secretRef ?? ''
+  formSecretValue.value = ''
+  formClearSecret.value = false
   formTimeout.value = 30
   formTimeoutText.value = '30'
   formNotes.value = preset.value?.notes ?? ''
@@ -221,7 +241,10 @@ function openEditProvider(provider: ProviderResponse) {
   formName.value = provider.name
   formKind.value = provider.kind
   formBaseUrl.value = provider.baseUrl
-  formSecretRef.value = provider.secretRef ?? ''
+  // Deliberately blank: the saved key is not sent to the browser, so an empty
+  // box means "keep it" and typing replaces it.
+  formSecretValue.value = ''
+  formClearSecret.value = false
   formTimeout.value = provider.timeoutSeconds
   formTimeoutText.value = String(provider.timeoutSeconds)
   formNotes.value = provider.notes ?? ''
@@ -234,8 +257,13 @@ function applyPreset() {
   if (!preset.value) return
   formKind.value = preset.value.kind
   formBaseUrl.value = preset.value.baseUrl
-  formSecretRef.value = preset.value.secretRef
   formNotes.value = preset.value.notes
+}
+
+/** Clear the saved key in the edit drawer (submitted with the next save). */
+function toggleClearSecret() {
+  formClearSecret.value = !formClearSecret.value
+  if (formClearSecret.value) formSecretValue.value = ''
 }
 
 async function saveProvider() {
@@ -243,7 +271,7 @@ async function saveProvider() {
   savingProvider.value = true
   providerError.value = null
   providerFieldErrors.value = {}
-  const secretRef = formSecretRef.value.trim()
+  const secretValue = formSecretValue.value.trim()
   const parsedTimeout = Number(formTimeoutText.value.replace(',', '.'))
   if (!Number.isFinite(parsedTimeout)) {
     providerFieldErrors.value = { timeoutSeconds: '请输入数字（秒）。' }
@@ -260,8 +288,10 @@ async function saveProvider() {
         name: formName.value.trim(),
         kind: formKind.value,
         baseUrl: formBaseUrl.value.trim(),
-        secretRef: secretRef === '' ? null : secretRef,
-        changeSecretRef: true,
+        // A typed key replaces the stored one; an explicit clear removes it.
+        // Neither is sent, so the saved key survives an unrelated edit.
+        secretValue: secretValue === '' ? null : secretValue,
+        changeSecretValue: secretValue !== '' || formClearSecret.value,
         timeoutSeconds: formTimeout.value,
         // Explicit null so clearing the box actually clears the note; the server
         // distinguishes "omitted" from "cleared".
@@ -272,12 +302,17 @@ async function saveProvider() {
         name: formName.value.trim(),
         kind: formKind.value,
         baseUrl: formBaseUrl.value.trim(),
-        secretRef: secretRef === '' ? null : secretRef,
+        secretValue: secretValue === '' ? null : secretValue,
         timeoutSeconds: formTimeout.value,
         notes: formNotes.value.trim() === '' ? null : formNotes.value.trim(),
       })
     }
     providerDrawerOpen.value = false
+    // Drop the submitted value from component state (and therefore from the
+    // input element) as soon as the save succeeds. The drawer is kept mounted,
+    // so without this the typed key would remain in the DOM after closing.
+    formSecretValue.value = ''
+    formClearSecret.value = false
     await load()
   } catch (error) {
     if (error instanceof ApiError) {
@@ -425,7 +460,7 @@ async function runProbe(model: ModelResponse) {
   <div class="models">
     <PageHeader
       title="模型中心"
-      description="分别管理供应商、模型与员工分配。密钥只以服务端环境变量引用的形式出现，界面不显示、不接收密钥值。"
+      description="分别管理供应商、模型与员工分配。API 密钥在服务端加密保存，界面只显示配置状态，不回显已保存的密钥。"
     >
       <template #actions>
         <AppButton @click="openCreateProvider">添加供应商</AppButton>
@@ -470,7 +505,7 @@ async function runProbe(model: ModelResponse) {
         <EmptyState
           v-if="providers.length === 0"
           title="还没有供应商"
-          description="添加一个 DeepSeek 预设或自定义 OpenAI 兼容接口。密钥值不会进入浏览器或数据库。"
+          description="添加一个 DeepSeek 预设或自定义 OpenAI 兼容接口。密钥只提交一次，保存后不再显示。"
         >
           <template #action>
             <AppButton @click="openCreateProvider">添加供应商</AppButton>
@@ -496,13 +531,14 @@ async function runProbe(model: ModelResponse) {
                 <dd>{{ provider.kind === 'DEEPSEEK' ? 'DeepSeek 预设' : 'OpenAI 兼容' }}</dd>
               </div>
               <div>
-                <dt>密钥引用</dt>
+                <dt>密钥</dt>
                 <dd>
-                  <span class="models__mono">{{ provider.secretRef ?? '—' }}</span>
-                  <StatusBadge
-                    :label="secretLabel(provider)"
-                    :tone="provider.secretConfigured ? 'success' : 'warning'"
-                  />
+                  <!-- Legacy ENV rows still name their variable; a DB-stored key
+                       has no reference to show, only its state. -->
+                  <span v-if="provider.secretRef" class="models__mono">
+                    {{ provider.secretRef }}
+                  </span>
+                  <StatusBadge :label="secretLabel(provider)" :tone="secretTone(provider)" />
                 </dd>
               </div>
               <div>
@@ -849,21 +885,50 @@ async function runProbe(model: ModelResponse) {
         </FormField>
 
         <FormField
-          label="密钥引用（环境变量名）"
-          field-name="provider-secret-ref"
-          hint="填写服务端环境变量名，例如 DEEPSEEK_API_KEY。系统不接收、不显示密钥值；界面只显示是否已在服务端配置。"
-          :error="providerFieldErrors.secretRef ?? null"
+          label="API 密钥"
+          field-name="provider-secret-value"
+          :hint="
+            editingProvider
+              ? '留空表示保持已保存的密钥不变；填写新值则替换。密钥保存后不再显示。'
+              : '直接粘贴供应商提供的密钥。保存在服务端并加密，保存后不再显示。'
+          "
+          :error="providerFieldErrors.secretValue ?? null"
         >
           <template #default="{ controlId, describedBy, invalid }">
             <AppInput
               :id="controlId"
-              v-model="formSecretRef"
+              v-model="formSecretValue"
+              type="password"
+              autocomplete="new-password"
               :described-by="describedBy"
               :invalid="invalid"
-              placeholder="DEEPSEEK_API_KEY"
+              :disabled="formClearSecret"
+              :placeholder="editingProvider ? '留空则不修改' : '粘贴 API 密钥'"
             />
           </template>
         </FormField>
+
+        <!-- A legacy Phase 02 provider reads its key from the server
+             environment. It is shown read-only: the only forward path is to
+             type a key here, which replaces the reference. -->
+        <p v-if="editingProvider?.secretSource === 'ENV'" class="acos-caption models__legacy-secret">
+          当前密钥来自服务端环境变量
+          <span class="models__mono">{{ editingProvider.secretRef }}</span>
+          （旧配置）。填写上面的密钥将改用服务端加密保存的密钥。
+        </p>
+
+        <div v-if="editingProvider" class="models__clear-secret">
+          <AppButton variant="secondary" size="small" @click="toggleClearSecret">
+            {{ formClearSecret ? '保留已保存的密钥' : '清除已保存的密钥' }}
+          </AppButton>
+          <span class="acos-caption">
+            {{
+              formClearSecret
+                ? '保存后将删除服务端保存的密钥，供应商在重新填写前无法调用。'
+                : '供应商密钥只影响之后发起的调用，已有执行记录不受影响。'
+            }}
+          </span>
+        </div>
 
         <FormField
           label="超时（秒）"
@@ -1288,6 +1353,21 @@ async function runProbe(model: ModelResponse) {
   color: var(--acos-color-danger);
   font-size: var(--acos-font-caption-size);
   line-height: var(--acos-font-caption-line);
+}
+
+.models__legacy-secret {
+  margin: 0;
+  padding: var(--acos-space-12);
+  border-radius: var(--acos-radius-control);
+  background: var(--acos-color-surface-subtle);
+  color: var(--acos-color-text-secondary);
+}
+
+.models__clear-secret {
+  display: flex;
+  align-items: center;
+  gap: var(--acos-space-12);
+  flex-wrap: wrap;
 }
 
 .models__select:focus-visible,

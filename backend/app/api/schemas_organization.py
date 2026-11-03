@@ -1,8 +1,9 @@
 """Pydantic request/response models for the Phase 02 API surface.
 
-Everything a response can contain is deliberately non-secret. There is no field
-anywhere in this module that can carry a credential value: providers expose a
-*reference name* plus a boolean ``secret_configured``.
+Request models can accept a credential (``secretValue``) so the model centre can
+store one, but response models cannot: no field in this module can carry a
+credential value or its ciphertext. Providers report ``secretSource``,
+``secretState`` and the legacy ``secretRef`` name only.
 """
 
 from __future__ import annotations
@@ -10,7 +11,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_serializer
 
 from app.api.schemas import ApiModel
 
@@ -18,6 +19,8 @@ AgentStatusLiteral = Literal["ACTIVE", "PAUSED", "ARCHIVED"]
 ProviderKindLiteral = Literal["DEEPSEEK", "OPENAI_COMPATIBLE"]
 EnablementLiteral = Literal["ENABLED", "DISABLED"]
 ProbeOutcomeLiteral = Literal["PENDING", "SUCCESS", "FAILURE"]
+SecretSourceLiteral = Literal["ENV", "DB"]
+SecretStateLiteral = Literal["NONE", "CONFIGURED", "MISSING_ENV", "UNDECRYPTABLE"]
 
 
 # ------------------------------------------------------------------- company
@@ -168,8 +171,14 @@ class ProviderResponse(ApiModel):
     kind: ProviderKindLiteral
     version: int
     base_url: str
-    # Environment variable *name*. Never a value.
+    # Environment variable *name* for a legacy ENV row; null for DB-stored keys.
+    # Never a value.
     secret_ref: str | None
+    secret_source: SecretSourceLiteral | None
+    # NONE / CONFIGURED / MISSING_ENV / UNDECRYPTABLE. Never a value.
+    secret_state: SecretStateLiteral
+    # True only when the credential is usable right now (CONFIGURED). Kept for
+    # existing consumers (setup wizard, assignments tab).
     secret_configured: bool
     status: EnablementLiteral
     notes: str | None
@@ -183,6 +192,11 @@ class ProviderCreateRequest(ApiModel):
     name: str = Field(min_length=1, max_length=80)
     kind: ProviderKindLiteral = "OPENAI_COMPATIBLE"
     base_url: str = Field(min_length=1, max_length=300)
+    # ADR-0006: the key typed in the UI. Encrypted before it is stored; never
+    # echoed back. ``repr=False`` keeps it out of accidental debug output.
+    secret_value: str | None = Field(default=None, max_length=512, repr=False)
+    # Legacy Phase 02 field: an environment-variable *name*. Rejected when a
+    # secret_value is also submitted.
     secret_ref: str | None = Field(default=None, max_length=128)
     status: EnablementLiteral = "ENABLED"
     notes: str | None = Field(default=None, max_length=500)
@@ -197,13 +211,26 @@ class ProviderUpdateRequest(ApiModel):
     name: str | None = Field(default=None, min_length=1, max_length=80)
     kind: ProviderKindLiteral | None = None
     base_url: str | None = Field(default=None, min_length=1, max_length=300)
+    secret_value: str | None = Field(default=None, max_length=512, repr=False)
+    # Explicit flag: an omitted field cannot be told apart from "clear it". When
+    # true, a null/blank secretValue clears the stored key.
+    change_secret_value: bool = False
     secret_ref: str | None = Field(default=None, max_length=128)
-    # Explicit flag: null secretRef would otherwise be ambiguous between
-    # "clear the reference" and "leave it as it was".
+    # Legacy flag for the Phase 02 environment-variable reference.
     change_secret_ref: bool = False
     status: EnablementLiteral | None = None
     notes: str | None = Field(default=None, max_length=500)
     timeout_seconds: float | None = Field(default=None, ge=1, le=120)
+
+    @field_serializer("secret_value")
+    def _hide_secret_value(self, value: str | None) -> str | None:
+        """Never emit a submitted credential in a serialised request model.
+
+        Request models are not normally serialised, but logs and test dumps do it
+        by accident. Returning a fixed placeholder keeps the field present (so
+        the contract is unchanged) without exposing anything.
+        """
+        return None if value is None else "***"
 
 
 class ModelResponse(ApiModel):

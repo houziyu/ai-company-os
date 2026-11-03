@@ -56,6 +56,11 @@ class Settings(BaseSettings):
     enable_api_docs: bool = False
     log_level: str = "INFO"
 
+    # ADR-0006: base64 of 32 random bytes, used to encrypt provider credentials
+    # at rest. Unset means "cannot store a key" (saves are refused with a clear
+    # error); it never means "store it in the clear".
+    secret_encryption_key: str | None = None
+
     lockout_threshold: int = Field(default=10, ge=3, le=100)
     lockout_minutes: int = Field(default=5, ge=1, le=120)
     password_min_length: int = Field(default=12, ge=12, le=128)
@@ -63,6 +68,25 @@ class Settings(BaseSettings):
     worker_name: str = "worker-1"
     worker_health_port: int = Field(default=9100, ge=1, le=65535)
     worker_heartbeat_interval_seconds: float = Field(default=5.0, gt=0.5, le=300)
+    # Phase 03: how often an idle worker polls the queue, and how long a claimed
+    # attempt keeps its lease without a heartbeat. The lease must comfortably
+    # exceed one demo step; tests lower it to observe recovery quickly.
+    worker_poll_interval_seconds: float = Field(default=1.0, gt=0.05, le=60)
+    worker_lease_seconds: float = Field(default=30.0, ge=2.0, le=600)
+
+    # Demo processor pacing. Only used by the labelled rehearsal processor; the
+    # value is exposed so acceptance can make a long-running attempt observable.
+    # The upper bound is generousand exists only to catch a typo; a value longer
+    # than Docker's stop grace period is exactly how "interrupted, not gracefully
+    # finished" is reproduced on purpose.
+    demo_slow_step_seconds: float = Field(default=1.5, ge=0.0, le=600)
+
+    # Phase 03 budget defaults. A company account is created with a real, visible
+    # allowance instead of an invented unlimited one or zero: zero would block
+    # every paid call, unlimited would be a fiction. Operators can change it.
+    company_default_budget_tokens: int = Field(default=1_000_000, ge=0, le=10**12)
+    # Conservative hold for one connectivity probe; settled against reported usage.
+    probe_reservation_tokens: int = Field(default=512, ge=1, le=1_000_000)
 
     @field_validator("public_base_url")
     @classmethod

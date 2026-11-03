@@ -1,0 +1,49 @@
+============================= test session starts =============================
+collecting ... collected 34 items
+
+tests/test_phase03_review_fixes.py::test_r1_claimed_but_not_started_task_honours_stop_command[pause] PASSED [  2%]
+tests/test_phase03_review_fixes.py::test_r1_claimed_but_not_started_task_honours_stop_command[cancel] PASSED [  5%]
+tests/test_phase03_review_fixes.py::test_r1_pause_between_steps_stops_before_the_next_call PASSED [  8%]
+tests/test_phase03_review_fixes.py::test_r2_expired_lease_cannot_write_or_be_renewed PASSED [ 11%]
+tests/test_phase03_review_fixes.py::test_r2_late_write_after_recovery_is_refused PASSED [ 14%]
+tests/test_phase03_review_fixes.py::test_r3_recovery_waits_for_an_in_flight_step_transaction PASSED [ 17%]
+tests/test_phase03_review_fixes.py::test_r3_stale_worker_cannot_write_after_recovery PASSED [ 20%]
+tests/test_phase03_review_fixes.py::test_r4_recovery_without_retry_budget_blocks_without_crashing PASSED [ 23%]
+tests/test_phase03_review_fixes.py::test_r4_recovery_without_any_call_is_not_charged PASSED [ 26%]
+tests/test_phase03_review_fixes.py::test_r5_cancel_after_call_started_keeps_company_cost_conservative PASSED [ 29%]
+tests/test_phase03_review_fixes.py::test_r6_failed_step_unknown_usage_makes_the_attempt_unknown PASSED [ 32%]
+tests/test_phase03_review_fixes.py::test_r6_mixed_known_and_unknown_steps_keep_the_unknown_part PASSED [ 35%]
+tests/test_phase03_review_fixes.py::test_r7_first_task_uses_the_configured_company_default[0] PASSED [ 38%]
+tests/test_phase03_review_fixes.py::test_r7_first_task_uses_the_configured_company_default[7777] PASSED [ 41%]
+tests/test_phase03_review_fixes.py::test_r7_budget_page_first_and_task_first_agree PASSED [ 44%]
+tests/test_phase03_review_fixes.py::test_r7_task_first_then_budget_page_agree PASSED [ 47%]
+tests/test_phase03_review_fixes.py::test_r8_late_committed_event_is_not_skipped PASSED [ 50%]
+tests/test_phase03_review_fixes.py::test_r8_cursor_is_stable_for_already_committed_events PASSED [ 52%]
+tests/test_phase03_review_fixes.py::test_r8_http_replay_uses_the_publication_cursor PASSED [ 55%]
+tests/test_phase03_review_fixes.py::test_r9_auto_retry_leaves_no_partial_company_hold PASSED [ 58%]
+tests/test_phase03_review_fixes.py::test_r9_manual_retry_leaves_no_partial_hold_when_project_is_short PASSED [ 61%]
+tests/test_phase03_review_fixes.py::test_r10_settled_unknown_usage_is_visible_in_every_projection PASSED [ 64%]
+tests/test_phase03_review_fixes.py::test_r10_open_unknown_hold_is_distinguished_from_settled PASSED [ 67%]
+tests/test_phase03_review_fixes.py::test_r11_cancel_interrupted_task_reaches_cancelled PASSED [ 70%]
+tests/test_phase03_review_fixes.py::test_r11_cancel_blocked_task_reaches_cancelled PASSED [ 73%]
+tests/test_phase03_review_fixes.py::test_r11_cancel_running_task_stays_cooperative PASSED [ 76%]
+tests/test_phase03_review_fixes.py::test_r12_frontend_query_names_filter_and_limit PASSED [ 79%]
+tests/test_phase03_review_fixes.py::test_r12_sse_accepts_the_frontend_project_parameter PASSED [ 82%]
+tests/test_phase03_review_fixes.py::test_r13_same_key_after_lost_response_yields_one_task_and_one_hold PASSED [ 85%]
+tests/test_phase03_review_fixes.py::test_r13_different_body_under_the_same_key_is_refused PASSED [ 88%]
+tests/test_phase03_review_fixes.py::test_successful_run_leaves_no_open_hold_and_no_unknown PASSED [ 91%]
+tests/test_phase03_review_fixes.py::test_recovery_is_idempotent_under_a_second_scan PASSED [ 94%]
+tests/test_phase03_review_fixes.py::test_queued_cancel_still_releases_without_consuming PASSED [ 97%]
+tests/test_phase03_review_fixes.py::test_company_wide_invariants_hold_after_mixed_workload PASSED [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_phase03_review_fixes.py::test_r1_claimed_but_not_started_task_honours_stop_command[pause]
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 34 passed, 2 warnings in 26.81s =======================

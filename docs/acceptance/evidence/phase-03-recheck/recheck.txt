@@ -1,0 +1,389 @@
+FFFFF                                                                    [100%]
+================================== FAILURES ===================================
+_______ test_cancel_queued_retry_does_not_charge_previous_attempt_again _______
+
+client = <starlette.testclient.TestClient object at 0x0000024DC60892B0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_1c27e1d656), autoflush=False, expire_on_commit=False)
+
+    def test_cancel_queued_retry_does_not_charge_previous_attempt_again(client, session_factory):
+        headers, project = bootstrap(client)
+        response = create_task(client, headers, project['id'], demo_behavior='PERMANENT_FAILURE', max_auto_retries=0)
+        task_id = response.json()['task']['id']
+        run_worker(session_factory).run_once()
+        with session_factory() as session:
+            before = session.scalar(select(BudgetAccount.consumed_tokens).where(BudgetAccount.scope == 'COMPANY'))
+        assert before == 1000
+        assert client.post(f'/api/v1/tasks/{task_id}/retry', json={}, headers=headers).status_code == 200
+        assert client.post(f'/api/v1/tasks/{task_id}/cancel', json={}, headers=headers).status_code == 200
+        with session_factory() as session:
+            after = session.scalar(select(BudgetAccount.consumed_tokens).where(BudgetAccount.scope == 'COMPANY'))
+>       assert after == before, f'Queued retry made no call, but consumed increased from {before} to {after}'
+E       AssertionError: Queued retry made no call, but consumed increased from 1000 to 2000
+E       assert 2000 == 1000
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:34: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:32:58.533251+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:32:58.686957+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:32:58.693080+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b753e2982bca4de6845567909fec1772", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 155.92, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:58.693923+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:32:58.761704+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:32:58.775311+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "da8e128a229c4abfa5b3490511bb2e32", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 78.24, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:58.775767+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:32:58.851789+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b28accd0ec8f447f955bfdca570d3c40", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 73.68, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:58.852252+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:32:58.941077+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "69c5b317df894ee0a6669e0c9bbce171", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 85.8, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:58.941512+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:32:59.166118+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ee192c9be2944bf5a6839b2eb206e316", "method": "POST", "path": "/api/v1/tasks/1/retry", "status": 200, "duration_ms": 55.31, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:59.166564+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:32:59.223895+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0cbde0b8ee0f42cca5dc419b5088e530", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 54.57, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:32:59.224444+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/retry "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:32:59.582722+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+_____________ test_cancelled_unknown_step_consumes_its_task_hold ______________
+
+client = <starlette.testclient.TestClient object at 0x0000024DC60587D0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_53172fa187), autoflush=False, expire_on_commit=False)
+
+    def test_cancelled_unknown_step_consumes_its_task_hold(client, session_factory):
+        headers, claim = claimed(client, session_factory)
+        service = ExecutionService()
+        with session_factory() as session:
+            step = service.start_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                                      sequence=0, name='unknown in-flight call', estimated_tokens=64)
+            session.commit()
+        assert client.post(f'/api/v1/tasks/{claim.task_id}/cancel', json={}, headers=headers).status_code == 200
+        with session_factory() as session:
+            service.finish_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                                step_id=step.id, status=StepStatus.CANCELLED,
+                                prompt_tokens=None, completion_tokens=None, usage_known=False)
+            session.commit()
+        with session_factory() as session:
+            hold = session.scalars(select(BudgetReservation).where(BudgetReservation.step_id == step.id)).one()
+>           assert hold.status == 'SETTLED', f'Unknown call hold was {hold.status}, amount={hold.amount_tokens}'
+E           AssertionError: Unknown call hold was RELEASED, amount=64
+E           assert 'RELEASED' == 'SETTLED'
+E             
+E             - SETTLED
+E             + RELEASED
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:52: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:33:00.043946+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:33:00.183101+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:33:00.188586+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fd9566e5f9b9491fae546bddf89e5bca", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 142.21, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.189113+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.251571+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:33:00.263144+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "23408ea7dfb84b28be2ae61d4fcb2cd0", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 70.59, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.263592+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.327431+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a323ed02a10344b5878227d521b5b210", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 61.04, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.327964+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.404439+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "49da7d823e7f414f995be18142faa4fe", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 73.44, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.404920+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.481740+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "71e2fea137c04cb7aa38e0f50b48698f", "method": "POST", "path": "/api/v1/tasks/1/cancel", "status": 200, "duration_ms": 28.32, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.482242+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/tasks/1/cancel "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:33:00.521212+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+__________ test_migration_keeps_old_cursor_when_event_ids_have_gaps ___________
+
+client = <starlette.testclient.TestClient object at 0x0000024DC7343C50>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_715a68f572), autoflush=False, expire_on_commit=False)
+database_url = 'postgresql+psycopg://review:review-isolated-only@127.0.0.1:55441/acos_test_715a68f572'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024DC5F9E3F0>
+
+    def test_migration_keeps_old_cursor_when_event_ids_have_gaps(client, session_factory, database_url, monkeypatch):
+        bootstrap(client)
+        with session_factory() as session:
+            session.add(DomainEvent(company_id=1, event_type='ROLLED_BACK', payload={}))
+            session.flush()
+            session.rollback()  # PostgreSQL sequences do not roll back: make a real gap.
+        with session_factory() as session:
+            row = DomainEvent(company_id=1, event_type='OLD_DELIVERED', payload={})
+            session.add(row)
+            session.commit()
+            old_cursor = row.id
+        monkeypatch.setenv('DATABASE_URL', database_url)
+        config = Config(str(BACKEND_ROOT / 'alembic.ini'))
+        command.downgrade(config, 'c41f7b93e2a5')
+        command.upgrade(config, 'head')
+        with session_factory() as session:
+            row = DomainEvent(company_id=1, event_type='AFTER_UPGRADE', payload={})
+            session.add(row)
+            session.commit()
+            new_id = row.id
+        feed = EventFeedService()
+        feed.publish(session_factory)
+        with session_factory() as session:
+            new_seq = session.scalar(select(DomainEvent.published_seq).where(DomainEvent.id == new_id))
+            replay = feed.read_after(session, cursor=old_cursor, limit=100)
+>       assert new_id in [e.id for e in replay], f'old cursor={old_cursor}, new id={new_id}, new seq={new_seq}; event skipped'
+E       AssertionError: old cursor=3, new id=4, new seq=3; event skipped
+E       assert 4 in []
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:82: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:33:00.679631+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:33:00.818799+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:33:00.823650+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "2b6849d2e3a246ec83a311eb0ae0ff7d", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 141.63, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.824156+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.885127+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:33:00.899227+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f0339bc96c4549ada8ba52c1e9096188", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 72.68, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.899696+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:00.964898+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "15fb5fbbcde545d19d348be8df44d1e9", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 62.56, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:00.965342+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+---------------------------- Captured stderr call -----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running downgrade e5b7c9d1a2f4 -> c41f7b93e2a5, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+________________ test_step_start_and_recovery_do_not_deadlock _________________
+
+client = <starlette.testclient.TestClient object at 0x0000024DC5F9E8B0>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_ba6b68b452), autoflush=False, expire_on_commit=False)
+engine = Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_ba6b68b452)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024DC5F9E060>
+
+    def test_step_start_and_recovery_do_not_deadlock(client, session_factory, engine, monkeypatch):
+        _, claim = claimed(client, session_factory, retries=1)
+        import app.services.execution_service as module
+        now = module.utcnow()
+        clock = {'value': now}
+        monkeypatch.setattr(module, 'utcnow', lambda: clock['value'])
+        service = ExecutionService()
+        reached_company_reserve = threading.Event()
+        recovery_has_company = threading.Event()
+        original = service._assert_startable
+        errors = []
+    
+        def gate(session, **kwargs):
+            original(session, **kwargs)
+            reached_company_reserve.set()  # start_step already owns task and execution.
+            assert recovery_has_company.wait(10)
+    
+        monkeypatch.setattr(service, '_assert_startable', gate)
+    
+        def after_sql(conn, cursor, statement, parameters, context, executemany):
+            if threading.current_thread().name == 'recheck-recovery' and 'FROM companies' in statement and 'FOR UPDATE' in statement:
+                recovery_has_company.set()
+    
+        event.listen(engine, 'after_cursor_execute', after_sql)
+    
+        def complete():
+            try:
+                with session_factory() as session:
+                    service.start_step(session, execution_id=claim.execution_id, fencing_token=claim.fencing_token,
+                        sequence=0, name='concurrent step', estimated_tokens=10)
+                    session.commit()
+            except Exception as exc:
+                errors.append(('complete', type(exc).__name__, getattr(getattr(exc, 'orig', None), 'sqlstate', None)))
+    
+        def recover():
+            try:
+                with session_factory() as session:
+                    ExecutionService().recover_expired_leases(session)
+                    session.commit()
+            except Exception as exc:
+                errors.append(('recover', type(exc).__name__, getattr(getattr(exc, 'orig', None), 'sqlstate', None)))
+    
+        first = threading.Thread(target=complete, name='recheck-complete')
+        second = threading.Thread(target=recover, name='recheck-recovery')
+        try:
+            first.start()
+            assert reached_company_reserve.wait(10)
+            clock['value'] = now + timedelta(minutes=5)
+            second.start()
+            first.join(20)
+            second.join(20)
+            assert not first.is_alive() and not second.is_alive()
+>           assert errors == [], f'Concurrent step/recovery errors: {errors}'
+E           AssertionError: Concurrent step/recovery errors: [('recover', 'OperationalError', '40P01')]
+E           assert [('recover', ...or', '40P01')] == []
+E             
+E             Left contains one more item: ('recover', 'OperationalError', '40P01')
+E             Use -v to get more diff
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:137: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:33:01.301050+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:33:01.438481+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:33:01.442924+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "88f0c5f77e384837bde4a90f243c9726", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 139.6, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:01.443515+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:01.505602+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:33:01.517316+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "1e1aec8ad1d1469b809a179ba3b00c9b", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 70.99, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:01.517768+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:01.580849+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f6065121355d49239a73349cfaeaa132", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 60.06, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:01.581390+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:01.661286+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "af6f53c0c1e54d259ab83ec118b3860d", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 76.63, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:01.661757+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:33:02.731433+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+________ test_heartbeat_waiting_on_lock_cannot_resurrect_expired_lease ________
+
+client = <starlette.testclient.TestClient object at 0x0000024DC5FEB100>
+session_factory = sessionmaker(class_='Session', bind=Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_9308820b88), autoflush=False, expire_on_commit=False)
+engine = Engine(postgresql+psycopg://review:***@127.0.0.1:55441/acos_test_9308820b88)
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024DC7788B90>
+
+    def test_heartbeat_waiting_on_lock_cannot_resurrect_expired_lease(client, session_factory, engine, monkeypatch):
+        _, claim = claimed(client, session_factory)
+        import app.services.execution_service as module
+        now = module.utcnow()
+        clock = {'value': now}
+        monkeypatch.setattr(module, 'utcnow', lambda: clock['value'])
+        with session_factory() as session:
+            session.get(TaskExecution, claim.execution_id).lease_expires_at = now + timedelta(seconds=1)
+            session.commit()
+        issued = threading.Event()
+        result = []
+        errors = []
+    
+        def before_sql(conn, cursor, statement, parameters, context, executemany):
+            if threading.current_thread().name == 'recheck-heartbeat' and statement.startswith('UPDATE task_executions'):
+                issued.set()
+    
+        def heartbeat():
+            try:
+                with session_factory() as session:
+                    result.append(ExecutionService().heartbeat(session, execution_id=claim.execution_id,
+                        fencing_token=claim.fencing_token, lease_seconds=30))
+                    session.commit()
+            except Exception as exc:
+                errors.append(repr(exc))
+    
+        event.listen(engine, 'before_cursor_execute', before_sql)
+        thread = threading.Thread(target=heartbeat, name='recheck-heartbeat')
+        try:
+            with session_factory() as lock_holder:
+                lock_holder.scalars(select(TaskExecution).where(TaskExecution.id == claim.execution_id).with_for_update()).one()
+                thread.start()
+                assert issued.wait(10)  # SQL carries the earlier timestamp and cannot obtain the row lock yet.
+                clock['value'] = now + timedelta(seconds=2)
+                lock_holder.commit()
+            thread.join(10)
+            assert not thread.is_alive() and not errors
+            with session_factory() as session:
+                expiry = session.get(TaskExecution, claim.execution_id).lease_expires_at
+>           assert result == [False], f'Heartbeat accepted after expiry: result={result}, now={clock["value"]}, new expiry={expiry}'
+E           AssertionError: Heartbeat accepted after expiry: result=[True], now=2026-11-02 08:33:05.370582+00:00, new expiry=2026-11-02 08:33:33.370582+00:00
+E           assert [True] == [False]
+E             
+E             At index 0 diff: True != False
+E             Use -v to get more diff
+
+..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py:185: AssertionError
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-02T08:33:02.957130+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-02T08:33:03.103776+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-02T08:33:03.110188+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "41811589dd9c4bf3a18e479fc8fb458d", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 150.57, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:03.110721+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:03.177393+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-02T08:33:03.192894+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d36941d41ca8433b9cd708163a948134", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 79.71, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:03.193324+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:03.263297+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "40e7ebc0f6fc4890a883e7942eca66d2", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 67.39, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:03.263705+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-02T08:33:03.348386+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ebc3ab77adc342bfa991b61268c5e279", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 81.95, "client_ip": "testclient"}
+{"ts": "2026-11-02T08:33:03.348836+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-02T08:33:03.416083+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:71 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-recheck/test_recheck.py::test_cancel_queued_retry_does_not_charge_previous_attempt_again
+docs/acceptance/evidence/phase-03-recheck/test_recheck.py::test_migration_keeps_old_cursor_when_event_ids_have_gaps
+docs/acceptance/evidence/phase-03-recheck/test_recheck.py::test_migration_keeps_old_cursor_when_event_ids_have_gaps
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_cancel_queued_retry_does_not_charge_previous_attempt_again
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_cancelled_unknown_step_consumes_its_task_hold
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_migration_keeps_old_cursor_when_event_ids_have_gaps
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_step_start_and_recovery_do_not_deadlock
+FAILED ..\docs\acceptance\evidence\phase-03-recheck\test_recheck.py::test_heartbeat_waiting_on_lock_cannot_resurrect_expired_lease
+5 failed, 4 warnings in 5.82s

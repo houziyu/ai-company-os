@@ -1,0 +1,380 @@
+{
+  "baseURL": "http://127.0.0.1:18086",
+  "api": "http://127.0.0.1:8010",
+  "viewports": [
+    "1440x900",
+    "1024x768",
+    "390x844",
+    "360x800"
+  ],
+  "results": [
+    {
+      "viewport": "1440x900",
+      "boardColumns": 2,
+      "boardCards": 12,
+      "boardNotePresent": true,
+      "listRows": 13,
+      "keyboardCreatedTask": "13",
+      "taskStatusText": "已通过",
+      "overviewMetrics": [
+        "0",
+        "—",
+        "9",
+        "980,500"
+      ],
+      "badgeContrast": [
+        {
+          "text": "服务已连接",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "公司运行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "演练模式",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.92
+        },
+        {
+          "text": "进行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        }
+      ],
+      "sseConnected": true,
+      "sseDisconnectedNotice": true,
+      "sseReconnected": true,
+      "documentOverflow": true
+    },
+    {
+      "viewport": "1024x768",
+      "boardColumns": 2,
+      "boardCards": 13,
+      "boardNotePresent": true,
+      "listRows": 14,
+      "keyboardCreatedTask": "14",
+      "taskStatusText": "已通过",
+      "overviewMetrics": [
+        "0",
+        "—",
+        "10",
+        "980,000"
+      ],
+      "badgeContrast": [
+        {
+          "text": "服务已连接",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "公司运行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "演练模式",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.92
+        },
+        {
+          "text": "进行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        }
+      ],
+      "sseConnected": true,
+      "sseDisconnectedNotice": true,
+      "sseReconnected": true,
+      "documentOverflow": true
+    },
+    {
+      "viewport": "390x844",
+      "boardColumns": 2,
+      "boardCards": 14,
+      "boardNotePresent": true,
+      "listRows": 15,
+      "keyboardCreatedTask": "15",
+      "taskStatusText": "已通过",
+      "overviewMetrics": [
+        "0",
+        "—",
+        "11",
+        "979,500"
+      ],
+      "badgeContrast": [
+        {
+          "text": "服务已连接",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "公司运行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "演练模式",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.92
+        },
+        {
+          "text": "进行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        }
+      ],
+      "sseConnected": true,
+      "sseDisconnectedNotice": true,
+      "sseReconnected": true,
+      "documentOverflow": true
+    },
+    {
+      "viewport": "360x800",
+      "boardColumns": 2,
+      "boardCards": 15,
+      "boardNotePresent": true,
+      "listRows": 16,
+      "keyboardCreatedTask": "16",
+      "taskStatusText": "已通过",
+      "overviewMetrics": [
+        "0",
+        "—",
+        "12",
+        "979,000"
+      ],
+      "badgeContrast": [
+        {
+          "text": "服务已连接",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "公司运行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "演练模式",
+          "color": "rgb(71, 85, 105)",
+          "background": "rgb(241, 245, 249)",
+          "contrast": 6.92
+        },
+        {
+          "text": "进行中",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        },
+        {
+          "text": "失败",
+          "color": "rgb(185, 28, 28)",
+          "background": "rgb(254, 242, 242)",
+          "contrast": 5.91
+        },
+        {
+          "text": "已通过",
+          "color": "rgb(21, 128, 61)",
+          "background": "rgb(240, 253, 244)",
+          "contrast": 4.79
+        }
+      ],
+      "sseConnected": true,
+      "sseDisconnectedNotice": true,
+      "sseReconnected": true,
+      "documentOverflow": true
+    }
+  ],
+  "pageErrors": [],
+  "passed": true
+}

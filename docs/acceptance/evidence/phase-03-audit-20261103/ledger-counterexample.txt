@@ -1,0 +1,171 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___________ test_execution_page_projection_keeps_old_attempt_usage ____________
+..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py:201: in test_execution_page_projection_keeps_old_attempt_usage
+    assert shown_consumed == execution["settledTokens"], (
+E   AssertionError: Old execution actually used 500, page projection shows 0
+E   assert 0 == 500
+---------------------------- Captured stdout setup ----------------------------
+{"ts": "2026-11-03T02:44:19.149625+00:00", "level": "INFO", "logger": "app.main", "message": "api starting", "version": "0.1.0", "environment": "test"}
+---------------------------- Captured stderr setup ----------------------------
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 6a790d8c2b88, phase 01 initial schema
+INFO  [alembic.runtime.migration] Running upgrade 6a790d8c2b88 -> 7b41c9d2f0aa, phase 02 company, organization and model centre
+INFO  [alembic.runtime.migration] Running upgrade 7b41c9d2f0aa -> 3f8d2c6a91b4, phase 02 review fixes: config versioning, probe evidence ownership, usage dimension
+INFO  [alembic.runtime.migration] Running upgrade 3f8d2c6a91b4 -> 8c24a71d9e03, Repair historical provider fingerprints and invalidate unowned capabilities.
+INFO  [alembic.runtime.migration] Running upgrade 8c24a71d9e03 -> c41f7b93e2a5, phase 03: projects, persistent task queue, executions, events and budgets
+INFO  [alembic.runtime.migration] Running upgrade c41f7b93e2a5 -> e5b7c9d1a2f4, phase 03 fixes: commit-ordered publication cursor for the SSE feed
+INFO  [alembic.runtime.migration] Running upgrade e5b7c9d1a2f4 -> f6c8d0e2b4a7, Re-publish history above both legacy cursor domains without losing events.
+INFO  [alembic.runtime.migration] Running upgrade f6c8d0e2b4a7 -> a7d2e5c81b64, provider credentials: encrypted at rest (ADR-0006)
+---------------------------- Captured stdout call -----------------------------
+{"ts": "2026-11-03T02:44:19.312654+00:00", "level": "INFO", "logger": "app.services.auth_service", "message": "owner setup prepared", "user_id": 1}
+{"ts": "2026-11-03T02:44:19.317989+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "d23e53269bc84155abdf8249d0088178", "method": "POST", "path": "/api/v1/auth/setup", "status": 201, "duration_ms": 165.75, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.318839+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:19.385777+00:00", "level": "INFO", "logger": "app.services.organization_service", "message": "log event", "user_id": 1}
+{"ts": "2026-11-03T02:44:19.398793+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "0b4798a2b6874e0697163a4642a7fff0", "method": "POST", "path": "/api/v1/company", "status": 201, "duration_ms": 77.12, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.399269+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:19.466225+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c8a30191058b462381072ad9e75aa696", "method": "POST", "path": "/api/v1/projects", "status": 201, "duration_ms": 64.64, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.466671+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:19.552992+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "7b92dc16be8648f884fac55ad4b713d7", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 82.24, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.553464+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:19.743842+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c85befd7cc6d4e03b117b68395987974", "method": "GET", "path": "/api/v1/tasks/1", "status": 200, "duration_ms": 25.39, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.744292+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:19.805088+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ceac30eca46a4ee097b823f8c86f1a5e", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 58.12, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:19.805548+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.012602+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "89e5211baa1d48689edc1f9bbe8f6abc", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 63.74, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.013011+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.206376+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f8e21ef19d384fc4a20b13f1f96df16f", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 55.46, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.206795+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.393158+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f318f9f02ad94cd9a89781ce524a75f2", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 58.29, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.393636+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.609758+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "799d696c6ead448ebbb18b76938cd5f0", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 63.92, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.610181+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.807776+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ce46ca1e54124cd3ad10f73f47141db8", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 57.74, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.808266+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:20.994287+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "56478804b816454493b80033f4249be5", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 52.13, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:20.994738+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:21.173696+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c3bd29993d7640b4b7ef663fa2be0088", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 50.14, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:21.174111+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:21.369418+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f1cfed19867249e1a318c706d67ad22b", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 60.01, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:21.369936+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:21.550510+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ac88028e94e344ddaf557e620b923345", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 50.69, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:21.551223+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:21.730546+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a13eedfc181047b8a29c842da535ed48", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 54.01, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:21.730987+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:21.913381+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "ee6bfa51dd16413783ec67f5eeff9b61", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 55.23, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:21.913812+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:22.098120+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "75cf49b1a0244bd1865bdfbf6e78f6ec", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 56.02, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:22.098742+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:22.347890+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "f9979ed0f62d4008b9eeb2b5f09cb883", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 73.85, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:22.348497+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:22.545826+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "dd5047b0ff5842d2b5e550510d767005", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 57.29, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:22.546230+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:22.731109+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "46cfeb127416415ca1d188de587d1c46", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 54.23, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:22.731688+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:22.913057+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "8835194a670e4475804837f734c5890e", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 50.24, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:22.913538+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:23.089410+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "16f43848f6e2485c9b4570ec123e6133", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 51.64, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:23.089852+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:23.269484+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fad0c7d00d8d45669027137ad2ed37fe", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 50.85, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:23.269911+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:23.450243+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "9515044d2301417aa7e5df34903dc345", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 51.4, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:23.450690+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:23.639956+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "4fdaa4871917449fa0b416555307ff1b", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 52.76, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:23.640377+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:23.831057+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "fabea2b9129f4a44bd706c614936776a", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 60.25, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:23.831473+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:24.012876+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "a90c7509fa1547b2bbf4f6202d11237b", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 51.38, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:24.013301+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:24.190091+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "c4dc1e84be5a477989f9aeeedc7beed6", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 51.77, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:24.190512+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:24.377486+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "408316d613134762af8f6e51dd6356cc", "method": "POST", "path": "/api/v1/projects/1/tasks", "status": 201, "duration_ms": 54.14, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:24.377932+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:24.556817+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "87c9f8c99d2443bd9cdbbf0e1d0672fe", "method": "GET", "path": "/api/v1/executions/1", "status": 200, "duration_ms": 14.27, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:24.557249+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+{"ts": "2026-11-03T02:44:24.695925+00:00", "level": "INFO", "logger": "app.api.middleware", "message": "request", "request_id": "b8905fb283fa45de82f608dc2d1ca4bf", "method": "GET", "path": "/api/v1/budgets", "status": 200, "duration_ms": 136.43, "client_ip": "testclient"}
+{"ts": "2026-11-03T02:44:24.696371+00:00", "level": "INFO", "logger": "httpx", "message": "log event"}
+------------------------------ Captured log call ------------------------------
+INFO     app.services.auth_service:auth_service.py:164 owner setup prepared
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/auth/setup "HTTP/1.1 201 Created"
+INFO     app.services.organization_service:organization_service.py:354 company initialized
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/company "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/tasks/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: POST http://testserver/api/v1/projects/1/tasks "HTTP/1.1 201 Created"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/executions/1 "HTTP/1.1 200 OK"
+INFO     app.api.middleware:middleware.py:42 request
+INFO     httpx:_client.py:1025 HTTP Request: GET http://testserver/api/v1/budgets?ledgerLimit=200 "HTTP/1.1 200 OK"
+-------------------------- Captured stdout teardown ---------------------------
+{"ts": "2026-11-03T02:44:25.038249+00:00", "level": "INFO", "logger": "app.main", "message": "api stopped"}
+---------------------------- Captured log teardown ----------------------------
+INFO     app.main:main.py:72 api stopped
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+docs/acceptance/evidence/phase-03-audit-20261103/test_audit.py::test_execution_page_projection_keeps_old_attempt_usage
+  C:\Users\admin\Desktop\ai-company-os\backend\.venv\Lib\site-packages\alembic\config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED ..\docs\acceptance\evidence\phase-03-audit-20261103\test_audit.py::test_execution_page_projection_keeps_old_attempt_usage
+1 failed, 7 deselected, 2 warnings in 7.68s

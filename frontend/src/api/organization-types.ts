@@ -5,6 +5,9 @@ export type ProviderKind = 'DEEPSEEK' | 'OPENAI_COMPATIBLE'
 export type Enablement = 'ENABLED' | 'DISABLED'
 /** PENDING: attempted, result unknown (interrupted); never auto-retried. */
 export type ProbeOutcome = 'PENDING' | 'SUCCESS' | 'FAILURE'
+/** ENV = server environment variable (legacy); DB = encrypted in the database. */
+export type SecretSource = 'ENV' | 'DB'
+export type SecretState = 'NONE' | 'CONFIGURED' | 'MISSING_ENV' | 'UNDECRYPTABLE'
 
 export interface CompanyResponse {
   id: number
@@ -138,8 +141,16 @@ export interface ProviderResponse {
   /** Optimistic-locking counter; echo it on update (409 when stale). */
   version: number
   baseUrl: string
-  /** Environment variable name, never a credential value. */
+  /**
+   * Environment variable name for a legacy ENV provider; null when the key is
+   * stored (encrypted) in the database. Never a credential value.
+   */
   secretRef: string | null
+  /** ENV = read from a server variable (Phase 02); DB = typed in the UI. */
+  secretSource: SecretSource | null
+  /** NONE / CONFIGURED / MISSING_ENV / UNDECRYPTABLE. Never a value. */
+  secretState: SecretState
+  /** True only when the credential is usable right now. */
   secretConfigured: boolean
   status: Enablement
   notes: string | null
@@ -153,6 +164,9 @@ export interface ProviderCreatePayload {
   name: string
   kind: ProviderKind
   baseUrl: string
+  /** The key typed by the operator. Encrypted server-side; never echoed back. */
+  secretValue?: string | null
+  /** Legacy Phase 02 field: an environment variable *name*. */
   secretRef?: string | null
   status?: Enablement
   notes?: string | null
@@ -165,8 +179,14 @@ export interface ProviderUpdatePayload {
   name?: string | null
   kind?: ProviderKind | null
   baseUrl?: string | null
+  secretValue?: string | null
+  /**
+   * Explicit: an omitted secretValue would otherwise be ambiguous between
+   * "leave the stored key alone" and "clear it".
+   */
+  changeSecretValue?: boolean
   secretRef?: string | null
-  /** Explicit: null secretRef alone would be ambiguous. */
+  /** Legacy flag for the environment-variable reference. */
   changeSecretRef?: boolean
   status?: Enablement | null
   notes?: string | null

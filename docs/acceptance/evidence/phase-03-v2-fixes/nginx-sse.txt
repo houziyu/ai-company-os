@@ -1,0 +1,4 @@
+SSE {"case": "through-nginx", "ok": true, "first_cursors": [1, 2]}
+SSE {"case": "resume-behind-nginx", "ok": true, "proxy_was_down": true, "resumed_from": 2, "resumed_cursors": [3], "resumed_task_ids": [2], "missed_task_id": 2, "last_cursor": 3}
+SSE {"case": "no-duplicates", "ok": true, "resumed_cursors": [3]}
+{"passed": true, "failures": []}
